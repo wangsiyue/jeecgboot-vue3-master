@@ -1,0 +1,19 @@
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/log.ts
+init_define_APP_INFO();
+var projectName = import.meta.env.VITE_GLOB_APP_TITLE;
+function warn(message) {
+  console.warn(`[${projectName} warn]:${message}`);
+}
+function error(message) {
+  throw new Error(`[${projectName} error]:${message}`);
+}
+
+export {
+  warn,
+  error
+};
+//# sourceMappingURL=chunk-LZQJUVGN.js.map

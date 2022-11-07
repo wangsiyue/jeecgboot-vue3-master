@@ -1,0 +1,40 @@
+import {
+  defHttp
+} from "./chunk-MXTOG34P.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/graphreport.api.js
+init_define_APP_INFO();
+var Api = ((Api2) => {
+  Api2["list"] = "/online/graphreport/head/list";
+  Api2["delete"] = "/online/graphreport/head/delete";
+  Api2["deleteBatch"] = "/online/graphreport/head/deleteBatch";
+  Api2["exportXls"] = "/online/graphreport/head/exportXls";
+  Api2["importXls"] = "/online/graphreport/head/importExcel";
+  Api2["paramsList"] = "/online/graphreport/params/listByHeadId";
+  Api2["getChartsData"] = "/online/graphreport/api/getChartsData";
+  Api2["getParamsInfo"] = "/online/graphreport/params/listByHeadId";
+  return Api2;
+})(Api || {});
+var list = (params) => defHttp.get({ url: "/online/graphreport/head/list", params });
+function doBatchDelete(idList) {
+  return defHttp.delete({
+    url: "/online/graphreport/head/deleteBatch",
+    params: { ids: idList.join(",") }
+  }, { joinParamsToUrl: true });
+}
+var queryParamsList = (headId) => defHttp.get({ url: "/online/graphreport/params/listByHeadId", params: { headId } });
+var getChartsData = (params) => defHttp.get({ url: "/online/graphreport/api/getChartsData", params });
+var getParamsInfo = (params) => defHttp.get({ url: "/online/graphreport/params/listByHeadId", params });
+
+export {
+  Api,
+  list,
+  doBatchDelete,
+  queryParamsList,
+  getChartsData,
+  getParamsInfo
+};
+//# sourceMappingURL=chunk-HTLVLCAV.js.map

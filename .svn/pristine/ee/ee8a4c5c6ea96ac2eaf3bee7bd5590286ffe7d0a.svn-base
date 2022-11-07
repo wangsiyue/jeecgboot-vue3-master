@@ -1,0 +1,18 @@
+import {
+  alignElement,
+  alignPoint,
+  dist_web_default
+} from "./chunk-KAI4QMTN.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:dom-align
+init_define_APP_INFO();
+var dom_align_default = dist_web_default;
+export {
+  alignElement,
+  alignPoint,
+  dom_align_default as default
+};
+//# sourceMappingURL=dom-align.js.map

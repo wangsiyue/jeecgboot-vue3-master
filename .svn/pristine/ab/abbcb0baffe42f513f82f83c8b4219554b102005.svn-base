@@ -1,0 +1,912 @@
+import { ref, reactive, toRaw, watch, resolveComponent, openBlock, createElementBlock, Fragment, createElementVNode, createBlock, withCtx, createVNode, Teleport, createCommentVNode, normalizeClass, withDirectives, vShow, renderList, toDisplayString, pushScopeId, popScopeId, createTextVNode } from "vue";
+import { useModalInner, BasicModal, useModal } from "/@/components/Modal";
+import { randomString } from "/@/utils/common/compUtils";
+import { useMessage } from "/@/hooks/web/useMessage";
+import { Modal, Divider } from "ant-design-vue";
+import { createLocalStorage } from "/@/utils/cache";
+import { useRoute } from "vue-router";
+import { b as FORM_VIEW_TO_QUERY_VIEW, F as FormSchemaFactory } from "./FormSchemaFactory.js";
+import { _ as _sfc_main$1 } from "./OnlineSuperQueryValComponent.vue_vue_type_script_lang.js";
+import { MinusCircleOutlined, PlusOutlined, FileTextOutlined, CloseCircleOutlined, AppstoreTwoTone } from "@ant-design/icons-vue";
+import { _ as _export_sfc } from "./index.js";
+import "/@/components/Form/src/jeecg/components/JUpload";
+import "/@/components/Form/src/componentMap";
+import "/@/components/Form/src/helper";
+import "/@/utils/is";
+import "./toString.js";
+import "./isArray.js";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+const SAVE_CODE_PRE = "JSuperQuerySaved_";
+function useSuperQuery() {
+  const { createMessage: $message } = useMessage();
+  const formRef = ref();
+  const dynamicRowValues = reactive({
+    values: []
+  });
+  const matchType = ref("and");
+  const [registerModal, { setModalProps }] = useModalInner(() => {
+    setModalProps({ confirmLoading: false });
+  });
+  const view2QueryViewMap = Object.assign({}, { "link_down": "text" }, FORM_VIEW_TO_QUERY_VIEW);
+  function handleSubmit() {
+    console.log("handleSubmit", dynamicRowValues.values);
+  }
+  function handleCancel() {
+  }
+  function setFormModel(key, value, item) {
+    console.log("setFormModel", key, value);
+    item["val"] = value;
+  }
+  const fieldProperties = ref({});
+  const fieldTreeData = ref([]);
+  function init(json) {
+    let { allFields, treeData } = getAllFields(json);
+    fieldProperties.value = allFields;
+    fieldTreeData.value = treeData;
+  }
+  function addOne(index) {
+    let item = {
+      field: void 0,
+      rule: "eq",
+      val: "",
+      key: randomString(16)
+    };
+    if (index === false) {
+      dynamicRowValues.values = [];
+      dynamicRowValues.values.push(item);
+    } else if (index === true) {
+      if (dynamicRowValues.values.length == 0) {
+        dynamicRowValues.values.push(item);
+      }
+    } else {
+      dynamicRowValues.values.splice(++index, 0, item);
+    }
+  }
+  function removeOne(item) {
+    let arr = toRaw(dynamicRowValues.values);
+    let index = -1;
+    for (let i = 0; i < arr.length; i++) {
+      if (item.key == arr[i].key) {
+        index = i;
+        break;
+      }
+    }
+    if (index != -1) {
+      dynamicRowValues.values.splice(index, 1);
+    }
+  }
+  const defaultInput = {
+    field: "val",
+    label: "\u6D4B\u8BD5",
+    component: "Input"
+  };
+  function getSchema(item, index) {
+    let map = fieldProperties.value;
+    let prop = map[item.field];
+    if (!prop) {
+      return defaultInput;
+    }
+    if (view2QueryViewMap[prop.view]) {
+      prop.view = view2QueryViewMap[prop.view];
+    }
+    let temp = FormSchemaFactory.createFormSchema(item.field, prop);
+    temp.noChange();
+    temp.asSearchForm();
+    temp.updateField(item.field + index);
+    const setFieldValue = (values) => {
+      item["val"] = values[item.field];
+    };
+    temp.setFunctionForFieldValue(setFieldValue);
+    let schema = temp.getFormItemSchema();
+    return schema;
+  }
+  const saveTreeData = ref("");
+  const $ls = createLocalStorage();
+  const saveInfo = reactive({
+    visible: false,
+    title: "",
+    content: "",
+    saveCode: ""
+  });
+  const loading = ref(false);
+  const route = useRoute();
+  watch(() => route.fullPath, (val) => {
+    console.log("fullpath", val);
+    initSaveQueryInfoCode();
+  });
+  const currentPageSavedArray = ref([]);
+  watch(() => currentPageSavedArray.value, (val) => {
+    let temp = [];
+    if (val && val.length > 0) {
+      val.map((item) => {
+        let key = randomString(16);
+        temp.push({
+          title: item.title,
+          slots: { icon: "custom" },
+          value: key
+        });
+      });
+    }
+    saveTreeData.value = temp;
+  }, { immediate: true, deep: true });
+  function initSaveQueryInfoCode() {
+    let code = SAVE_CODE_PRE + route.fullPath;
+    saveInfo.saveCode = code;
+    let list = $ls.get(code);
+    if (list && list instanceof Array) {
+      currentPageSavedArray.value = list;
+    }
+  }
+  initSaveQueryInfoCode();
+  function handleSave() {
+    let fieldArray = getQueryInfo();
+    if (!fieldArray) {
+      $message.warning("\u7A7A\u6761\u4EF6\u4E0D\u80FD\u4FDD\u5B58");
+      return;
+    }
+    let content = JSON.stringify(fieldArray);
+    openSaveInfoModal(content);
+  }
+  function openSaveInfoModal(content) {
+    saveInfo.visible = true;
+    saveInfo.title = "";
+    saveInfo.content = content;
+  }
+  function doSaveQueryInfo() {
+    let { title, content, saveCode } = saveInfo;
+    let index = getTitleIndex(title);
+    if (index >= 0) {
+      Modal.confirm({
+        title: "\u63D0\u793A",
+        content: `${title} \u5DF2\u5B58\u5728\uFF0C\u662F\u5426\u8986\u76D6\uFF1F`,
+        okText: "\u786E\u8BA4",
+        cancelText: "\u53D6\u6D88",
+        onOk: () => {
+          currentPageSavedArray.value.splice(index, 1, {
+            content,
+            title,
+            type: matchType.value
+          });
+          $ls.set(saveCode, currentPageSavedArray.value);
+          saveInfo.visible = false;
+        }
+      });
+    } else {
+      currentPageSavedArray.value.push({
+        content,
+        title,
+        type: matchType.value
+      });
+      $ls.set(saveCode, currentPageSavedArray.value);
+      saveInfo.visible = false;
+    }
+  }
+  function getTitleIndex(title) {
+    let savedArray = currentPageSavedArray.value;
+    let index = -1;
+    for (let i = 0; i < savedArray.length; i++) {
+      if (savedArray[i].title == title) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+  function getQueryInfo(isEmit = false) {
+    let arr = dynamicRowValues.values;
+    if (!arr || arr.length == 0) {
+      return false;
+    }
+    let fieldArray = [];
+    let fieldProps = fieldProperties.value;
+    for (let item of arr) {
+      if (item.field && (item.val || item.val === 0) && item.rule) {
+        let tempVal = toRaw(item.val);
+        if (tempVal instanceof Array) {
+          tempVal = tempVal.join(",");
+        }
+        let obj = {
+          field: item.field,
+          rule: item.rule,
+          val: tempVal
+        };
+        if (isEmit === true) {
+          let prop = fieldProps[item.field];
+          if (prop) {
+            obj["type"] = prop.view;
+            obj["dbType"] = prop.type;
+          }
+        }
+        fieldArray.push(obj);
+      }
+    }
+    if (fieldArray.length == 0) {
+      return false;
+    }
+    return fieldArray;
+  }
+  function handleTreeSelect(key, { node }) {
+    console.log(key, node);
+    let title = node.dataRef.title;
+    let arr = currentPageSavedArray.value.filter((item) => item.title == title);
+    if (arr && arr.length > 0) {
+      let { content, type } = arr[0];
+      let data = JSON.parse(content);
+      let rowsValues = [];
+      for (let item of data) {
+        rowsValues.push(Object.assign({}, { key: randomString(16) }, item));
+      }
+      dynamicRowValues.values = rowsValues;
+      matchType.value = type;
+    }
+  }
+  function handleRemoveSaveInfo(title) {
+    console.log(title);
+    let index = getTitleIndex(title);
+    if (index >= 0) {
+      currentPageSavedArray.value.splice(index, 1);
+      $ls.set(saveInfo.saveCode, currentPageSavedArray.value);
+    }
+  }
+  function getAllFields(json) {
+    const { properties, table, title } = json;
+    let allFields = {};
+    let order = 1;
+    let treeData = [];
+    let mainNode = {
+      title,
+      value: table,
+      disabled: true,
+      children: []
+    };
+    treeData.push(mainNode);
+    Object.keys(properties).map((field) => {
+      let item = properties[field];
+      if (item.view == "table") {
+        let subProps = item["properties"];
+        let subTableOrder = order * 100;
+        let subNode = {
+          title: item.title,
+          value: field,
+          disabled: true,
+          children: []
+        };
+        Object.keys(subProps).map((subField) => {
+          let subItem = subProps[subField];
+          subItem["order"] = subTableOrder + subItem["order"];
+          let subFieldKey = field + "@" + subField;
+          allFields[subFieldKey] = subItem;
+          subNode.children.push({
+            title: subItem.title,
+            value: subFieldKey,
+            isLeaf: true,
+            order: subItem["order"]
+          });
+        });
+        orderField(subNode);
+        treeData.push(subNode);
+        order++;
+      } else {
+        let fieldKey = table + "@" + field;
+        allFields[fieldKey] = item;
+        mainNode.children.push({
+          title: item.title,
+          value: fieldKey,
+          isLeaf: true,
+          order: item.order
+        });
+      }
+    });
+    orderField(mainNode);
+    return { allFields, treeData };
+  }
+  function orderField(data) {
+    let arr = data.children;
+    arr.sort(function(a, b) {
+      return a.order - b.order;
+    });
+  }
+  function initDefaultValues(values) {
+    const { params, matchType: matchType2 } = values;
+    if (params) {
+      let rowsValues = [];
+      for (let item of params) {
+        rowsValues.push(Object.assign({}, { key: randomString(16) }, item));
+      }
+      dynamicRowValues.values = rowsValues;
+      matchType2.value = matchType2;
+    }
+  }
+  return {
+    formRef,
+    init,
+    dynamicRowValues,
+    matchType,
+    registerModal,
+    handleSubmit,
+    handleCancel,
+    handleSave,
+    doSaveQueryInfo,
+    saveInfo,
+    saveTreeData,
+    handleRemoveSaveInfo,
+    handleTreeSelect,
+    fieldTreeData,
+    addOne,
+    removeOne,
+    setFormModel,
+    getSchema,
+    loading,
+    getQueryInfo,
+    initDefaultValues
+  };
+}
+var OnlineSuperQuery_vue_vue_type_style_index_0_scoped_true_lang = "";
+const _sfc_main = {
+  name: "OnlineSuperQuery",
+  props: {
+    config: {
+      type: Object,
+      default: []
+    },
+    status: {
+      type: Boolean,
+      default: false
+    }
+  },
+  components: {
+    BasicModal,
+    MinusCircleOutlined,
+    PlusOutlined,
+    OnlineSuperQueryValComponent: _sfc_main$1,
+    FileTextOutlined,
+    CloseCircleOutlined,
+    AppstoreTwoTone,
+    Divider
+  },
+  emits: ["search"],
+  setup(props, { emit }) {
+    const [registerFormModal, formModal] = useModal();
+    const { createMessage: $message } = useMessage();
+    function handleCancel() {
+      formModal.closeModal();
+    }
+    function handleSubmit() {
+      console.log("handleSubmit", dynamicRowValues.values);
+      let dataArray = getQueryInfo(true);
+      if (dataArray && dataArray.length > 0) {
+        emit("search", dataArray, matchType.value);
+      } else {
+        $message.warning("\u7A7A\u6761\u4EF6\u65E0\u6CD5\u67E5\u8BE2\uFF01");
+      }
+    }
+    function handleReset() {
+      dynamicRowValues.values = [];
+      addOne(false);
+      emit("search", [], matchType.value);
+    }
+    const {
+      formRef,
+      init,
+      dynamicRowValues,
+      matchType,
+      registerModal,
+      handleSave,
+      doSaveQueryInfo,
+      saveInfo,
+      saveTreeData,
+      handleTreeSelect,
+      handleRemoveSaveInfo,
+      fieldTreeData,
+      addOne,
+      removeOne,
+      setFormModel,
+      getSchema,
+      loading,
+      getQueryInfo,
+      initDefaultValues
+    } = useSuperQuery();
+    const superQueryFlag = ref(false);
+    watch(() => props.status, (val) => {
+      superQueryFlag.value = val;
+    }, { immediate: true });
+    function handleOpen() {
+      formModal.openModal();
+      addOne(true);
+    }
+    function getPopupContainer() {
+      return document.getElementsByClassName("jee-super-query-form")[0];
+    }
+    function onFinish(a) {
+      console.log("onfinish", a);
+    }
+    function handleChangeField(item) {
+      item["val"] = "";
+    }
+    return {
+      formRef,
+      registerFormModal,
+      init,
+      handleChangeField,
+      dynamicRowValues,
+      matchType,
+      registerModal,
+      handleSubmit,
+      handleCancel,
+      handleSave,
+      handleReset,
+      doSaveQueryInfo,
+      saveInfo,
+      saveTreeData,
+      handleTreeSelect,
+      handleRemoveSaveInfo,
+      fieldTreeData,
+      addOne,
+      removeOne,
+      setFormModel,
+      getSchema,
+      loading,
+      onFinish,
+      getPopupContainer,
+      superQueryFlag,
+      handleOpen,
+      initDefaultValues
+    };
+  }
+};
+const _withScopeId = (n) => (pushScopeId("data-v-08fc9755"), n = n(), popScopeId(), n);
+const _hoisted_1 = { class: "j-super-query-button" };
+const _hoisted_2 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createElementVNode("span", null, "\u5DF2\u6709\u9AD8\u7EA7\u67E5\u8BE2\u6761\u4EF6\u751F\u6548", -1));
+const _hoisted_3 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createElementVNode("span", null, "\u9AD8\u7EA7\u67E5\u8BE2", -1));
+const _hoisted_4 = /* @__PURE__ */ createTextVNode(" \u9AD8\u7EA7\u67E5\u8BE2 ");
+const _hoisted_5 = { style: { "float": "left" } };
+const _hoisted_6 = /* @__PURE__ */ createTextVNode("\u91CD\u7F6E");
+const _hoisted_7 = /* @__PURE__ */ createTextVNode("\u4FDD\u5B58\u67E5\u8BE2\u6761\u4EF6");
+const _hoisted_8 = /* @__PURE__ */ createTextVNode("\u786E\u5B9A");
+const _hoisted_9 = /* @__PURE__ */ createTextVNode("\u5173\u95ED");
+const _hoisted_10 = { slot: "description" };
+const _hoisted_11 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createElementVNode("span", null, "\u6CA1\u6709\u4EFB\u4F55\u67E5\u8BE2\u6761\u4EF6", -1));
+const _hoisted_12 = /* @__PURE__ */ createTextVNode("AND\uFF08\u6240\u6709\u6761\u4EF6\u90FD\u8981\u6C42\u5339\u914D\uFF09");
+const _hoisted_13 = /* @__PURE__ */ createTextVNode("OR\uFF08\u6761\u4EF6\u4E2D\u7684\u4EFB\u610F\u4E00\u4E2A\u5339\u914D\uFF09");
+const _hoisted_14 = /* @__PURE__ */ createTextVNode("\u7B49\u4E8E");
+const _hoisted_15 = /* @__PURE__ */ createTextVNode("\u6A21\u7CCA");
+const _hoisted_16 = /* @__PURE__ */ createTextVNode("\u4EE5..\u5F00\u59CB");
+const _hoisted_17 = /* @__PURE__ */ createTextVNode("\u4EE5..\u7ED3\u5C3E");
+const _hoisted_18 = /* @__PURE__ */ createTextVNode("\u5728...\u4E2D");
+const _hoisted_19 = /* @__PURE__ */ createTextVNode("\u4E0D\u7B49\u4E8E");
+const _hoisted_20 = /* @__PURE__ */ createTextVNode("\u5927\u4E8E");
+const _hoisted_21 = /* @__PURE__ */ createTextVNode("\u5927\u4E8E\u7B49\u4E8E");
+const _hoisted_22 = /* @__PURE__ */ createTextVNode("\u5C0F\u4E8E");
+const _hoisted_23 = /* @__PURE__ */ createTextVNode("\u5C0F\u4E8E\u7B49\u4E8E");
+const _hoisted_24 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createElementVNode("div", null, "\u4FDD\u5B58\u7684\u67E5\u8BE2", -1));
+const _hoisted_25 = ["title"];
+const _hoisted_26 = { class: "icon-cancle" };
+const _hoisted_27 = { style: { "height": "80px", "line-height": "75px", "width": "100%", "text-align": "center" } };
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_divider = resolveComponent("divider");
+  const _component_AppstoreTwoTone = resolveComponent("AppstoreTwoTone");
+  const _component_a_button = resolveComponent("a-button");
+  const _component_a_button_group = resolveComponent("a-button-group");
+  const _component_a_tooltip = resolveComponent("a-tooltip");
+  const _component_a_divider = resolveComponent("a-divider");
+  const _component_a_empty = resolveComponent("a-empty");
+  const _component_a_select_option = resolveComponent("a-select-option");
+  const _component_a_select = resolveComponent("a-select");
+  const _component_a_form_item = resolveComponent("a-form-item");
+  const _component_a_col = resolveComponent("a-col");
+  const _component_a_row = resolveComponent("a-row");
+  const _component_a_tree_select = resolveComponent("a-tree-select");
+  const _component_online_super_query_val_component = resolveComponent("online-super-query-val-component");
+  const _component_PlusOutlined = resolveComponent("PlusOutlined");
+  const _component_MinusCircleOutlined = resolveComponent("MinusCircleOutlined");
+  const _component_a_space = resolveComponent("a-space");
+  const _component_a_form = resolveComponent("a-form");
+  const _component_close_circle_outlined = resolveComponent("close-circle-outlined");
+  const _component_file_text_outlined = resolveComponent("file-text-outlined");
+  const _component_a_tree = resolveComponent("a-tree");
+  const _component_a_card = resolveComponent("a-card");
+  const _component_BasicModal = resolveComponent("BasicModal");
+  const _component_a_input = resolveComponent("a-input");
+  const _component_a_modal = resolveComponent("a-modal");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createElementVNode("div", _hoisted_1, [
+      $setup.superQueryFlag ? (openBlock(), createBlock(_component_a_tooltip, {
+        key: 0,
+        mouseLeaveDelay: 0.2
+      }, {
+        title: withCtx(() => [
+          _hoisted_2,
+          createVNode(_component_divider, {
+            type: "vertical",
+            style: { "background-color": "#fff" }
+          }),
+          createElementVNode("a", {
+            onClick: _cache[0] || (_cache[0] = (...args) => $setup.handleReset && $setup.handleReset(...args))
+          }, "\u6E05\u7A7A")
+        ]),
+        default: withCtx(() => [
+          createVNode(_component_a_button_group, null, {
+            default: withCtx(() => [
+              createVNode(_component_a_button, {
+                type: "primary",
+                onClick: $setup.handleOpen
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_AppstoreTwoTone, { spin: true }),
+                  _hoisted_3
+                ]),
+                _: 1
+              }, 8, ["onClick"])
+            ]),
+            _: 1
+          })
+        ]),
+        _: 1
+      }, 8, ["mouseLeaveDelay"])) : (openBlock(), createBlock(_component_a_button, {
+        key: 1,
+        type: "primary",
+        preIcon: "ant-design:filter-outlined",
+        onClick: $setup.handleOpen
+      }, {
+        default: withCtx(() => [
+          _hoisted_4
+        ]),
+        _: 1
+      }, 8, ["onClick"]))
+    ]),
+    (openBlock(), createBlock(Teleport, { to: "body" }, [
+      createVNode(_component_BasicModal, {
+        title: "\u9AD8\u7EA7\u67E5\u8BE2\u6784\u9020\u5668",
+        canFullscreen: false,
+        width: 1050,
+        onRegister: $setup.registerFormModal,
+        onOk: $setup.handleSubmit
+      }, {
+        footer: withCtx(() => [
+          createElementVNode("div", _hoisted_5, [
+            createVNode(_component_a_button, {
+              loading: $setup.loading,
+              onClick: $setup.handleReset
+            }, {
+              default: withCtx(() => [
+                _hoisted_6
+              ]),
+              _: 1
+            }, 8, ["loading", "onClick"]),
+            createVNode(_component_a_button, {
+              loading: $setup.loading,
+              onClick: $setup.handleSave
+            }, {
+              default: withCtx(() => [
+                _hoisted_7
+              ]),
+              _: 1
+            }, 8, ["loading", "onClick"])
+          ]),
+          createVNode(_component_a_button, {
+            key: "submit",
+            type: "primary",
+            onClick: $setup.handleSubmit
+          }, {
+            default: withCtx(() => [
+              _hoisted_8
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_a_button, {
+            key: "back",
+            onClick: $setup.handleCancel
+          }, {
+            default: withCtx(() => [
+              _hoisted_9
+            ]),
+            _: 1
+          }, 8, ["onClick"])
+        ]),
+        default: withCtx(() => [
+          $setup.dynamicRowValues.values.length == 0 ? (openBlock(), createBlock(_component_a_empty, { key: 0 }, {
+            default: withCtx(() => [
+              createElementVNode("div", _hoisted_10, [
+                _hoisted_11,
+                createVNode(_component_a_divider, { type: "vertical" }),
+                createElementVNode("a", {
+                  onClick: _cache[1] || (_cache[1] = ($event) => $setup.addOne(-1))
+                }, "\u70B9\u51FB\u65B0\u589E")
+              ])
+            ]),
+            _: 1
+          })) : createCommentVNode("", true),
+          createVNode(_component_a_row, {
+            class: normalizeClass("j-super-query-modal-content")
+          }, {
+            default: withCtx(() => [
+              createVNode(_component_a_col, {
+                sm: 24,
+                md: 18
+              }, {
+                default: withCtx(() => [
+                  withDirectives(createVNode(_component_a_row, null, {
+                    default: withCtx(() => [
+                      createVNode(_component_a_col, {
+                        md: 12,
+                        xs: 24
+                      }, {
+                        default: withCtx(() => [
+                          createVNode(_component_a_form_item, {
+                            label: "\u8FC7\u6EE4\u6761\u4EF6\u5339\u914D",
+                            labelCol: { md: 6, xs: 24 },
+                            wrapperCol: { md: 18, xs: 24 },
+                            style: { "width": "100%" }
+                          }, {
+                            default: withCtx(() => [
+                              createVNode(_component_a_select, {
+                                value: $setup.matchType,
+                                "onUpdate:value": _cache[2] || (_cache[2] = ($event) => $setup.matchType = $event),
+                                getPopupContainer: (node) => node.parentNode,
+                                style: { "width": "100%" }
+                              }, {
+                                default: withCtx(() => [
+                                  createVNode(_component_a_select_option, { value: "and" }, {
+                                    default: withCtx(() => [
+                                      _hoisted_12
+                                    ]),
+                                    _: 1
+                                  }),
+                                  createVNode(_component_a_select_option, { value: "or" }, {
+                                    default: withCtx(() => [
+                                      _hoisted_13
+                                    ]),
+                                    _: 1
+                                  })
+                                ]),
+                                _: 1
+                              }, 8, ["value", "getPopupContainer"])
+                            ]),
+                            _: 1
+                          })
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  }, 512), [
+                    [vShow, $setup.dynamicRowValues.values.length > 0]
+                  ]),
+                  withDirectives(createVNode(_component_a_form, {
+                    ref: "formRef",
+                    class: normalizeClass("jee-super-query-form"),
+                    model: $setup.dynamicRowValues,
+                    onFinish: $setup.onFinish
+                  }, {
+                    default: withCtx(() => [
+                      (openBlock(true), createElementBlock(Fragment, null, renderList($setup.dynamicRowValues.values, (item, index) => {
+                        return openBlock(), createBlock(_component_a_space, {
+                          key: item.key,
+                          style: { "display": "flex", "margin-bottom": "8px" },
+                          align: "baseline"
+                        }, {
+                          default: withCtx(() => [
+                            createVNode(_component_a_form_item, {
+                              name: ["values", index, "field"],
+                              style: { "width": "180px" }
+                            }, {
+                              default: withCtx(() => [
+                                createVNode(_component_a_tree_select, {
+                                  style: { "width": "100%" },
+                                  placeholder: "\u8BF7\u9009\u62E9\u5B57\u6BB5",
+                                  value: item.field,
+                                  "onUpdate:value": ($event) => item.field = $event,
+                                  "show-search": "",
+                                  "tree-node-filter-prop": "title",
+                                  "allow-clear": "",
+                                  "tree-default-expand-all": "",
+                                  "dropdown-style": { maxHeight: "180px", overflow: "auto" },
+                                  onChange: ($event) => $setup.handleChangeField(item),
+                                  "tree-data": $setup.fieldTreeData
+                                }, null, 8, ["value", "onUpdate:value", "onChange", "tree-data"])
+                              ]),
+                              _: 2
+                            }, 1032, ["name"]),
+                            createVNode(_component_a_form_item, {
+                              name: ["values", index, "rule"],
+                              style: { "width": "180px" }
+                            }, {
+                              default: withCtx(() => [
+                                createVNode(_component_a_select, {
+                                  style: { "width": "100%" },
+                                  placeholder: "\u8BF7\u9009\u62E9\u5339\u914D\u89C4\u5219",
+                                  value: item.rule,
+                                  "onUpdate:value": ($event) => item.rule = $event
+                                }, {
+                                  default: withCtx(() => [
+                                    createVNode(_component_a_select_option, { value: "eq" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_14
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "like" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_15
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "right_like" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_16
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "left_like" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_17
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "in" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_18
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "ne" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_19
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "gt" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_20
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "ge" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_21
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "lt" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_22
+                                      ]),
+                                      _: 1
+                                    }),
+                                    createVNode(_component_a_select_option, { value: "le" }, {
+                                      default: withCtx(() => [
+                                        _hoisted_23
+                                      ]),
+                                      _: 1
+                                    })
+                                  ]),
+                                  _: 2
+                                }, 1032, ["value", "onUpdate:value"])
+                              ]),
+                              _: 2
+                            }, 1032, ["name"]),
+                            createVNode(_component_a_form_item, {
+                              name: ["values", index, "val"],
+                              style: { "width": "280px" }
+                            }, {
+                              default: withCtx(() => [
+                                createVNode(_component_online_super_query_val_component, {
+                                  style: { "width": "100%" },
+                                  schema: $setup.getSchema(item, index),
+                                  formModel: item,
+                                  setFormModel: (key, value) => {
+                                    $setup.setFormModel(key, value, item);
+                                  }
+                                }, null, 8, ["schema", "formModel", "setFormModel"])
+                              ]),
+                              _: 2
+                            }, 1032, ["name"]),
+                            createVNode(_component_a_form_item, null, {
+                              default: withCtx(() => [
+                                createVNode(_component_a_button, {
+                                  onClick: ($event) => $setup.addOne(index),
+                                  style: { "margin-right": "6px" }
+                                }, {
+                                  default: withCtx(() => [
+                                    createVNode(_component_PlusOutlined)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["onClick"]),
+                                createVNode(_component_a_button, {
+                                  onClick: ($event) => $setup.removeOne(item)
+                                }, {
+                                  default: withCtx(() => [
+                                    createVNode(_component_MinusCircleOutlined)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["onClick"])
+                              ]),
+                              _: 2
+                            }, 1024)
+                          ]),
+                          _: 2
+                        }, 1024);
+                      }), 128))
+                    ]),
+                    _: 1
+                  }, 8, ["model", "onFinish"]), [
+                    [vShow, $setup.dynamicRowValues.values.length > 0]
+                  ])
+                ]),
+                _: 1
+              }),
+              createVNode(_component_a_col, {
+                sm: 24,
+                md: 6
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_a_card, {
+                    class: "j-super-query-history-card",
+                    bordered: true
+                  }, {
+                    title: withCtx(() => [
+                      _hoisted_24
+                    ]),
+                    default: withCtx(() => [
+                      $setup.saveTreeData.length === 0 ? (openBlock(), createBlock(_component_a_empty, {
+                        key: 0,
+                        class: "j-super-query-history-empty",
+                        description: "\u6CA1\u6709\u4FDD\u5B58\u4EFB\u4F55\u67E5\u8BE2"
+                      })) : (openBlock(), createBlock(_component_a_tree, {
+                        key: 1,
+                        class: "j-super-query-history-tree",
+                        treeData: $setup.saveTreeData,
+                        selectedKeys: [],
+                        "show-icon": true,
+                        onSelect: $setup.handleTreeSelect
+                      }, {
+                        title: withCtx(({ title }) => [
+                          createElementVNode("div", null, [
+                            createElementVNode("span", { title }, toDisplayString(title.length > 10 ? title.substring(0, 10) + "..." : title), 9, _hoisted_25),
+                            createElementVNode("span", _hoisted_26, [
+                              createVNode(_component_close_circle_outlined, {
+                                onClick: ($event) => $setup.handleRemoveSaveInfo(title)
+                              }, null, 8, ["onClick"])
+                            ])
+                          ])
+                        ]),
+                        custom: withCtx(() => [
+                          createVNode(_component_file_text_outlined)
+                        ]),
+                        _: 1
+                      }, 8, ["treeData", "onSelect"]))
+                    ]),
+                    _: 1
+                  })
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          })
+        ]),
+        _: 1
+      }, 8, ["onRegister", "onOk"])
+    ])),
+    createVNode(_component_a_modal, {
+      title: "\u8BF7\u8F93\u5165\u4FDD\u5B58\u7684\u540D\u79F0",
+      visible: $setup.saveInfo.visible,
+      onCancel: _cache[4] || (_cache[4] = ($event) => $setup.saveInfo.visible = false),
+      onOk: $setup.doSaveQueryInfo
+    }, {
+      default: withCtx(() => [
+        createElementVNode("div", _hoisted_27, [
+          createVNode(_component_a_input, {
+            value: $setup.saveInfo.title,
+            "onUpdate:value": _cache[3] || (_cache[3] = ($event) => $setup.saveInfo.title = $event),
+            style: { "width": "90%" },
+            placeholder: "\u8BF7\u8F93\u5165\u4FDD\u5B58\u7684\u540D\u79F0"
+          }, null, 8, ["value"])
+        ])
+      ]),
+      _: 1
+    }, 8, ["visible", "onOk"])
+  ], 64);
+}
+var OnlineSuperQuery = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-08fc9755"]]);
+export { OnlineSuperQuery as default };

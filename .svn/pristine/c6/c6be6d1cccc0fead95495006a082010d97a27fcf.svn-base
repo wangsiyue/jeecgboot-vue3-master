@@ -1,0 +1,94 @@
+import {
+  isString
+} from "./chunk-RX5I5ULI.js";
+import {
+  modal_default
+} from "./chunk-IF4EKY7K.js";
+import {
+  message_default
+} from "./chunk-D65CINXV.js";
+import {
+  CheckCircleFilled_default,
+  CloseCircleFilled_default,
+  InfoCircleFilled_default
+} from "./chunk-SJ2YS27J.js";
+import {
+  createVNode
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/useMessageOnline.js
+init_define_APP_INFO();
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+function getIcon(iconType) {
+  if (iconType === "warning") {
+    return createVNode(InfoCircleFilled_default, {
+      "class": "modal-icon-warning"
+    }, null);
+  } else if (iconType === "success") {
+    return createVNode(CheckCircleFilled_default, {
+      "class": "modal-icon-success"
+    }, null);
+  } else if (iconType === "info") {
+    return createVNode(InfoCircleFilled_default, {
+      "class": "modal-icon-info"
+    }, null);
+  } else {
+    return createVNode(CloseCircleFilled_default, {
+      "class": "modal-icon-error"
+    }, null);
+  }
+}
+function renderContent({
+  content
+}) {
+  if (isString(content)) {
+    return createVNode("div", {
+      "innerHTML": `<div>${content}</div>`
+    }, null);
+  } else {
+    return content;
+  }
+}
+function createConfirm(options) {
+  const iconType = options.iconType || "warning";
+  Reflect.deleteProperty(options, "iconType");
+  const opt = __spreadProps(__spreadValues({
+    centered: true,
+    icon: getIcon(iconType)
+  }, options), {
+    content: renderContent(options)
+  });
+  return modal_default.confirm(opt);
+}
+function useMessageOnline() {
+  return {
+    createMessage: message_default,
+    createConfirm
+  };
+}
+
+export {
+  useMessageOnline
+};
+//# sourceMappingURL=chunk-J75HBRFQ.js.map

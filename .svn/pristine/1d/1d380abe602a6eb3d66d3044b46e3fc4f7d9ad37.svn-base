@@ -1,0 +1,332 @@
+import {
+  useCgformList
+} from "./chunk-O6RCE4TK.js";
+import "./chunk-NEQIUIVJ.js";
+import "./chunk-J75HBRFQ.js";
+import {
+  AuthManagerDrawer
+} from "./chunk-LRFXWKVL.js";
+import {
+  AuthSetterModal
+} from "./chunk-ZCL2K76O.js";
+import "./chunk-RD5D52AZ.js";
+import "./chunk-AU475GDW.js";
+import "./chunk-6PZ7TKAD.js";
+import "./chunk-2XEWFQ6A.js";
+import "./chunk-IB2CICDP.js";
+import "./chunk-WAULTM7Y.js";
+import {
+  CustomButtonList
+} from "./chunk-GUN22OC3.js";
+import {
+  EnhanceJsModal
+} from "./chunk-WKG4F6AR.js";
+import "./chunk-EX5GJQHJ.js";
+import {
+  EnhanceJavaModal
+} from "./chunk-WPG4BOJM.js";
+import {
+  EnhanceSqlModal
+} from "./chunk-B4CXZWPH.js";
+import "./chunk-ETUAENEG.js";
+import "./chunk-MVR23ZME.js";
+import "./chunk-J4T72XU3.js";
+import "./chunk-OUASFHT6.js";
+import "./chunk-4O4AOII7.js";
+import "./chunk-WEWWQRI4.js";
+import "./chunk-OCFTGKVL.js";
+import "./chunk-MAZ6MTU5.js";
+import {
+  CgformModal
+} from "./chunk-D775WV2P.js";
+import "./chunk-TVTOMBKU.js";
+import "./chunk-HOLFWHAD.js";
+import "./chunk-2UC6MOE4.js";
+import {
+  CgformPageType
+} from "./chunk-TVXRCUK6.js";
+import "./chunk-IWXE4XJG.js";
+import "./chunk-2W2CZODK.js";
+import "./chunk-AQHLUZYB.js";
+import "./chunk-T6HXXEQN.js";
+import "./chunk-WXFIQ355.js";
+import "./chunk-LMRYBDBC.js";
+import "./chunk-CWQVWJAJ.js";
+import "./chunk-YFX4JODE.js";
+import "./chunk-BDO74DPO.js";
+import {
+  DbToOnlineModal
+} from "./chunk-AOPCKECH.js";
+import "./chunk-W2KVQNJD.js";
+import "./chunk-LEVLXUZ4.js";
+import {
+  default as default2,
+  default2 as default3
+} from "./chunk-SEYUDYTJ.js";
+import "./chunk-2D5MMSKL.js";
+import "./chunk-MHXJV5SW.js";
+import "./chunk-ZZBFKWCL.js";
+import "./chunk-QPJKLTNU.js";
+import "./chunk-PVYVDTBU.js";
+import "./chunk-NVCZ2J7C.js";
+import "./chunk-OMA7JPDB.js";
+import "./chunk-DZMOYDKI.js";
+import "./chunk-YFVM7TWR.js";
+import "./chunk-M25O2SOY.js";
+import "./chunk-UY63CZ3T.js";
+import "./chunk-TNMIRAD5.js";
+import "./chunk-EKOIBGOQ.js";
+import "./chunk-MXTOG34P.js";
+import "./chunk-SAFWZAHM.js";
+import "./chunk-LZQJUVGN.js";
+import "./chunk-GH3CBHGS.js";
+import "./chunk-ARD7XY2B.js";
+import "./chunk-H5XI7H7T.js";
+import "./chunk-GPOHKMTD.js";
+import "./chunk-RLJKXQIA.js";
+import "./chunk-RHCHCTS4.js";
+import "./chunk-A7XLKMMP.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import "./chunk-SQAXQJKY.js";
+import "./chunk-GE6AQLDJ.js";
+import "./chunk-RX5I5ULI.js";
+import "./chunk-KVJ6VO5A.js";
+import "./chunk-WLZB43K5.js";
+import "./chunk-GJK6IZYL.js";
+import "./chunk-YTTBVVBT.js";
+import "./chunk-KIDT26GW.js";
+import "./chunk-EW6PF333.js";
+import "./chunk-SFFFXB4Y.js";
+import "./chunk-4VBCR2UY.js";
+import "./chunk-LU447FN7.js";
+import "./chunk-PCZNDPKY.js";
+import "./chunk-RNTI5KWT.js";
+import "./chunk-D2VLAI67.js";
+import "./chunk-6AC3D6AH.js";
+import "./chunk-ZQYRAJKZ.js";
+import "./chunk-Z3NVNWVB.js";
+import "./chunk-YXPBMO4E.js";
+import "./chunk-WTYZJWFF.js";
+import "./chunk-IF4EKY7K.js";
+import "./chunk-SOWJBRMK.js";
+import "./chunk-JTWWQTIY.js";
+import "./chunk-7GOB2L72.js";
+import "./chunk-GUMRFUUS.js";
+import "./chunk-D65CINXV.js";
+import "./chunk-3UC42JCT.js";
+import "./chunk-RL4BZ2NY.js";
+import "./chunk-MH4EPDFD.js";
+import "./chunk-L26JVTZY.js";
+import "./chunk-KAI4QMTN.js";
+import "./chunk-O3J5FWNC.js";
+import "./chunk-SJ2YS27J.js";
+import "./chunk-UFII5LNT.js";
+import "./chunk-FYK3HJMB.js";
+import {
+  Fragment,
+  createBaseVNode,
+  createCommentVNode,
+  createElementBlock,
+  createTextVNode,
+  createVNode,
+  defineComponent,
+  openBlock,
+  provide,
+  resolveComponent,
+  watch,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import "./chunk-G5TZ7427.js";
+import {
+  normalizeClass
+} from "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/CgformCopyList.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "CgformCopyList",
+  components: {
+    BasicTable: default2,
+    TableAction: default3,
+    CgformModal,
+    DbToOnlineModal,
+    CustomButtonList,
+    EnhanceJsModal,
+    EnhanceJavaModal,
+    EnhanceSqlModal,
+    AuthManagerDrawer,
+    AuthSetterModal
+  },
+  setup() {
+    const pageType = CgformPageType.copy;
+    provide("cgformPageType", pageType);
+    const {
+      router,
+      pageContext,
+      getTableAction,
+      getDropDownAction,
+      onShowCustomButton,
+      onShowEnhanceJs,
+      onShowEnhanceSql,
+      onShowEnhanceJava,
+      registerCustomButtonModal,
+      registerEnhanceJsModal,
+      registerEnhanceSqlModal,
+      registerEnhanceJavaModal,
+      registerAuthManagerDrawer,
+      registerAuthSetterModal,
+      registerCgformModal,
+      registerDbToOnlineModal
+    } = useCgformList({
+      pageType,
+      designScope: "online-cgform-list",
+      columns: [
+        { title: "\u89C6\u56FE\u8868\u540D", dataIndex: "tableName" },
+        { title: "\u89C6\u56FE\u8868\u63CF\u8FF0", dataIndex: "tableTxt" },
+        { title: "\u539F\u8868\u7248\u672C", dataIndex: "copyVersion" },
+        { title: "\u89C6\u56FE\u7248\u672C", dataIndex: "tableVersion" }
+      ],
+      formSchemas: [
+        { label: "\u8868\u540D", field: "tableName", component: "JInput" }
+      ]
+    });
+    const { prefixCls, tableContext } = pageContext;
+    const [registerTable, { reload }, { rowSelection }] = tableContext;
+    watch(router.currentRoute, () => reload());
+    return {
+      prefixCls,
+      reload,
+      rowSelection,
+      getTableAction,
+      getDropDownAction,
+      onShowCustomButton,
+      onShowEnhanceJs,
+      onShowEnhanceSql,
+      onShowEnhanceJava,
+      registerCustomButtonModal,
+      registerEnhanceJsModal,
+      registerEnhanceSqlModal,
+      registerEnhanceJavaModal,
+      registerAuthManagerDrawer,
+      registerAuthSetterModal,
+      registerTable,
+      registerCgformModal,
+      registerDbToOnlineModal
+    };
+  }
+});
+var _hoisted_1 = createTextVNode("\u81EA\u5B9A\u4E49\u6309\u94AE");
+var _hoisted_2 = createTextVNode("JS\u589E\u5F3A");
+var _hoisted_3 = createTextVNode("SQL\u589E\u5F3A");
+var _hoisted_4 = createTextVNode("Java\u589E\u5F3A");
+var _hoisted_5 = {
+  key: 0,
+  style: { "color": "limegreen" }
+};
+var _hoisted_6 = {
+  key: 1,
+  style: { "color": "red" }
+};
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_TableAction = resolveComponent("TableAction");
+  const _component_BasicTable = resolveComponent("BasicTable");
+  const _component_CgformModal = resolveComponent("CgformModal");
+  const _component_EnhanceJsModal = resolveComponent("EnhanceJsModal");
+  const _component_EnhanceJavaModal = resolveComponent("EnhanceJavaModal");
+  const _component_EnhanceSqlModal = resolveComponent("EnhanceSqlModal");
+  const _component_DbToOnlineModal = resolveComponent("DbToOnlineModal");
+  const _component_CustomButtonList = resolveComponent("CustomButtonList");
+  const _component_AuthManagerDrawer = resolveComponent("AuthManagerDrawer");
+  const _component_AuthSetterModal = resolveComponent("AuthSetterModal");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", {
+      class: normalizeClass(_ctx.prefixCls)
+    }, [
+      createVNode(_component_BasicTable, {
+        onRegister: _ctx.registerTable,
+        rowSelection: _ctx.rowSelection
+      }, {
+        tableTitle: withCtx(() => [
+          createVNode(_component_a_button, {
+            onClick: _ctx.onShowCustomButton,
+            type: "primary",
+            preIcon: "ant-design:highlight"
+          }, {
+            default: withCtx(() => [
+              _hoisted_1
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_a_button, {
+            onClick: _ctx.onShowEnhanceJs,
+            type: "primary",
+            preIcon: "ant-design:strikethrough"
+          }, {
+            default: withCtx(() => [
+              _hoisted_2
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_a_button, {
+            onClick: _ctx.onShowEnhanceSql,
+            type: "primary",
+            preIcon: "ant-design:filter"
+          }, {
+            default: withCtx(() => [
+              _hoisted_3
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_a_button, {
+            onClick: _ctx.onShowEnhanceJava,
+            type: "primary",
+            preIcon: "ant-design:tool"
+          }, {
+            default: withCtx(() => [
+              _hoisted_4
+            ]),
+            _: 1
+          }, 8, ["onClick"])
+        ]),
+        dbSync: withCtx(({ text }) => [
+          text === "Y" ? (openBlock(), createElementBlock("span", _hoisted_5, "\u5DF2\u540C\u6B65")) : createCommentVNode("", true),
+          text === "N" ? (openBlock(), createElementBlock("span", _hoisted_6, "\u672A\u540C\u6B65")) : createCommentVNode("", true)
+        ]),
+        action: withCtx(({ record }) => [
+          createVNode(_component_TableAction, {
+            actions: _ctx.getTableAction(record),
+            dropDownActions: _ctx.getDropDownAction(record)
+          }, null, 8, ["actions", "dropDownActions"])
+        ]),
+        _: 1
+      }, 8, ["onRegister", "rowSelection"])
+    ], 2),
+    createVNode(_component_CgformModal, {
+      onRegister: _ctx.registerCgformModal,
+      actionButton: false,
+      onSuccess: _ctx.reload
+    }, null, 8, ["onRegister", "onSuccess"]),
+    createVNode(_component_EnhanceJsModal, { onRegister: _ctx.registerEnhanceJsModal }, null, 8, ["onRegister"]),
+    createVNode(_component_EnhanceJavaModal, { onRegister: _ctx.registerEnhanceJavaModal }, null, 8, ["onRegister"]),
+    createVNode(_component_EnhanceSqlModal, { onRegister: _ctx.registerEnhanceSqlModal }, null, 8, ["onRegister"]),
+    createVNode(_component_DbToOnlineModal, {
+      onRegister: _ctx.registerDbToOnlineModal,
+      onSuccess: _ctx.reload
+    }, null, 8, ["onRegister", "onSuccess"]),
+    createVNode(_component_CustomButtonList, { onRegister: _ctx.registerCustomButtonModal }, null, 8, ["onRegister"]),
+    createVNode(_component_AuthManagerDrawer, { onRegister: _ctx.registerAuthManagerDrawer }, null, 8, ["onRegister"]),
+    createVNode(_component_AuthSetterModal, { onRegister: _ctx.registerAuthSetterModal }, null, 8, ["onRegister"])
+  ], 64);
+}
+var CgformCopyList = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export {
+  CgformCopyList as default
+};
+//# sourceMappingURL=CgformCopyList-R33YZWTD.js.map

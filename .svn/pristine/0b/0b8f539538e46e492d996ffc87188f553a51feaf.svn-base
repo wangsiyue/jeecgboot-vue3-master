@@ -1,0 +1,89 @@
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  Fragment,
+  createBaseVNode,
+  createElementBlock,
+  createVNode,
+  defineComponent,
+  openBlock,
+  ref,
+  resolveComponent
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/ParamsTable.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "FieldTable",
+  props: {
+    loading: Boolean,
+    dataSource: Array
+  },
+  setup() {
+    const tableRef = ref();
+    const columns = ref([
+      {
+        title: "\u53C2\u6570",
+        key: "paramName",
+        width: 230,
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u8F93\u5165${title}",
+        validateRules: [{ required: true, message: "${title}\u4E0D\u80FD\u4E3A\u7A7A" }]
+      },
+      {
+        title: "\u53C2\u6570\u6587\u672C",
+        key: "paramTxt",
+        width: 230,
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u8F93\u5165${title}",
+        validateRules: [{ required: true, message: "${title}\u4E0D\u80FD\u4E3A\u7A7A" }]
+      },
+      {
+        title: "\u9ED8\u8BA4\u503C",
+        key: "paramValue",
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u8F93\u5165${title}"
+      }
+    ]);
+    return { tableRef, columns };
+  }
+});
+var _hoisted_1 = createBaseVNode("br", null, null, -1);
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_alert = resolveComponent("a-alert");
+  const _component_JVxeTable = resolveComponent("JVxeTable");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_a_alert, {
+      type: "info",
+      showIcon: "",
+      message: "\u76EE\u524D\u53EA\u6709SQL\u6A21\u5F0F\u624D\u652F\u6301\u62A5\u8868\u53C2\u6570\uFF01"
+    }),
+    _hoisted_1,
+    createVNode(_component_JVxeTable, {
+      ref: "tableRef",
+      toolbar: "",
+      rowNumber: "",
+      rowSelection: "",
+      dragSort: "",
+      sortKey: "orderNum",
+      loading: _ctx.loading,
+      columns: _ctx.columns,
+      dataSource: _ctx.dataSource,
+      height: 336
+    }, null, 8, ["loading", "columns", "dataSource"])
+  ], 64);
+}
+var ParamsTable = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  ParamsTable
+};
+//# sourceMappingURL=chunk-4H54GNBB.js.map

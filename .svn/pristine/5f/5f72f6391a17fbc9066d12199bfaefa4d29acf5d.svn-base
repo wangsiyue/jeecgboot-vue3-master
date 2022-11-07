@@ -1,0 +1,260 @@
+import {
+  isObject
+} from "./chunk-RX5I5ULI.js";
+import {
+  require_dayjs_min
+} from "./chunk-GUMRFUUS.js";
+import {
+  unref
+} from "./chunk-JQQZ4WSS.js";
+import {
+  __toESM,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/index.ts
+init_define_APP_INFO();
+var URL_HASH_TAB = `__AGWE4H__HASH__TAG__PWHRG__`;
+var noop = () => {
+};
+function getPopupContainer(node) {
+  return node?.parentNode ?? document.body;
+}
+function setObjToUrlParams(baseUrl, obj) {
+  let parameters = "";
+  for (const key in obj) {
+    parameters += key + "=" + encodeURIComponent(obj[key]) + "&";
+  }
+  parameters = parameters.replace(/&$/, "");
+  return /\?$/.test(baseUrl) ? baseUrl + parameters : baseUrl.replace(/\/?$/, "?") + parameters;
+}
+function deepMerge(src = {}, target = {}) {
+  let key;
+  for (key in target) {
+    src[key] = isObject(src[key]) ? deepMerge(src[key], target[key]) : src[key] = target[key];
+  }
+  return src;
+}
+function openWindow(url2, opt) {
+  const { target = "__blank", noopener = true, noreferrer = true } = opt || {};
+  const feature = [];
+  noopener && feature.push("noopener=yes");
+  noreferrer && feature.push("noreferrer=yes");
+  window.open(url2, target, feature.join(","));
+}
+function getDynamicProps(props) {
+  const ret = {};
+  Object.keys(props).map((key) => {
+    ret[key] = unref(props[key]);
+  });
+  return ret;
+}
+function getValueType(props, field) {
+  let formSchema = unref(unref(props)?.schemas);
+  let valueType = "string";
+  if (formSchema) {
+    let schema = formSchema.filter((item) => item.field === field)[0];
+    valueType = schema.componentProps && schema.componentProps.valueType ? schema.componentProps.valueType : valueType;
+  }
+  return valueType;
+}
+function getRawRoute(route) {
+  if (!route)
+    return route;
+  const { matched, ...opt } = route;
+  return {
+    ...opt,
+    matched: matched ? matched.map((item) => ({
+      meta: item.meta,
+      name: item.name,
+      path: item.path
+    })) : void 0
+  };
+}
+function cloneObject(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+var withInstall = (component, alias) => {
+  const comp = component;
+  comp.install = (app) => {
+    app.component(comp.name || comp.displayName, component);
+    if (alias) {
+      app.config.globalProperties[alias] = component;
+    }
+  };
+  return component;
+};
+function getUrlParam(paraName) {
+  let url2 = document.location.toString();
+  let arrObj = url2.split("?");
+  if (arrObj.length > 1) {
+    let arrPara = arrObj[1].split("&");
+    let arr;
+    for (let i = 0; i < arrPara.length; i++) {
+      arr = arrPara[i].split("=");
+      if (arr != null && arr[0] == paraName) {
+        return arr[1];
+      }
+    }
+    return "";
+  } else {
+    return "";
+  }
+}
+function sleep(ms, fn) {
+  return new Promise(
+    (resolve) => setTimeout(() => {
+      fn && fn();
+      resolve();
+    }, ms)
+  );
+}
+function replaceAll(text, checker, replacer) {
+  let lastText = text;
+  text = text.replace(checker, replacer);
+  if (lastText !== text) {
+    return replaceAll(text, checker, replacer);
+  }
+  return text;
+}
+function getQueryVariable(url2) {
+  if (!url2)
+    return;
+  var t, n, r, i = url2.split("?")[1], s = {};
+  t = i.split("&"), r = null, n = null;
+  for (var o in t) {
+    var u = t[o].indexOf("=");
+    u !== -1 && (r = t[o].substr(0, u), n = t[o].substr(u + 1), s[r] = n);
+  }
+  return s;
+}
+function showDealBtn(bpmStatus) {
+  if (bpmStatus != "1" && bpmStatus != "3" && bpmStatus != "4") {
+    return true;
+  }
+  return false;
+}
+function numToUpper(value) {
+  if (value != "") {
+    let unit = new Array("\u4EDF", "\u4F70", "\u62FE", "", "\u4EDF", "\u4F70", "\u62FE", "", "\u89D2", "\u5206");
+    const toDx = (n) => {
+      switch (n) {
+        case "0":
+          return "\u96F6";
+        case "1":
+          return "\u58F9";
+        case "2":
+          return "\u8D30";
+        case "3":
+          return "\u53C1";
+        case "4":
+          return "\u8086";
+        case "5":
+          return "\u4F0D";
+        case "6":
+          return "\u9646";
+        case "7":
+          return "\u67D2";
+        case "8":
+          return "\u634C";
+        case "9":
+          return "\u7396";
+      }
+    };
+    let lth = value.toString().length;
+    value *= 100;
+    value += "";
+    let length = value.length;
+    if (lth <= 8) {
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        if (i == 2) {
+          result = "\u5143" + result;
+        } else if (i == 6) {
+          result = "\u4E07" + result;
+        }
+        if (value.charAt(length - i - 1) == 0) {
+          if (i != 0 && i != 1) {
+            if (result.charAt(0) != "\u96F6" && result.charAt(0) != "\u5143" && result.charAt(0) != "\u4E07") {
+              result = "\u96F6" + result;
+            }
+          }
+          continue;
+        }
+        result = toDx(value.charAt(length - i - 1)) + unit[unit.length - i - 1] + result;
+      }
+      result += result.charAt(result.length - 1) == "\u5143" ? "\u6574" : "";
+      return result;
+    } else {
+      return null;
+    }
+  }
+  return null;
+}
+var allModules = import.meta.glob("../views/**/*.vue");
+function importViewsFile(path) {
+  if (path.startsWith("/")) {
+    path = path.substring(1);
+  }
+  let page = "";
+  if (path.endsWith(".vue")) {
+    page = `../views/${path}`;
+  } else {
+    page = `../views/${path}.vue`;
+  }
+  return new Promise((resolve, reject) => {
+    let flag = true;
+    for (const path2 in allModules) {
+      if (path2 == page) {
+        flag = false;
+        allModules[path2]().then((mod) => {
+          console.log(path2, mod);
+          resolve(mod);
+        });
+      }
+    }
+    if (flag) {
+      reject("\u8BE5\u6587\u4EF6\u4E0D\u5B58\u5728:" + page);
+    }
+  });
+}
+function goJmReportViewPage(url, id, token) {
+  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => eval(s2));
+  if (url.includes("?")) {
+    url += "&";
+  } else {
+    url += "?";
+  }
+  url += `id=${id}`;
+  url += `&token=${token}`;
+  window.open(url);
+}
+
+// src/utils/dateUtil.ts
+init_define_APP_INFO();
+var import_dayjs = __toESM(require_dayjs_min());
+var DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm";
+var DATE_FORMAT = "YYYY-MM-DD ";
+function formatToDateTime(date = void 0, format = DATE_TIME_FORMAT) {
+  return (0, import_dayjs.default)(date).format(format);
+}
+function formatToDate(date = void 0, format = DATE_FORMAT) {
+  return (0, import_dayjs.default)(date).format(format);
+}
+var dateUtil = import_dayjs.default;
+
+export {
+  URL_HASH_TAB,
+  setObjToUrlParams,
+  deepMerge,
+  getDynamicProps,
+  getValueType,
+  withInstall,
+  getUrlParam,
+  sleep,
+  replaceAll,
+  formatToDateTime,
+  formatToDate,
+  dateUtil
+};
+//# sourceMappingURL=chunk-GH3CBHGS.js.map

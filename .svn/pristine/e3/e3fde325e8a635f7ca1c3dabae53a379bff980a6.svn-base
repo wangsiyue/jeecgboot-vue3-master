@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:codemirror_mode_xml_xml_js"],
+  "sourcesContent": ["export default require(\"./node_modules/codemirror/mode/xml/xml.js\");"],
+  "mappings": ";;;;;;;;;AAAA;AAAA,IAAO,qCAAQ;",
+  "names": []
+}

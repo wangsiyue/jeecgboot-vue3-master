@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../ant-design-vue/es/locale/en_US.js"],
+  "sourcesContent": ["import defaultLocale from './default';\nexport default defaultLocale;"],
+  "mappings": ";;;;;;;;AAAA;AACA,IAAO,gBAAQ;",
+  "names": []
+}

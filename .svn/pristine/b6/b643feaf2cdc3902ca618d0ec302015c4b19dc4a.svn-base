@@ -1,0 +1,36 @@
+import {
+  __commonJS,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/tinymce/plugins/contextmenu/plugin.js
+var require_plugin = __commonJS({
+  "node_modules/tinymce/plugins/contextmenu/plugin.js"() {
+    init_define_APP_INFO();
+    (function() {
+      "use strict";
+      var global = tinymce.util.Tools.resolve("tinymce.PluginManager");
+      function Plugin() {
+        global.add("contextmenu", function() {
+        });
+      }
+      Plugin();
+    })();
+  }
+});
+
+// node_modules/tinymce/plugins/contextmenu/index.js
+var require_contextmenu = __commonJS({
+  "node_modules/tinymce/plugins/contextmenu/index.js"() {
+    init_define_APP_INFO();
+    require_plugin();
+  }
+});
+
+// dep:tinymce_plugins_contextmenu
+init_define_APP_INFO();
+var tinymce_plugins_contextmenu_default = require_contextmenu();
+export {
+  tinymce_plugins_contextmenu_default as default
+};
+//# sourceMappingURL=tinymce_plugins_contextmenu.js.map

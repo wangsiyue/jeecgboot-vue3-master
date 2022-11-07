@@ -1,0 +1,81 @@
+import {
+  getAuthCache
+} from "./chunk-MXTOG34P.js";
+import {
+  DB_DICT_DATA_KEY
+} from "./chunk-GE6AQLDJ.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/dict/index.ts
+init_define_APP_INFO();
+var getDictItemsByCode = (code) => {
+  if (getAuthCache(DB_DICT_DATA_KEY) && getAuthCache(DB_DICT_DATA_KEY)[code]) {
+    return getAuthCache(DB_DICT_DATA_KEY)[code];
+  }
+};
+
+// src/utils/dict/JDictSelectUtil.js
+init_define_APP_INFO();
+function filterDictText(dictOptions, text) {
+  if (text != null && Array.isArray(dictOptions)) {
+    let result = [];
+    let splitText;
+    if (Array.isArray(text)) {
+      splitText = text;
+    } else {
+      splitText = text.toString().trim().split(",");
+    }
+    for (let txt of splitText) {
+      let dictText = txt;
+      for (let dictItem of dictOptions) {
+        if (txt.toString() === dictItem.value.toString()) {
+          dictText = dictItem.text || dictItem.title || dictItem.label;
+          break;
+        }
+      }
+      result.push(dictText);
+    }
+    return result.join(",");
+  }
+  return text;
+}
+function filterMultiDictText(dictOptions, text) {
+  if (text === 0 || text === "0") {
+    if (dictOptions) {
+      for (let dictItem of dictOptions) {
+        if (text == dictItem.value) {
+          return dictItem.text;
+        }
+      }
+    }
+  }
+  if (!text || text == "undefined" || text == "null" || !dictOptions || dictOptions.length == 0) {
+    return "";
+  }
+  let re = "";
+  text = text.toString();
+  let arr = text.split(",");
+  dictOptions.forEach(function(option) {
+    if (option) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === option.value) {
+          re += option.text + ",";
+          break;
+        }
+      }
+    }
+  });
+  if (re == "") {
+    return text;
+  }
+  return re.substring(0, re.length - 1);
+}
+
+export {
+  getDictItemsByCode,
+  filterDictText,
+  filterMultiDictText
+};
+//# sourceMappingURL=chunk-UY63CZ3T.js.map

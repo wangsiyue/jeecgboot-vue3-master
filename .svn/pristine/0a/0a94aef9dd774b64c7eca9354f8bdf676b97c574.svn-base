@@ -1,0 +1,326 @@
+import {
+  Api,
+  doBatchDelete,
+  list,
+  queryParamsList
+} from "./chunk-G4VGU4ES.js";
+import {
+  GraphreportModal
+} from "./chunk-RLSVX5K2.js";
+import "./chunk-4H54GNBB.js";
+import {
+  useCopyModal
+} from "./chunk-37O2UL56.js";
+import "./chunk-XBK2KMKX.js";
+import "./chunk-J75HBRFQ.js";
+import "./chunk-7ZEJXTWD.js";
+import "./chunk-KYYR2BW6.js";
+import "./chunk-SOSH3DWB.js";
+import {
+  useListPage
+} from "./chunk-TWHHE4M5.js";
+import "./chunk-CB466JPU.js";
+import {
+  default as default2,
+  default2 as default3
+} from "./chunk-UE4HX7HJ.js";
+import "./chunk-25RI66DN.js";
+import {
+  useModal
+} from "./chunk-SMLIOOAP.js";
+import "./chunk-ZZBFKWCL.js";
+import "./chunk-YFVM7TWR.js";
+import {
+  router
+} from "./chunk-64MZJWVI.js";
+import "./chunk-ANLUEKLO.js";
+import "./chunk-LZQJUVGN.js";
+import "./chunk-GH3CBHGS.js";
+import "./chunk-ARD7XY2B.js";
+import "./chunk-H5XI7H7T.js";
+import "./chunk-GPOHKMTD.js";
+import "./chunk-RLJKXQIA.js";
+import "./chunk-RHCHCTS4.js";
+import "./chunk-A7XLKMMP.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import "./chunk-C4IBJHIP.js";
+import "./chunk-YLDRSUWQ.js";
+import "./chunk-RX5I5ULI.js";
+import "./chunk-KVJ6VO5A.js";
+import "./chunk-WLZB43K5.js";
+import "./chunk-GJK6IZYL.js";
+import "./chunk-YTTBVVBT.js";
+import "./chunk-KIDT26GW.js";
+import "./chunk-EW6PF333.js";
+import "./chunk-SFFFXB4Y.js";
+import "./chunk-4VBCR2UY.js";
+import "./chunk-LU447FN7.js";
+import "./chunk-PCZNDPKY.js";
+import "./chunk-RNTI5KWT.js";
+import "./chunk-D2VLAI67.js";
+import "./chunk-6AC3D6AH.js";
+import "./chunk-ZQYRAJKZ.js";
+import "./chunk-Z3NVNWVB.js";
+import "./chunk-YXPBMO4E.js";
+import "./chunk-WTYZJWFF.js";
+import "./chunk-IF4EKY7K.js";
+import "./chunk-SOWJBRMK.js";
+import "./chunk-JTWWQTIY.js";
+import "./chunk-7GOB2L72.js";
+import "./chunk-GUMRFUUS.js";
+import "./chunk-D65CINXV.js";
+import "./chunk-3UC42JCT.js";
+import "./chunk-RL4BZ2NY.js";
+import "./chunk-MH4EPDFD.js";
+import "./chunk-L26JVTZY.js";
+import "./chunk-KAI4QMTN.js";
+import "./chunk-O3J5FWNC.js";
+import "./chunk-SJ2YS27J.js";
+import "./chunk-UFII5LNT.js";
+import "./chunk-FYK3HJMB.js";
+import {
+  Fragment,
+  createBaseVNode,
+  createBlock,
+  createCommentVNode,
+  createElementBlock,
+  createTextVNode,
+  createVNode,
+  defineComponent,
+  h,
+  openBlock,
+  ref,
+  resolveComponent,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import "./chunk-G5TZ7427.js";
+import {
+  normalizeClass
+} from "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/GraphreportList.js
+init_define_APP_INFO();
+import ExcelButton from "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/ExcelButton.vue";
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var _sfc_main = defineComponent({
+  name: "GraphreportList",
+  components: { ExcelButton, BasicTable: default2, TableAction: default3, GraphreportModal },
+  setup() {
+    const { prefixCls, doRequest, doDeleteRecord, tableContext } = useListPage({
+      designScope: "online-graphreport-list",
+      tableProps: {
+        api: list,
+        columns: [
+          { title: "\u56FE\u8868\u540D\u79F0", dataIndex: "name" },
+          { title: "\u7F16\u7801", dataIndex: "code" },
+          { title: "\u6570\u636E", dataIndex: "cgrSql" },
+          { title: "Y\u8F74\u6587\u5B57", dataIndex: "yaxisText" },
+          { title: "X\u8F74\u5B57\u6BB5", dataIndex: "xaxisField" }
+        ],
+        formConfig: {
+          labelWidth: 200,
+          schemas: [
+            { label: "\u56FE\u8868\u540D\u79F0", field: "name", component: "JInput" },
+            { label: "\u7F16\u7801", field: "code", component: "JInput" }
+          ]
+        }
+      }
+    });
+    const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
+    const excelConfig = {
+      export: {
+        name: "Online\u56FE\u8868",
+        url: Api.exportXls
+      },
+      import: {
+        url: Api.importXls,
+        success: reload
+      }
+    };
+    const [registerFormModal, formModal] = useModal();
+    function onAdd() {
+      formModal.openModal(true, { isUpdate: false });
+    }
+    function onEdit(record) {
+      formModal.openModal(true, { isUpdate: true, record });
+    }
+    function onBatchDelete() {
+      return __async(this, null, function* () {
+        doRequest(() => doBatchDelete(selectedRowKeys.value));
+      });
+    }
+    function onGoToTest(record) {
+      router.push("/online/graphreport/chart/" + record.id);
+    }
+    const { createCopyModal } = useCopyModal();
+    function onShowOnlineUrl(record) {
+      return __async(this, null, function* () {
+        let baseUrl = `/online/graphreport/chart/${record.id}`;
+        let copyText = ref(baseUrl);
+        createCopyModal({
+          title: `\u914D\u7F6E\u5730\u5740\u3010${record.name}\u3011`,
+          content: () => h("div", {}, copyText.value),
+          copyText
+        });
+        let result = yield queryParamsList(record.id);
+        if (result && result.length > 0) {
+          let str = "?";
+          result.forEach((item) => {
+            str += item.paramName + "=${" + item.paramName + "}&";
+          });
+          str = str.substring(0, str.length - 1);
+          copyText.value = `${baseUrl}${str}`;
+        }
+      });
+    }
+    function getTableAction(record) {
+      return [
+        {
+          label: "\u7F16\u8F91",
+          onClick: () => onEdit(record)
+        }
+      ];
+    }
+    function getDropDownAction(record) {
+      return [
+        {
+          label: "\u529F\u80FD\u6D4B\u8BD5",
+          onClick: () => onGoToTest(record)
+        },
+        {
+          label: "\u914D\u7F6E\u5730\u5740",
+          onClick: () => onShowOnlineUrl(record)
+        },
+        {
+          label: "\u5220\u9664",
+          popConfirm: {
+            title: "\u786E\u5B9A\u5220\u9664\u5417\uFF1F",
+            placement: "left",
+            confirm: () => doDeleteRecord(() => doBatchDelete([record.id]))
+          }
+        }
+      ];
+    }
+    return {
+      reload,
+      prefixCls,
+      rowSelection,
+      selectedRowKeys,
+      onAdd,
+      getTableAction,
+      getDropDownAction,
+      onBatchDelete,
+      registerTable,
+      registerFormModal,
+      excelConfig
+    };
+  }
+});
+var _hoisted_1 = createTextVNode("\u65B0\u589E");
+var _hoisted_2 = createBaseVNode("span", null, "\u5220\u9664", -1);
+var _hoisted_3 = createBaseVNode("span", null, "\u6279\u91CF\u64CD\u4F5C", -1);
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_ExcelButton = resolveComponent("ExcelButton");
+  const _component_a_icon = resolveComponent("a-icon");
+  const _component_a_menu_item = resolveComponent("a-menu-item");
+  const _component_a_menu = resolveComponent("a-menu");
+  const _component_a_dropdown = resolveComponent("a-dropdown");
+  const _component_TableAction = resolveComponent("TableAction");
+  const _component_BasicTable = resolveComponent("BasicTable");
+  const _component_GraphreportModal = resolveComponent("GraphreportModal");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", {
+      class: normalizeClass(_ctx.prefixCls)
+    }, [
+      createVNode(_component_BasicTable, {
+        onRegister: _ctx.registerTable,
+        rowSelection: _ctx.rowSelection
+      }, {
+        tableTitle: withCtx(() => [
+          createVNode(_component_a_button, {
+            onClick: _ctx.onAdd,
+            type: "primary",
+            preIcon: "ant-design:plus"
+          }, {
+            default: withCtx(() => [
+              _hoisted_1
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_ExcelButton, { config: _ctx.excelConfig }, null, 8, ["config"]),
+          _ctx.selectedRowKeys.length > 0 ? (openBlock(), createBlock(_component_a_dropdown, { key: 0 }, {
+            overlay: withCtx(() => [
+              createVNode(_component_a_menu, null, {
+                default: withCtx(() => [
+                  createVNode(_component_a_menu_item, {
+                    key: "1",
+                    onClick: _ctx.onBatchDelete
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(_component_a_icon, { type: "delete" }),
+                      _hoisted_2
+                    ]),
+                    _: 1
+                  }, 8, ["onClick"])
+                ]),
+                _: 1
+              })
+            ]),
+            default: withCtx(() => [
+              createVNode(_component_a_button, null, {
+                default: withCtx(() => [
+                  _hoisted_3,
+                  createVNode(_component_a_icon, { type: "down" })
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          })) : createCommentVNode("", true)
+        ]),
+        action: withCtx(({ record }) => [
+          createVNode(_component_TableAction, {
+            actions: _ctx.getTableAction(record),
+            dropDownActions: _ctx.getDropDownAction(record)
+          }, null, 8, ["actions", "dropDownActions"])
+        ]),
+        _: 1
+      }, 8, ["onRegister", "rowSelection"])
+    ], 2),
+    createVNode(_component_GraphreportModal, {
+      onRegister: _ctx.registerFormModal,
+      onSuccess: _ctx.reload
+    }, null, 8, ["onRegister", "onSuccess"])
+  ], 64);
+}
+var GraphreportList = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export {
+  GraphreportList as default
+};
+//# sourceMappingURL=GraphreportList-UUHYZVGC.js.map

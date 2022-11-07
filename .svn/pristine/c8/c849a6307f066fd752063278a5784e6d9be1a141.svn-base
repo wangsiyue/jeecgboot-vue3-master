@@ -1,0 +1,809 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+import { useMessage } from "/@/hooks/web/useMessage";
+import { reactive, ref, computed, resolveComponent, openBlock, createElementBlock, createVNode, createBlock, withCtx, Fragment, renderList, normalizeStyle, createCommentVNode, renderSlot, unref, nextTick, toRaw } from "vue";
+import { BasicForm, useForm } from "/@/components/Form/index";
+import { V as VALIDATE_FAILED, S as SUBMIT_FLOW_KEY, a as SUBMIT_FLOW_ID } from "./FormSchemaFactory.js";
+import { defHttp } from "/@/utils/http/axios";
+import { u as useOnlineFormContext, a as useFormItems, l as loadFormFieldsDefVal, g as getRefPromise } from "./useAutoForm.js";
+import { Loading } from "/@/components/Loading";
+import OnlineSubForm from "./OnlineSubForm.js";
+import { _ as _export_sfc } from "./index.js";
+import { p as pick } from "./pick.js";
+function useEnhance(onlineTableContext, isList = true) {
+  let EnhanceJS = reactive({});
+  const getAction = (url, params) => {
+    return defHttp.get({ url, params }, { isTransformResponse: false });
+  };
+  const postAction = (url, params) => {
+    return defHttp.post({ url, params }, { isTransformResponse: false });
+  };
+  const putAction = (url, params) => {
+    return defHttp.put({ url, params }, { isTransformResponse: false });
+  };
+  const deleteAction = (url, params) => {
+    return defHttp.delete({ url, params }, { isTransformResponse: false });
+  };
+  if (isList === true) {
+    onlineTableContext["_getAction"] = getAction;
+    onlineTableContext["_postAction"] = postAction;
+    onlineTableContext["_putAction"] = putAction;
+    onlineTableContext["_deleteAction"] = deleteAction;
+  } else {
+    onlineTableContext.addObject2Context("_getAction", getAction);
+    onlineTableContext.addObject2Context("_postAction", postAction);
+    onlineTableContext.addObject2Context("_putAction", putAction);
+    onlineTableContext.addObject2Context("_deleteAction", deleteAction);
+  }
+  function initCgEnhanceJs(str) {
+    if (str) {
+      let Obj = eval("(" + str + ")");
+      return new Obj(getAction, postAction, deleteAction);
+    } else {
+      return {};
+    }
+  }
+  function triggerJsFun(that, buttonCode) {
+    if (EnhanceJS && EnhanceJS[buttonCode]) {
+      EnhanceJS[buttonCode](that);
+    }
+  }
+  function customBeforeSubmit(that, formData) {
+    if (EnhanceJS && EnhanceJS["beforeSubmit"]) {
+      return EnhanceJS["beforeSubmit"](that, formData);
+    } else {
+      return Promise.resolve();
+    }
+  }
+  function beforeDelete(that, record) {
+    if (EnhanceJS && EnhanceJS["beforeDelete"]) {
+      return EnhanceJS["beforeDelete"](that, record);
+    } else {
+      return Promise.resolve();
+    }
+  }
+  if (isList === true) {
+    if (onlineTableContext) {
+      onlineTableContext["beforeDelete"] = (record) => {
+        const onlEnhanceJS = onlineTableContext["EnhanceJS"];
+        if (onlEnhanceJS && onlEnhanceJS["beforeDelete"]) {
+          return onlEnhanceJS["beforeDelete"](onlineTableContext, record);
+        } else {
+          return Promise.resolve();
+        }
+      };
+      onlineTableContext["beforeEdit"] = (record) => {
+        const onlEnhanceJS = onlineTableContext["EnhanceJS"];
+        if (onlEnhanceJS && onlEnhanceJS["beforeEdit"]) {
+          return onlEnhanceJS["beforeEdit"](onlineTableContext, record);
+        } else {
+          return Promise.resolve();
+        }
+      };
+    }
+  }
+  return {
+    EnhanceJS,
+    initCgEnhanceJs,
+    customBeforeSubmit,
+    beforeDelete,
+    triggerJsFun
+  };
+}
+const urlObject = {
+  optPre: "/online/cgform/api/form/",
+  urlButtonAction: "/online/cgform/api/doButton"
+};
+const _sfc_main = {
+  name: "OnlineForm",
+  components: {
+    BasicForm,
+    Loading,
+    OnlineSubForm
+  },
+  props: {
+    id: {
+      type: String,
+      default: ""
+    },
+    formTemplate: {
+      type: Number,
+      default: 1
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    isTree: {
+      type: Boolean,
+      default: false
+    },
+    pidField: {
+      type: String,
+      default: ""
+    }
+  },
+  emits: ["success", "rendered"],
+  setup(props, { emit }) {
+    console.log("onlineForm-setup\u300B\u300B");
+    const { createMessage: $message } = useMessage();
+    const onlineFormRef = ref(null);
+    const single = ref(true);
+    const loading = ref(false);
+    const tableType = ref(1);
+    const customEditSubmitUrl = ref("");
+    const submitFlowFlag = ref(false);
+    const isUpdate = ref(false);
+    const onlineExtConfigJson = reactive({
+      reportPrintShow: 0,
+      reportPrintUrl: "",
+      joinQuery: 0,
+      modelFullscreen: 0,
+      modalMinWidth: ""
+    });
+    const { onlineFormContext, resetContext } = useOnlineFormContext();
+    const {
+      formSchemas,
+      defaultValueFields,
+      changeDataIfArray2String,
+      tableName,
+      dbData,
+      checkOnlyFieldValue,
+      hasSubTable,
+      subTabInfo,
+      refMap,
+      subDataSource,
+      baseColProps,
+      createFormSchemas,
+      linkDownList,
+      fieldDisplayStatus
+    } = useFormItems(props, onlineFormRef);
+    let { EnhanceJS: EnhanceJS2, initCgEnhanceJs: initCgEnhanceJs2 } = useEnhance(onlineFormContext, false);
+    const [registerForm, { setProps, validate, resetFields, setFieldsValue, updateSchema, getFieldsValue, scrollToField }] = useForm({
+      schemas: formSchemas,
+      showActionButtonGroup: false,
+      baseColProps
+    });
+    const onlineFormDisabled = ref(false);
+    function handleFormDisabled() {
+      let flag = props.disabled;
+      onlineFormDisabled.value = flag;
+      setProps({ disabled: flag });
+    }
+    function show(status, record, param) {
+      return __async(this, null, function* () {
+        console.log("\u65B0\u589E\u7F16\u8F91\u8FDB\u5165\u8868\u5355\u300B\u300Bform", record);
+        yield updatePidFieldDict();
+        customEditSubmitUrl.value = "";
+        yield resetFields();
+        dbData.value = "";
+        let flag = unref(status);
+        isUpdate.value = flag;
+        if (flag) {
+          yield edit(record);
+        } else {
+          editSubVxeTableData();
+        }
+        nextTick(() => {
+          if (!flag && param) {
+            setFieldsValue(param);
+          }
+          handleDefaultValue();
+          handleCgButtonClick("js", "loaded");
+          handleFormDisabled();
+        });
+      });
+    }
+    function updatePidFieldDict() {
+      return __async(this, null, function* () {
+        if (props.isTree === true) {
+          let pidFieldName = props.pidField;
+          let arr = formSchemas.value;
+          if (arr && arr.length > 0) {
+            let temp = arr.filter((item) => item.field === pidFieldName);
+            if (temp.length > 0) {
+              yield updateSchema({
+                field: pidFieldName,
+                componentProps: {
+                  reload: new Date().getTime()
+                }
+              });
+            }
+          } else {
+            console.log("\u6CA1\u6709\u62FF\u5230\u8868\u5355\u914D\u7F6E\u4FE1\u606F\uFF0C\u53EF\u80FD\u662F\u7B2C\u4E00\u6B21\u6253\u5F00\u65B0\u589E\u9875\u9762");
+          }
+        }
+      });
+    }
+    function handleDefaultValue() {
+      if (unref(isUpdate) === false) {
+        let fieldProperties = toRaw(defaultValueFields[tableName.value]);
+        loadFormFieldsDefVal(fieldProperties, (values) => {
+          setFieldsValue(values);
+        });
+      }
+    }
+    function handleSubTableDefaultValue(sub, $event) {
+      let subFieldProperties = toRaw(defaultValueFields[sub.key]);
+      loadFormFieldsDefVal(subFieldProperties, (values) => {
+        const { row, target } = $event;
+        let v = [{ rowKey: row.id, values: __spreadValues({}, values) }];
+        target.ctx.setValues(v);
+      });
+    }
+    function edit(record) {
+      return __async(this, null, function* () {
+        let formData = yield getFormData(record.id);
+        dbData.value = Object.assign({}, record);
+        let arr = realFormFieldNames.value;
+        yield setFieldsValue(pick(formData, ...arr));
+        editSubVxeTableData(formData);
+      });
+    }
+    function editSubVxeTableData(record) {
+      if (!record) {
+        record = {};
+      }
+      let keys = Object.keys(subDataSource.value);
+      if (keys && keys.length > 0) {
+        let obj = {};
+        for (let key of keys) {
+          obj[key] = record[key] || [];
+        }
+        subDataSource.value = obj;
+      }
+    }
+    let realFormFieldNames = computed(() => {
+      let arr = formSchemas.value;
+      let names = [];
+      for (let a of arr) {
+        names.push(a.field);
+      }
+      return names;
+    });
+    function getFormData(dataId) {
+      let url = `${urlObject.optPre}${props.id}/${dataId}`;
+      return new Promise((resolve, reject) => {
+        defHttp.get({ url }, { isTransformResponse: false }).then((res) => {
+          if (res.success) {
+            resolve(res.result);
+          } else {
+            reject();
+            $message.warning(res.message);
+          }
+        }).catch(() => {
+          reject();
+        });
+      });
+    }
+    function createRootProperties(data) {
+      return __async(this, null, function* () {
+        tableType.value = data.head.tableType;
+        tableName.value = data.head.tableName;
+        single.value = data.head.tableType == 1;
+        handleExtConfigJson(data.head.extConfigJson);
+        createFormSchemas(data.schema.properties, data.schema.required, checkOnlyFieldValue);
+        EnhanceJS2 = initCgEnhanceJs2(data.enhanceJs);
+        emit("rendered", onlineExtConfigJson);
+        let formRefObject = yield getRefPromise(onlineFormRef);
+        formRefObject.$formValueChange = (field, value) => {
+          onValuesChange(field, value);
+        };
+      });
+    }
+    function handleExtConfigJson(jsonStr) {
+      let extConfigJson = { "reportPrintShow": 0, "reportPrintUrl": "", "joinQuery": 0, "modelFullscreen": 1, "modalMinWidth": "" };
+      if (jsonStr) {
+        extConfigJson = JSON.parse(jsonStr);
+      }
+      Object.keys(extConfigJson).map((k) => {
+        onlineExtConfigJson[k] = extConfigJson[k];
+      });
+    }
+    function handleSubmit() {
+      if (single.value === true) {
+        handleSingleSubmit();
+      } else {
+        handleOne2ManySubmit();
+      }
+    }
+    function handleOne2ManySubmit() {
+      validateAll().then((formData) => {
+        handleApplyRequest(formData);
+      });
+    }
+    function validateAll() {
+      let temp = {};
+      return new Promise((resolve, reject) => {
+        validate().then((values) => resolve(values), ({ errorFields }) => {
+          if (errorFields && errorFields.length > 0) {
+            scrollToField(errorFields[0][0]);
+          }
+          reject(VALIDATE_FAILED);
+        });
+      }).then((result) => {
+        Object.assign(temp, changeDataIfArray2String(result));
+        return validateSubTableFields();
+      }).then((allTableData) => {
+        Object.assign(temp, allTableData);
+        return Promise.resolve(temp);
+      }).catch((e) => {
+        if (e === VALIDATE_FAILED || (e == null ? void 0 : e.code) === VALIDATE_FAILED) {
+          $message.warning("\u6821\u9A8C\u672A\u901A\u8FC7");
+          if (e.key) {
+            changeTab(e.key);
+          }
+        } else {
+          console.error(e);
+        }
+        return Promise.reject(null);
+      });
+    }
+    function changeTab(key) {
+      let arr = subTabInfo.value;
+      for (let i = 0; i < arr.length; i++) {
+        if (key == arr[i].key) {
+          subActiveKey.value = i + "";
+          break;
+        }
+      }
+    }
+    function validateSubTableFields() {
+      return new Promise((resolve, reject) => __async(this, null, function* () {
+        let subData = {};
+        try {
+          let arr = subTabInfo.value;
+          for (let i = 0; i < arr.length; i++) {
+            let key = arr[i].key;
+            let instance = refMap[key].value;
+            if (instance instanceof Array) {
+              instance = instance[0];
+            }
+            if (arr[i].relationType == 1) {
+              try {
+                let subFormData = yield instance.getAll();
+                subData[key] = [];
+                subData[key].push(subFormData);
+              } catch (e) {
+                throw { code: VALIDATE_FAILED, key };
+              }
+            } else {
+              let errMap = yield instance.fullValidateTable();
+              if (errMap) {
+                throw { code: VALIDATE_FAILED, key };
+              }
+              subData[key] = instance.getTableData();
+            }
+          }
+        } catch (e) {
+          reject(e);
+        }
+        resolve(subData);
+      }));
+    }
+    function handleSingleSubmit() {
+      return __async(this, null, function* () {
+        try {
+          let values = yield validate();
+          values = Object.assign({}, dbData.value, values);
+          values = changeDataIfArray2String(values);
+          loading.value = true;
+          handleApplyRequest(values);
+        } finally {
+          loading.value = false;
+        }
+      });
+    }
+    function handleApplyRequest(formData) {
+      customBeforeSubmit2(context, formData).then(() => {
+        doApplyRequest(formData);
+      }).catch((msg) => {
+        $message.warning(msg);
+      });
+    }
+    function doApplyRequest(formData) {
+      Object.keys(formData).map((key) => {
+        if (Array.isArray(formData[key])) {
+          if (formData[key].length == 0) {
+            formData[key] = "";
+          }
+        }
+      });
+      console.log("\u63D0\u4EA4\u8868\u5355\u6570\u636E\u300B\u300B\u300Bform:", formData);
+      let customUrl = customEditSubmitUrl.value;
+      let url = `${urlObject.optPre}${props.id}?tabletype=${tableType.value}`;
+      if (customUrl) {
+        url = `${customUrl}?tabletype=${tableType.value}`;
+      }
+      if (submitFlowFlag.value === true) {
+        formData[SUBMIT_FLOW_KEY] = 1;
+      }
+      let method = isUpdate.value === true ? "put" : "post";
+      defHttp.request({ url, method, params: formData }, { isTransformResponse: false }).then((res) => {
+        if (res.success) {
+          if (res.result) {
+            formData[SUBMIT_FLOW_ID] = res.result;
+          }
+          emit("success", formData);
+          $message.success(res.message);
+        } else {
+          $message.warning(res.message);
+        }
+      }).finally(() => {
+        loading.value = false;
+      });
+    }
+    function triggleChangeValues(values, id, target) {
+      if (id && target) {
+        if (target.setValues) {
+          target.setValues(values);
+        } else {
+          target.ctx.setValues([{
+            rowKey: id,
+            values
+          }]);
+        }
+      } else {
+        setFieldsValue(values);
+      }
+    }
+    function triggleChangeValue(field, value) {
+      let obj = {};
+      obj[field] = value;
+      setFieldsValue(obj);
+    }
+    const subActiveKey = ref("0");
+    const subFormHeight = ref(300);
+    const subTableHeight = ref(340);
+    function getSubTableForeignKeyValue(key) {
+      if (isUpdate.value === true) {
+        let formData = dbData.value;
+        return getValueIgnoreCase(formData, key);
+      }
+      return "";
+    }
+    function getValueIgnoreCase(data, key) {
+      if (data) {
+        let temp = data[key];
+        if (!temp && temp !== 0) {
+          temp = data[key.toLowerCase()];
+          if (!temp && temp !== 0) {
+            temp = data[key.toUpperCase()];
+          }
+        }
+        return temp;
+      }
+      return "";
+    }
+    function handleSubFormChange(valueObj, tableKey) {
+      if (EnhanceJS2 && EnhanceJS2[tableKey + "_onlChange"]) {
+        let tableChangeObj = EnhanceJS2[tableKey + "_onlChange"]();
+        let columnKey = Object.keys(valueObj)[0];
+        if (tableChangeObj[columnKey]) {
+          let subRef = refMap[tableKey].value;
+          if (subRef instanceof Array) {
+            subRef = subRef[0];
+          }
+          let formEvent = subRef.getFormEvent();
+          let event = __spreadValues({
+            column: { key: columnKey },
+            value: valueObj[columnKey]
+          }, formEvent);
+          tableChangeObj[columnKey].call(onlineFormContext, onlineFormContext, event);
+        }
+      }
+    }
+    function handleValueChange(event, tableKey) {
+      if (EnhanceJS2 && EnhanceJS2[tableKey + "_onlChange"]) {
+        let tableChangeObj = EnhanceJS2[tableKey + "_onlChange"](onlineFormContext);
+        if (tableChangeObj[event.column.key]) {
+          tableChangeObj[event.column.key].call(onlineFormContext, onlineFormContext, event);
+        }
+      }
+    }
+    function handleAdded(event) {
+      event.target.emit("executeFillRule", event);
+    }
+    function getSubTableAuthPre(table) {
+      return "online_" + table + ":";
+    }
+    function onValuesChange(columnKey, value) {
+      return __async(this, null, function* () {
+        if (!EnhanceJS2 || !EnhanceJS2["onlChange"]) {
+          return false;
+        }
+        if (!columnKey) {
+          return false;
+        }
+        let tableChangeObj = EnhanceJS2["onlChange"]();
+        if (tableChangeObj[columnKey]) {
+          let formData = yield getFieldsValue();
+          let event = {
+            row: formData,
+            column: { key: columnKey },
+            value
+          };
+          tableChangeObj[columnKey].call(onlineFormContext, onlineFormContext, event);
+        }
+      });
+    }
+    function handleCgButtonClick(optType, buttonCode) {
+      if (optType == "js") {
+        if (EnhanceJS2 && EnhanceJS2[buttonCode]) {
+          EnhanceJS2[buttonCode].call(onlineFormContext, onlineFormContext);
+        }
+      } else if (optType == "action") {
+        let formData = dbData.value;
+        let params = {
+          formId: props.id,
+          buttonCode,
+          dataId: formData.id,
+          uiFormData: Object.assign({}, formData)
+        };
+        defHttp.post({
+          url: `${urlObject.urlButtonAction}`,
+          params
+        }, { isTransformResponse: false }).then((res) => {
+          if (res.success) {
+            $message.success("\u5904\u7406\u5B8C\u6210!");
+          } else {
+            $message.warning("\u5904\u7406\u5931\u8D25!");
+          }
+        });
+      }
+    }
+    function clearSubRows(tbname) {
+      let instance = refMap[tbname].value;
+      let rows = [...instance.getNewDataWithId(), ...subDataSource.value[tbname]];
+      if (!rows || rows.length == 0) {
+        return false;
+      }
+      let ids = [];
+      for (let i of rows) {
+        ids.push(i.id);
+      }
+      instance.removeRowsById(ids);
+    }
+    function addSubRows(tbname, rows) {
+      if (!rows) {
+        return false;
+      }
+      let instance = refMap[tbname].value;
+      if (typeof rows == "object") {
+        instance.addRows(rows, true);
+      } else {
+        this.$message.error("\u6DFB\u52A0\u5B50\u8868\u6570\u636E,\u53C2\u6570\u4E0D\u8BC6\u522B!");
+      }
+    }
+    function clearThenAddRows(tbname, rows) {
+      clearSubRows(tbname);
+      addSubRows(tbname, rows);
+    }
+    function changeOptions(field, options) {
+      if (!options && options.length <= 0) {
+        options = [];
+      }
+      options.map((item) => {
+        if (!item.hasOwnProperty("label")) {
+          item["label"] = item.text;
+        }
+      });
+      updateSchema({
+        field,
+        componentProps: {
+          options
+        }
+      });
+    }
+    function customBeforeSubmit2(that, formData) {
+      if (EnhanceJS2 && EnhanceJS2["beforeSubmit"]) {
+        return EnhanceJS2["beforeSubmit"](that, formData);
+      } else {
+        return Promise.resolve();
+      }
+    }
+    function handleCustomFormSh(show2, hide) {
+      let plain = toRaw(fieldDisplayStatus);
+      if (show2 && show2.length > 0) {
+        Object.keys(plain).map((k) => {
+          if (!k.endsWith("_load") && show2.indexOf(k) < 0) {
+            fieldDisplayStatus[k] = false;
+          }
+        });
+      } else if (hide && hide.length > 0) {
+        Object.keys(plain).map((k) => {
+          if (hide.indexOf(k) >= 0) {
+            fieldDisplayStatus[k] = false;
+          }
+        });
+      }
+    }
+    function handleCustomFormEdit(record, editSubmitUrl) {
+      return __async(this, null, function* () {
+        console.log("\u81EA\u5B9A\u4E49\u5F39\u7A97\u6253\u5F00online\u8868\u5355\u300B\u300Bform", record);
+        customEditSubmitUrl.value = editSubmitUrl;
+        yield resetFields();
+        dbData.value = "";
+        isUpdate.value = true;
+        yield edit(record);
+        yield nextTick(() => {
+          handleCgButtonClick("js", "loaded");
+        });
+      });
+    }
+    function getSubTableInstance(tableName2) {
+      let instance = refMap[tableName2].value;
+      if (instance instanceof Array) {
+        instance = instance[0];
+      }
+      return instance;
+    }
+    let context = {
+      tableName,
+      loading,
+      subActiveKey,
+      onlineFormRef,
+      getFieldsValue,
+      setFieldsValue,
+      submitFlowFlag,
+      subFormHeight,
+      subTableHeight,
+      refMap,
+      triggleChangeValues,
+      triggleChangeValue,
+      sh: fieldDisplayStatus,
+      clearSubRows,
+      addSubRows,
+      clearThenAddRows,
+      changeOptions,
+      isUpdate,
+      getSubTableInstance
+    };
+    resetContext(context);
+    return {
+      tableName,
+      onlineFormRef,
+      registerForm,
+      loading,
+      subActiveKey,
+      hasSubTable,
+      subTabInfo,
+      refMap,
+      subFormHeight,
+      getSubTableForeignKeyValue,
+      isUpdate,
+      handleSubFormChange,
+      subTableHeight,
+      onlineFormDisabled,
+      subDataSource,
+      getSubTableAuthPre,
+      handleAdded,
+      handleSubTableDefaultValue,
+      handleValueChange,
+      show,
+      createRootProperties,
+      handleSubmit,
+      sh: fieldDisplayStatus,
+      handleCgButtonClick,
+      handleCustomFormSh,
+      handleCustomFormEdit
+    };
+  }
+};
+const _hoisted_1 = ["id"];
+const _hoisted_2 = { key: 1 };
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BasicForm = resolveComponent("BasicForm");
+  const _component_online_sub_form = resolveComponent("online-sub-form");
+  const _component_JVxeTable = resolveComponent("JVxeTable");
+  const _component_a_tab_pane = resolveComponent("a-tab-pane");
+  const _component_a_tabs = resolveComponent("a-tabs");
+  const _component_Loading = resolveComponent("Loading");
+  return openBlock(), createElementBlock("div", {
+    id: $setup.tableName + "_form"
+  }, [
+    createVNode(_component_BasicForm, {
+      ref: "onlineFormRef",
+      onRegister: $setup.registerForm
+    }, null, 8, ["onRegister"]),
+    $setup.hasSubTable ? (openBlock(), createBlock(_component_a_tabs, {
+      key: 0,
+      activeKey: $setup.subActiveKey,
+      "onUpdate:activeKey": _cache[0] || (_cache[0] = ($event) => $setup.subActiveKey = $event)
+    }, {
+      default: withCtx(() => [
+        (openBlock(true), createElementBlock(Fragment, null, renderList($setup.subTabInfo, (sub, index) => {
+          return openBlock(), createBlock(_component_a_tab_pane, {
+            tab: sub.describe,
+            key: index + "",
+            forceRender: true
+          }, {
+            default: withCtx(() => [
+              sub.relationType == 1 ? (openBlock(), createElementBlock("div", {
+                key: 0,
+                style: normalizeStyle({ "overflow-y": "auto", "overflow-x": "hidden", "max-height": $setup.subFormHeight + "px" })
+              }, [
+                createVNode(_component_online_sub_form, {
+                  ref_for: true,
+                  ref: $setup.refMap[sub.key],
+                  table: sub.key,
+                  disabled: $setup.onlineFormDisabled,
+                  "form-template": $props.formTemplate,
+                  "main-id": $setup.getSubTableForeignKeyValue(sub.foreignKey),
+                  properties: sub.properties,
+                  "required-fields": sub.requiredFields,
+                  "is-update": $setup.isUpdate,
+                  onFormChange: (arg) => $setup.handleSubFormChange(arg, sub.key)
+                }, null, 8, ["table", "disabled", "form-template", "main-id", "properties", "required-fields", "is-update", "onFormChange"])
+              ], 4)) : (openBlock(), createElementBlock("div", _hoisted_2, [
+                createVNode(_component_JVxeTable, {
+                  ref_for: true,
+                  ref: $setup.refMap[sub.key],
+                  toolbar: "",
+                  "keep-source": "",
+                  "row-number": "",
+                  "row-selection": "",
+                  height: $setup.subTableHeight,
+                  disabled: $setup.onlineFormDisabled,
+                  columns: sub.columns,
+                  dataSource: $setup.subDataSource[sub.key],
+                  onValueChange: (event) => $setup.handleValueChange(event, sub.key),
+                  authPre: $setup.getSubTableAuthPre(sub.key),
+                  onAdded: $setup.handleAdded,
+                  onExecuteFillRule: ($event) => $setup.handleSubTableDefaultValue(sub, $event)
+                }, null, 8, ["height", "disabled", "columns", "dataSource", "onValueChange", "authPre", "onAdded", "onExecuteFillRule"])
+              ]))
+            ]),
+            _: 2
+          }, 1032, ["tab"]);
+        }), 128))
+      ]),
+      _: 1
+    }, 8, ["activeKey"])) : createCommentVNode("", true),
+    createVNode(_component_Loading, {
+      loading: $setup.loading,
+      absolute: false
+    }, null, 8, ["loading"]),
+    renderSlot(_ctx.$slots, "bottom")
+  ], 8, _hoisted_1);
+}
+var OnlineForm = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+var OnlineForm$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": OnlineForm
+}, Symbol.toStringTag, { value: "Module" }));
+export { OnlineForm as O, OnlineForm$1 as a, useEnhance as u };

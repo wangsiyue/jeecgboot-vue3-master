@@ -1,0 +1,21 @@
+import { defineComponent, h } from "vue";
+import { _ as _export_sfc } from "./index.js";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "/@/hooks/web/useMessage";
+import "vue-router";
+var ErrorTip_vue_vue_type_style_index_0_scoped_true_lang = "";
+const _sfc_main = defineComponent({
+  name: "ErrorTip",
+  props: {
+    tip: String,
+    tag: { type: String, default: "div" }
+  },
+  render() {
+    var _a;
+    return h(this.tag, {
+      class: ["error-tip"]
+    }, h("span", {}, (_a = this.tip) != null ? _a : this.$slots.default));
+  }
+});
+var ErrorTip = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-7e37d703"]]);
+export { ErrorTip as default };

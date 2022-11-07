@@ -1,0 +1,14 @@
+import {
+  printarea_default
+} from "./chunk-BRDDJTJW.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:vue-print-nb-jeecg_src_printarea
+init_define_APP_INFO();
+var vue_print_nb_jeecg_src_printarea_default = printarea_default;
+export {
+  vue_print_nb_jeecg_src_printarea_default as default
+};
+//# sourceMappingURL=vue-print-nb-jeecg_src_printarea.js.map

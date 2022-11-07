@@ -1,0 +1,261 @@
+import {
+  useMethods
+} from "./chunk-LEVLXUZ4.js";
+import {
+  useTable
+} from "./chunk-SEYUDYTJ.js";
+import {
+  filterObj
+} from "./chunk-2D5MMSKL.js";
+import {
+  useContext
+} from "./chunk-ZZBFKWCL.js";
+import {
+  withInstall
+} from "./chunk-GH3CBHGS.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  merge_default
+} from "./chunk-EW6PF333.js";
+import {
+  reactive,
+  ref,
+  unref
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/hooks/system/useListPage.ts
+init_define_APP_INFO();
+
+// src/hooks/web/useDesign.ts
+init_define_APP_INFO();
+
+// src/components/Application/index.ts
+init_define_APP_INFO();
+import appLogo from "D:/jeecgboot-vue3-master/src/components/Application/src/AppLogo.vue";
+import appProvider from "D:/jeecgboot-vue3-master/src/components/Application/src/AppProvider.vue";
+import appSearch from "D:/jeecgboot-vue3-master/src/components/Application/src/search/AppSearch.vue";
+import appLocalePicker from "D:/jeecgboot-vue3-master/src/components/Application/src/AppLocalePicker.vue";
+import appDarkModeToggle from "D:/jeecgboot-vue3-master/src/components/Application/src/AppDarkModeToggle.vue";
+
+// src/components/Application/src/useAppContext.ts
+init_define_APP_INFO();
+var key = Symbol();
+function useAppProviderContext() {
+  return useContext(key);
+}
+
+// src/components/Application/index.ts
+var AppLogo = withInstall(appLogo);
+var AppProvider = withInstall(appProvider);
+var AppSearch = withInstall(appSearch);
+var AppLocalePicker = withInstall(appLocalePicker);
+var AppDarkModeToggle = withInstall(appDarkModeToggle);
+
+// src/hooks/web/useDesign.ts
+function useDesign(scope) {
+  const values = useAppProviderContext();
+  return {
+    prefixCls: `${values.prefixCls}-${scope}`,
+    prefixVar: values.prefixCls
+  };
+}
+
+// src/hooks/system/useListPage.ts
+var { handleExportXls, handleImportXls } = useMethods();
+function useListPage(options) {
+  const $message = useMessage();
+  let $design = {};
+  if (options.designScope) {
+    $design = useDesign(options.designScope);
+  }
+  const tableContext = useListTable(options.tableProps);
+  const [, { getForm, reload, setLoading }, { selectedRowKeys }] = tableContext;
+  async function onExportXls() {
+    let { url, name, params } = options?.exportConfig ?? {};
+    let realUrl = typeof url === "function" ? url() : url;
+    if (realUrl) {
+      let title = typeof name === "function" ? name() : name;
+      let paramsForm = {};
+      try {
+        paramsForm = await getForm().validate();
+      } catch (e) {
+        console.error(e);
+      }
+      if (params) {
+        Object.keys(params).map((k) => {
+          let temp = params[k];
+          if (temp) {
+            paramsForm[k] = unref(temp);
+          }
+        });
+      }
+      if (selectedRowKeys.value && selectedRowKeys.value.length > 0) {
+        paramsForm["selections"] = selectedRowKeys.value.join(",");
+      }
+      return handleExportXls(title, realUrl, filterObj(paramsForm));
+    } else {
+      $message.createMessage.warn("\u6CA1\u6709\u4F20\u9012 exportConfig.url \u53C2\u6570");
+      return Promise.reject();
+    }
+  }
+  function onImportXls(file) {
+    let { url, success } = options?.importConfig ?? {};
+    let realUrl = typeof url === "function" ? url() : url;
+    if (realUrl) {
+      return handleImportXls(file, realUrl, success || reload);
+    } else {
+      $message.createMessage.warn("\u6CA1\u6709\u4F20\u9012 importConfig.url \u53C2\u6570");
+      return Promise.reject();
+    }
+  }
+  function doRequest(api, options2) {
+    return new Promise((resolve, reject) => {
+      const execute = async () => {
+        try {
+          setLoading(true);
+          const res = await api();
+          if (options2?.reload ?? true) {
+            reload();
+          }
+          if (options2?.clearSelection ?? true) {
+            selectedRowKeys.value = [];
+          }
+          resolve(res);
+        } catch (e) {
+          reject(e);
+        } finally {
+          setLoading(false);
+        }
+      };
+      if (options2?.confirm ?? true) {
+        $message.createConfirm({
+          iconType: "warning",
+          title: "\u5220\u9664",
+          content: "\u786E\u5B9A\u8981\u5220\u9664\u5417\uFF1F",
+          onOk: () => execute(),
+          onCancel: () => reject()
+        });
+      } else {
+        execute();
+      }
+    });
+  }
+  function doDeleteRecord(api) {
+    return doRequest(api, { confirm: false, clearSelection: false });
+  }
+  return {
+    ...$design,
+    ...$message,
+    onExportXls,
+    onImportXls,
+    doRequest,
+    doDeleteRecord,
+    tableContext
+  };
+}
+function useListTable(tableProps) {
+  const adaptiveColProps = {
+    xs: 24,
+    sm: 12,
+    md: 12,
+    lg: 8,
+    xl: 8,
+    xxl: 6
+  };
+  const defaultTableProps = {
+    rowKey: "id",
+    useSearchForm: true,
+    formConfig: {
+      compact: true,
+      autoSubmitOnEnter: true,
+      rowProps: { gutter: 8 },
+      baseColProps: {
+        ...adaptiveColProps
+      },
+      labelCol: {
+        xs: 24,
+        sm: 8,
+        md: 6,
+        lg: 8,
+        xl: 6,
+        xxl: 6
+      },
+      wrapperCol: {},
+      showAdvancedButton: true,
+      autoAdvancedCol: 3,
+      actionColOptions: {
+        ...adaptiveColProps,
+        style: { textAlign: "left" }
+      }
+    },
+    striped: true,
+    canResize: true,
+    minHeight: 500,
+    clickToRowSelect: false,
+    bordered: true,
+    showIndexColumn: false,
+    showTableSetting: true,
+    tableSetting: {
+      fullScreen: false
+    },
+    showActionColumn: true,
+    actionColumn: {
+      width: 120,
+      title: "\u64CD\u4F5C",
+      fixed: false,
+      dataIndex: "action",
+      slots: { customRender: "action" }
+    }
+  };
+  if (tableProps) {
+    merge_default(defaultTableProps, tableProps);
+  }
+  function beforeFetch(params) {
+    return Object.assign({ column: "createTime", order: "desc" }, params);
+  }
+  Object.assign(defaultTableProps, { beforeFetch });
+  if (typeof tableProps.beforeFetch === "function") {
+    defaultTableProps.beforeFetch = function(params) {
+      params = beforeFetch(params);
+      tableProps.beforeFetch(params);
+      return params;
+    };
+  }
+  const selectedRowKeys = ref([]);
+  const selectedRows = ref([]);
+  const rowSelection = tableProps?.rowSelection ?? {};
+  const defaultRowSelection = reactive({
+    ...rowSelection,
+    type: rowSelection.type ?? "checkbox",
+    columnWidth: rowSelection.columnWidth ?? 50,
+    selectedRows,
+    selectedRowKeys,
+    onChange(...args) {
+      selectedRowKeys.value = args[0];
+      selectedRows.value = args[1];
+      if (typeof rowSelection.onChange === "function") {
+        rowSelection.onChange(...args);
+      }
+    }
+  });
+  delete defaultTableProps.rowSelection;
+  return [
+    ...useTable(defaultTableProps),
+    {
+      selectedRows,
+      selectedRowKeys,
+      rowSelection: defaultRowSelection
+    }
+  ];
+}
+
+export {
+  useListPage,
+  useListTable
+};
+//# sourceMappingURL=chunk-W2KVQNJD.js.map

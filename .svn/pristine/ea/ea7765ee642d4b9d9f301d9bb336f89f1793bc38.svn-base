@@ -1,0 +1,298 @@
+import {
+  AuthFieldConfig
+} from "./chunk-OL24QAX7.js";
+import {
+  AuthButtonConfig
+} from "./chunk-FH6VDVMD.js";
+import {
+  AuthDataConfig
+} from "./chunk-HKIMGJPA.js";
+import {
+  error
+} from "./chunk-LZQJUVGN.js";
+import {
+  withInstall
+} from "./chunk-GH3CBHGS.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  isProdMode
+} from "./chunk-YLDRSUWQ.js";
+import {
+  isFunction
+} from "./chunk-RX5I5ULI.js";
+import {
+  tryOnUnmounted
+} from "./chunk-WTYZJWFF.js";
+import {
+  isEqual_default
+} from "./chunk-L26JVTZY.js";
+import {
+  Fragment,
+  computed,
+  createBlock,
+  createCommentVNode,
+  createElementBlock,
+  createVNode,
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  openBlock,
+  reactive,
+  ref,
+  resolveComponent,
+  toRaw,
+  unref,
+  watchEffect,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/AuthManagerDrawer.js
+init_define_APP_INFO();
+
+// src/components/Drawer/index.ts
+init_define_APP_INFO();
+import basicDrawer from "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/Drawer/src/BasicDrawer.vue";
+
+// src/components/Drawer/src/typing.ts
+init_define_APP_INFO();
+
+// src/components/Drawer/src/useDrawer.ts
+init_define_APP_INFO();
+var dataTransferRef = reactive({});
+var visibleData = reactive({});
+function useDrawer() {
+  if (!getCurrentInstance()) {
+    throw new Error("useDrawer() can only be used inside setup() or functional components!");
+  }
+  const drawer = ref(null);
+  const loaded = ref(false);
+  const uid = ref("");
+  function register(drawerInstance, uuid) {
+    isProdMode() && tryOnUnmounted(() => {
+      drawer.value = null;
+      loaded.value = null;
+      dataTransferRef[unref(uid)] = null;
+    });
+    if (unref(loaded) && isProdMode() && drawerInstance === unref(drawer)) {
+      return;
+    }
+    uid.value = uuid;
+    drawer.value = drawerInstance;
+    loaded.value = true;
+    drawerInstance.emitVisible = (visible, uid2) => {
+      visibleData[uid2] = visible;
+    };
+  }
+  const getInstance = () => {
+    const instance = unref(drawer);
+    if (!instance) {
+      error("useDrawer instance is undefined!");
+    }
+    return instance;
+  };
+  const methods = {
+    setDrawerProps: (props) => {
+      getInstance()?.setDrawerProps(props);
+    },
+    getVisible: computed(() => {
+      return visibleData[~~unref(uid)];
+    }),
+    openDrawer: (visible = true, data, openOnSet = true) => {
+      getInstance()?.setDrawerProps({
+        visible
+      });
+      if (!data)
+        return;
+      if (openOnSet) {
+        dataTransferRef[unref(uid)] = null;
+        dataTransferRef[unref(uid)] = toRaw(data);
+        return;
+      }
+      const equal = isEqual_default(toRaw(dataTransferRef[unref(uid)]), toRaw(data));
+      if (!equal) {
+        dataTransferRef[unref(uid)] = toRaw(data);
+      }
+    },
+    closeDrawer: () => {
+      getInstance()?.setDrawerProps({ visible: false });
+    }
+  };
+  return [register, methods];
+}
+var useDrawerInner = (callbackFn) => {
+  const drawerInstanceRef = ref(null);
+  const currentInstance = getCurrentInstance();
+  const uidRef = ref("");
+  if (!getCurrentInstance()) {
+    throw new Error("useDrawerInner() can only be used inside setup() or functional components!");
+  }
+  const getInstance = () => {
+    const instance = unref(drawerInstanceRef);
+    if (!instance) {
+      error("useDrawerInner instance is undefined!");
+      return;
+    }
+    return instance;
+  };
+  const register = (modalInstance, uuid) => {
+    isProdMode() && tryOnUnmounted(() => {
+      drawerInstanceRef.value = null;
+    });
+    uidRef.value = uuid;
+    drawerInstanceRef.value = modalInstance;
+    currentInstance?.emit("register", modalInstance, uuid);
+  };
+  watchEffect(() => {
+    const data = dataTransferRef[unref(uidRef)];
+    if (!data)
+      return;
+    if (!callbackFn || !isFunction(callbackFn))
+      return;
+    nextTick(() => {
+      callbackFn(data);
+    });
+  });
+  return [
+    register,
+    {
+      changeLoading: (loading = true) => {
+        getInstance()?.setDrawerProps({ loading });
+      },
+      changeOkLoading: (loading = true) => {
+        getInstance()?.setDrawerProps({ confirmLoading: loading });
+      },
+      getVisible: computed(() => {
+        return visibleData[~~unref(uidRef)];
+      }),
+      closeDrawer: () => {
+        getInstance()?.setDrawerProps({ visible: false });
+      },
+      setDrawerProps: (props) => {
+        getInstance()?.setDrawerProps(props);
+      }
+    }
+  ];
+};
+
+// src/components/Drawer/index.ts
+var BasicDrawer = withInstall(basicDrawer);
+
+// node_modules/@jeecg/online/AuthManagerDrawer.js
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "AuthManagerDrawer",
+  components: {
+    BasicDrawer,
+    AuthFieldConfig,
+    AuthButtonConfig,
+    AuthDataConfig
+  },
+  props: {
+    tableType: {
+      type: Number,
+      default: 1
+    }
+  },
+  emits: ["register"],
+  setup(props) {
+    const cgformId = ref("");
+    const headId = ref("");
+    const authFields = ref([]);
+    const activeKey = ref("field");
+    const hasDataAuth = computed(() => props.tableType == 1 || props.tableType == 2);
+    const [registerDrawer, { closeDrawer }] = useDrawerInner((data) => {
+      cgformId.value = data.cgformId;
+      headId.value = cgformId.value + "?" + new Date().getTime();
+      activeKey.value = "field";
+    });
+    function onClose() {
+      closeDrawer();
+    }
+    return {
+      activeKey,
+      cgformId,
+      headId,
+      authFields,
+      hasDataAuth,
+      onClose,
+      registerDrawer
+    };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AuthFieldConfig = resolveComponent("AuthFieldConfig");
+  const _component_a_tab_pane = resolveComponent("a-tab-pane");
+  const _component_AuthButtonConfig = resolveComponent("AuthButtonConfig");
+  const _component_AuthDataConfig = resolveComponent("AuthDataConfig");
+  const _component_a_tabs = resolveComponent("a-tabs");
+  const _component_BasicDrawer = resolveComponent("BasicDrawer");
+  return openBlock(), createBlock(_component_BasicDrawer, {
+    onRegister: _ctx.registerDrawer,
+    title: "\u6743\u9650\u7BA1\u7406",
+    width: 800,
+    onClose: _ctx.onClose
+  }, {
+    default: withCtx(() => [
+      createVNode(_component_a_tabs, {
+        activeKey: _ctx.activeKey,
+        "onUpdate:activeKey": _cache[1] || (_cache[1] = ($event) => _ctx.activeKey = $event)
+      }, {
+        default: withCtx(() => [
+          createVNode(_component_a_tab_pane, {
+            tab: "\u5B57\u6BB5\u6743\u9650",
+            key: "field",
+            forceRender: ""
+          }, {
+            default: withCtx(() => [
+              createVNode(_component_AuthFieldConfig, {
+                headId: _ctx.headId,
+                authFields: _ctx.authFields,
+                "onUpdate:authFields": _cache[0] || (_cache[0] = ($event) => _ctx.authFields = $event)
+              }, null, 8, ["headId", "authFields"])
+            ]),
+            _: 1
+          }),
+          _ctx.hasDataAuth ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+            createVNode(_component_a_tab_pane, {
+              tab: "\u6309\u94AE\u6743\u9650",
+              key: "button",
+              forceRender: ""
+            }, {
+              default: withCtx(() => [
+                createVNode(_component_AuthButtonConfig, { headId: _ctx.headId }, null, 8, ["headId"])
+              ]),
+              _: 1
+            }),
+            createVNode(_component_a_tab_pane, {
+              tab: "\u6570\u636E\u6743\u9650",
+              key: "data",
+              forceRender: ""
+            }, {
+              default: withCtx(() => [
+                createVNode(_component_AuthDataConfig, {
+                  cgformId: _ctx.cgformId,
+                  authFields: _ctx.authFields
+                }, null, 8, ["cgformId", "authFields"])
+              ]),
+              _: 1
+            })
+          ], 64)) : createCommentVNode("", true)
+        ]),
+        _: 1
+      }, 8, ["activeKey"])
+    ]),
+    _: 1
+  }, 8, ["onRegister", "onClose"]);
+}
+var AuthManagerDrawer = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  useDrawer,
+  AuthManagerDrawer
+};
+//# sourceMappingURL=chunk-B4HWH5OS.js.map

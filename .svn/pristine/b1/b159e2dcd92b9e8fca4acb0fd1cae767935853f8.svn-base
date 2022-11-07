@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:china-area-data"],
+  "sourcesContent": ["export default require(\"./node_modules/china-area-data/data.js\");"],
+  "mappings": ";;;;;;;;AAAA;AAAA,IAAO,0BAAQ;",
+  "names": []
+}

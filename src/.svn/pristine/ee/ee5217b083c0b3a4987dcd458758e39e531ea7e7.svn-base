@@ -1,0 +1,299 @@
+import {BasicColumn} from '/@/components/Table';
+import {FormSchema} from '/@/components/Table';
+import { rules} from '/@/utils/helper/validator';
+import { render } from '/@/utils/common/renderUtils';
+
+export const columns: BasicColumn[] = [
+    {
+    title: '辐射工作人员主键',
+    dataIndex: 'workPersonId'
+   },
+   {
+    title: '许可证申请单位主键',
+    dataIndex: 'companyId'
+   },
+   {
+    title: '姓名',
+    dataIndex: 'name'
+   },
+   {
+    title: '性别',
+    dataIndex: 'sex'
+   },
+   {
+    title: '出生日期',
+    dataIndex: 'birthday'
+   },
+   {
+    title: '毕业学校',
+    dataIndex: 'gradeSchool'
+   },
+   {
+    title: '学历',
+    dataIndex: 'degree'
+   },
+   {
+    title: '专业',
+    dataIndex: 'department'
+   },
+   {
+    title: '证件类型',
+    dataIndex: 'personIdType'
+   },
+   {
+    title: '证件编码',
+    dataIndex: 'personId'
+   },
+   {
+    title: '工作岗位',
+    dataIndex: 'workStation'
+   },
+   {
+    title: '备注',
+    dataIndex: 'remark'
+   },
+   {
+    title: 'BEGIN_TRAIN_DATE',
+    dataIndex: 'beginTrainDate'
+   },
+   {
+    title: 'TRAIN_NO',
+    dataIndex: 'trainNo'
+   },
+   {
+    title: 'YEAR_DOSAGE',
+    dataIndex: 'yearDosage'
+   },
+   {
+    title: 'IFLEGAL',
+    dataIndex: 'iflegal'
+   },
+   {
+    title: 'YEAR',
+    dataIndex: 'year'
+   },
+   {
+    title: 'END_TRAIN_DATE',
+    dataIndex: 'endTrainDate'
+   },
+   {
+    title: 'COMPANY_TYPE',
+    dataIndex: 'companyType'
+   },
+   {
+    title: 'YWID',
+    dataIndex: 'ywid'
+   },
+   {
+    title: 'REQUEIR_YWID',
+    dataIndex: 'requeirYwid'
+   },
+   {
+    title: 'PERSON_FLAG',
+    dataIndex: 'personFlag'
+   },
+   {
+    title: 'IS_DELETE',
+    dataIndex: 'isDelete'
+   },
+   {
+    title: 'UPDATETIME',
+    dataIndex: 'updatetime'
+   },
+   {
+    title: 'INSERT_STATUS',
+    dataIndex: 'insertStatus'
+   },
+   {
+    title: 'newOldId',
+    dataIndex: 'newOldId'
+   },
+   {
+    title: 'trainLevel',
+    dataIndex: 'trainLevel'
+   },
+   {
+    title: 'trainDate',
+    dataIndex: 'trainDate'
+   },
+   {
+    title: 'trainOrg',
+    dataIndex: 'trainOrg'
+   },
+   {
+    title: 'workCompany',
+    dataIndex: 'workCompany'
+   },
+];
+
+export const searchFormSchema: FormSchema[] = [
+ {
+    label: '辐射工作人员主键',
+    field: 'workPersonId',
+    component: 'Input'
+  },
+ {
+    label: '许可证申请单位主键',
+    field: 'companyId',
+    component: 'Input'
+  },
+];
+
+export const formSchema: FormSchema[] = [
+  // TODO 主键隐藏字段，目前写死为ID
+  {label: '', field: 'id', component: 'Input', show: false},
+  {
+    label: '辐射工作人员主键',
+    field: 'workPersonId',
+    component: 'Input',
+  },
+  {
+    label: '许可证申请单位主键',
+    field: 'companyId',
+    component: 'Input',
+  },
+  {
+    label: '姓名',
+    field: 'name',
+    component: 'Input',
+  },
+  {
+    label: '性别',
+    field: 'sex',
+    component: 'Input',
+  },
+  {
+    label: '出生日期',
+    field: 'birthday',
+    component: 'DatePicker'
+  },
+  {
+    label: '毕业学校',
+    field: 'gradeSchool',
+    component: 'Input',
+  },
+  {
+    label: '学历',
+    field: 'degree',
+    component: 'Input',
+  },
+  {
+    label: '专业',
+    field: 'department',
+    component: 'Input',
+  },
+  {
+    label: '证件类型',
+    field: 'personIdType',
+    component: 'Input',
+  },
+  {
+    label: '证件编码',
+    field: 'personId',
+    component: 'Input',
+  },
+  {
+    label: '工作岗位',
+    field: 'workStation',
+    component: 'Input',
+  },
+  {
+    label: '备注',
+    field: 'remark',
+    component: 'Input',
+  },
+  {
+    label: 'BEGIN_TRAIN_DATE',
+    field: 'beginTrainDate',
+    component: 'DatePicker'
+  },
+  {
+    label: 'TRAIN_NO',
+    field: 'trainNo',
+    component: 'Input',
+  },
+  {
+    label: 'YEAR_DOSAGE',
+    field: 'yearDosage',
+    component: 'InputNumber',
+  },
+  {
+    label: 'IFLEGAL',
+    field: 'iflegal',
+    component: 'InputNumber',
+  },
+  {
+    label: 'YEAR',
+    field: 'year',
+    component: 'InputNumber',
+  },
+  {
+    label: 'END_TRAIN_DATE',
+    field: 'endTrainDate',
+    component: 'DatePicker'
+  },
+  {
+    label: 'COMPANY_TYPE',
+    field: 'companyType',
+    component: 'Input',
+  },
+  {
+    label: 'YWID',
+    field: 'ywid',
+    component: 'Input',
+  },
+  {
+    label: 'REQUEIR_YWID',
+    field: 'requeirYwid',
+    component: 'Input',
+  },
+  {
+    label: 'PERSON_FLAG',
+    field: 'personFlag',
+    component: 'InputNumber',
+  },
+  {
+    label: 'IS_DELETE',
+    field: 'isDelete',
+    component: 'InputNumber',
+  },
+  {
+    label: 'UPDATETIME',
+    field: 'updatetime',
+    component: 'Input',
+  },
+  {
+    label: 'INSERT_STATUS',
+    field: 'insertStatus',
+    component: 'Input',
+  },
+  {
+    label: 'newOldId',
+    field: 'newOldId',
+    component: 'InputNumber',
+  },
+  {
+    label: 'trainLevel',
+    field: 'trainLevel',
+    component: 'Input',
+  },
+  {
+    label: 'trainDate',
+    field: 'trainDate',
+    component: 'DatePicker',
+    componentProps: {
+      showTime: true,
+      valueFormat: 'YYYY-MM-DD hh:mm:ss',
+    },
+  },
+  {
+    label: 'trainOrg',
+    field: 'trainOrg',
+    component: 'Input',
+  },
+  {
+    label: 'workCompany',
+    field: 'workCompany',
+    component: 'Input',
+  },
+];

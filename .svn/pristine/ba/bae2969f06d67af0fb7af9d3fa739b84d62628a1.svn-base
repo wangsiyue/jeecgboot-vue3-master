@@ -1,0 +1,51 @@
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/is.ts
+init_define_APP_INFO();
+var toString = Object.prototype.toString;
+function is(val, type) {
+  return toString.call(val) === `[object ${type}]`;
+}
+function isDef(val) {
+  return typeof val !== "undefined";
+}
+function isUnDef(val) {
+  return !isDef(val);
+}
+function isObject(val) {
+  return val !== null && is(val, "Object");
+}
+function isNull(val) {
+  return val === null;
+}
+function isNullOrUnDef(val) {
+  return isUnDef(val) || isNull(val);
+}
+function isString(val) {
+  return is(val, "String");
+}
+function isFunction(val) {
+  return typeof val === "function";
+}
+function isArray(val) {
+  return val && Array.isArray(val);
+}
+var isServer = typeof window === "undefined";
+var isClient = !isServer;
+function isUrl(path) {
+  const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+  return reg.test(path);
+}
+
+export {
+  isObject,
+  isNullOrUnDef,
+  isString,
+  isFunction,
+  isArray,
+  isClient,
+  isUrl
+};
+//# sourceMappingURL=chunk-RX5I5ULI.js.map

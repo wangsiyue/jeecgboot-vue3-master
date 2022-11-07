@@ -1,0 +1,33 @@
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  defineComponent,
+  h
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/ErrorTip.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "ErrorTip",
+  props: {
+    tip: String,
+    tag: { type: String, default: "div" }
+  },
+  render() {
+    var _a;
+    return h(this.tag, {
+      class: ["error-tip"]
+    }, h("span", {}, (_a = this.tip) != null ? _a : this.$slots.default));
+  }
+});
+var ErrorTip = _export_sfc(_sfc_main, [["__scopeId", "data-v-7e37d703"]]);
+
+export {
+  ErrorTip
+};
+//# sourceMappingURL=chunk-VM2WJ5ZW.js.map

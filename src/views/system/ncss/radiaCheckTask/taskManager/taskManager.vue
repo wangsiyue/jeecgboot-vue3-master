@@ -1,0 +1,49 @@
+<template>
+  <Card :tab-list="tabListTitle" v-bind="$attrs" :active-tab-key="activeKey" @tabChange="onTabChange">
+    <p v-if="activeKey === 'tab1'">
+
+    </p>
+    <p v-if="activeKey === 'tab2'">
+
+    </p>
+    <p v-if="activeKey === 'tab3'">
+
+    </p>
+    <p v-if="activeKey === 'tab4'">
+
+    </p>
+  </Card>
+</template>
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { Card } from 'ant-design-vue';
+const activeKey = ref('tab1');
+
+const tabListTitle = [
+  {
+    key: 'tab1',
+    tab: '任务管理',
+  },
+  {
+    key: 'tab2',
+    tab: '任务检查记录',
+  },
+  {
+    key: 'tab3',
+    tab: '企业巡查记录',
+  },
+  {
+    key: 'tab4',
+    tab: '企业安全信用管理',
+  },
+];
+
+function onTabChange(key) {
+  activeKey.value = key;
+}
+</script>
+<style scoped>
+.ant-tabs-large > .ant-tabs-nav .ant-tabs-tab {
+  font-size: 24px;
+}
+</style>

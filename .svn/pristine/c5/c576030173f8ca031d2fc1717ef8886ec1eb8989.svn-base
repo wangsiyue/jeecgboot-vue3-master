@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:dom-align"],
+  "sourcesContent": ["import d from \"./node_modules/dom-align/dist-web/index.js\";export default d;\nexport * from \"./node_modules/dom-align/dist-web/index.js\""],
+  "mappings": ";;;;;;;;;;AAAA;AAA2D,IAAO,oBAAQ;",
+  "names": []
+}

@@ -1,0 +1,2056 @@
+import {
+  useGlobSetting
+} from "./chunk-SAFWZAHM.js";
+import {
+  warn
+} from "./chunk-LZQJUVGN.js";
+import {
+  URL_HASH_TAB,
+  deepMerge,
+  formatToDateTime,
+  getUrlParam,
+  setObjToUrlParams
+} from "./chunk-GH3CBHGS.js";
+import {
+  require_lib
+} from "./chunk-ARD7XY2B.js";
+import {
+  require_md5
+} from "./chunk-H5XI7H7T.js";
+import {
+  require_axios
+} from "./chunk-RHCHCTS4.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  APP_DARK_MODE_KEY_,
+  APP_LOCAL_CACHE_KEY,
+  APP_SESSION_CACHE_KEY,
+  DB_DICT_DATA_KEY,
+  DEFAULT_CACHE_TIME,
+  LOCK_INFO_KEY,
+  LOGIN_INFO_KEY,
+  PROJ_CFG_KEY,
+  ROLES_KEY,
+  TENANT_ID,
+  TOKEN_KEY,
+  USER_INFO_KEY,
+  createLocalStorage,
+  createSessionStorage,
+  store,
+  t,
+  useI18n
+} from "./chunk-GE6AQLDJ.js";
+import {
+  isArray,
+  isFunction,
+  isObject,
+  isString,
+  isUrl
+} from "./chunk-RX5I5ULI.js";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory
+} from "./chunk-WLZB43K5.js";
+import {
+  defineStore
+} from "./chunk-YTTBVVBT.js";
+import {
+  cloneDeep_default,
+  omit_default,
+  pick_default
+} from "./chunk-7GOB2L72.js";
+import {
+  require_dayjs_min
+} from "./chunk-GUMRFUUS.js";
+import {
+  toRaw
+} from "./chunk-JQQZ4WSS.js";
+import {
+  __export,
+  __publicField,
+  __toESM,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/router/index.ts
+init_define_APP_INFO();
+
+// src/router/routes/index.ts
+init_define_APP_INFO();
+
+// src/router/routes/basic.ts
+init_define_APP_INFO();
+
+// src/router/constant.ts
+init_define_APP_INFO();
+var REDIRECT_NAME = "Redirect";
+var PARENT_LAYOUT_NAME = "ParentLayout";
+var PAGE_NOT_FOUND_NAME = "PageNotFound";
+var EXCEPTION_COMPONENT = () => import("D:/jeecgboot-vue3-master/src/views/sys/exception/Exception.vue");
+var LAYOUT = () => import("D:/jeecgboot-vue3-master/src/layouts/default/index.vue");
+var getParentLayout = (_name) => {
+  return () => new Promise((resolve) => {
+    resolve({
+      name: PARENT_LAYOUT_NAME
+    });
+  });
+};
+
+// src/router/routes/basic.ts
+var PAGE_NOT_FOUND_ROUTE = {
+  path: "/:path(.*)*",
+  name: PAGE_NOT_FOUND_NAME,
+  component: LAYOUT,
+  meta: {
+    title: "ErrorPage",
+    hideBreadcrumb: true,
+    hideMenu: true
+  },
+  children: [
+    {
+      path: "/:path(.*)*",
+      name: PAGE_NOT_FOUND_NAME,
+      component: EXCEPTION_COMPONENT,
+      meta: {
+        title: "ErrorPage",
+        hideBreadcrumb: true,
+        hideMenu: true
+      }
+    }
+  ]
+};
+var REDIRECT_ROUTE = {
+  path: "/redirect",
+  component: LAYOUT,
+  name: "RedirectTo",
+  meta: {
+    title: REDIRECT_NAME,
+    hideBreadcrumb: true,
+    hideMenu: true
+  },
+  children: [
+    {
+      path: "/redirect/:path(.*)",
+      name: REDIRECT_NAME,
+      component: () => import("D:/jeecgboot-vue3-master/src/views/sys/redirect/index.vue"),
+      meta: {
+        title: REDIRECT_NAME,
+        hideBreadcrumb: true
+      }
+    }
+  ]
+};
+var ERROR_LOG_ROUTE = {
+  path: "/error-log",
+  name: "ErrorLog",
+  component: LAYOUT,
+  redirect: "/error-log/list",
+  meta: {
+    title: "ErrorLog",
+    hideBreadcrumb: true,
+    hideChildrenInMenu: true
+  },
+  children: [
+    {
+      path: "list",
+      name: "ErrorLogList",
+      component: () => import("D:/jeecgboot-vue3-master/src/views/sys/error-log/index.vue"),
+      meta: {
+        title: t("routes.basic.errorLogList"),
+        hideBreadcrumb: true,
+        currentActiveMenu: "/error-log"
+      }
+    }
+  ]
+};
+
+// src/router/routes/mainOut.ts
+init_define_APP_INFO();
+var mainOutRoutes = [
+  {
+    path: "/main-out",
+    name: "MainOut",
+    component: () => import("D:/jeecgboot-vue3-master/src/views/demo/main-out/index.vue"),
+    meta: {
+      title: "MainOut",
+      ignoreAuth: true
+    }
+  }
+];
+var mainOutRouteNames = mainOutRoutes.map((item2) => item2.name);
+
+// src/enums/pageEnum.ts
+init_define_APP_INFO();
+
+// src/router/routes/index.ts
+var modules = import.meta.globEager("./modules/**/*.ts");
+var routeModuleList = [];
+Object.keys(modules).forEach((key) => {
+  const mod = modules[key].default || {};
+  const modList = Array.isArray(mod) ? [...mod] : [mod];
+  routeModuleList.push(...modList);
+});
+var asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
+var RootRoute = {
+  path: "/",
+  name: "Root",
+  redirect: "/dashboard/analysis" /* BASE_HOME */,
+  meta: {
+    title: "Root"
+  }
+};
+var LoginRoute = {
+  path: "/login",
+  name: "Login",
+  component: () => import("D:/jeecgboot-vue3-master/src/views/sys/login/Login.vue"),
+  meta: {
+    title: t("routes.basic.login")
+  }
+};
+var Oauth2LoginRoute = {
+  path: "/oauth2-app/login",
+  name: "oauth2-app-login",
+  component: () => import("D:/jeecgboot-vue3-master/src/views/sys/login/OAuth2Login.vue"),
+  meta: {
+    title: t("routes.oauth2.login")
+  }
+};
+var TokenLoginRoute = {
+  path: "/tokenLogin",
+  name: "TokenLoginRoute",
+  component: () => import("D:/jeecgboot-vue3-master/src/views/sys/login/TokenLoginPage.vue"),
+  meta: {
+    title: "\u5E26token\u767B\u5F55\u9875\u9762",
+    ignoreAuth: true
+  }
+};
+var basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE, TokenLoginRoute, Oauth2LoginRoute];
+
+// src/router/index.ts
+var WHITE_NAME_LIST = [];
+var getRouteNames = (array) => array.forEach((item2) => {
+  WHITE_NAME_LIST.push(item2.name);
+  getRouteNames(item2.children || []);
+});
+getRouteNames(basicRoutes);
+var router = createRouter({
+  history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH),
+  routes: basicRoutes,
+  strict: true,
+  scrollBehavior: () => ({ left: 0, top: 0 })
+});
+function resetRouter() {
+  router.getRoutes().forEach((route) => {
+    const { name: name2 } = route;
+    if (name2 && !WHITE_NAME_LIST.includes(name2)) {
+      router.hasRoute(name2) && router.removeRoute(name2);
+    }
+  });
+}
+
+// src/store/modules/permission.ts
+init_define_APP_INFO();
+
+// src/store/modules/user.ts
+init_define_APP_INFO();
+
+// src/utils/auth/index.ts
+init_define_APP_INFO();
+
+// src/utils/cache/persistent.ts
+init_define_APP_INFO();
+
+// src/utils/cache/memory.ts
+init_define_APP_INFO();
+var NOT_ALIVE = 0;
+var Memory = class {
+  constructor(alive = NOT_ALIVE) {
+    __publicField(this, "cache", {});
+    __publicField(this, "alive");
+    this.alive = alive * 1e3;
+  }
+  get getCache() {
+    return this.cache;
+  }
+  setCache(cache) {
+    this.cache = cache;
+  }
+  get(key) {
+    return this.cache[key];
+  }
+  set(key, value, expires) {
+    let item2 = this.get(key);
+    if (!expires || expires <= 0) {
+      expires = this.alive;
+    }
+    if (item2) {
+      if (item2.timeoutId) {
+        clearTimeout(item2.timeoutId);
+        item2.timeoutId = void 0;
+      }
+      item2.value = value;
+    } else {
+      item2 = { value, alive: expires };
+      this.cache[key] = item2;
+    }
+    if (!expires) {
+      return value;
+    }
+    const now = new Date().getTime();
+    item2.time = now + this.alive;
+    item2.timeoutId = setTimeout(
+      () => {
+        this.remove(key);
+      },
+      expires > now ? expires - now : expires
+    );
+    return value;
+  }
+  remove(key) {
+    const item2 = this.get(key);
+    Reflect.deleteProperty(this.cache, key);
+    if (item2) {
+      clearTimeout(item2.timeoutId);
+      return item2.value;
+    }
+  }
+  resetCache(cache) {
+    Object.keys(cache).forEach((key) => {
+      const k = key;
+      const item2 = cache[k];
+      if (item2 && item2.time) {
+        const now = new Date().getTime();
+        const expire = item2.time;
+        if (expire > now) {
+          this.set(k, item2.value, expire);
+        }
+      }
+    });
+  }
+  clear() {
+    console.log("------clear------\u8FDB\u5165clear\u65B9\u6CD5");
+    Object.keys(this.cache).forEach((key) => {
+      const item2 = this.cache[key];
+      item2.timeoutId && clearTimeout(item2.timeoutId);
+    });
+    this.cache = {
+      ...omit_default(this.cache, [TOKEN_KEY, USER_INFO_KEY, ROLES_KEY, DB_DICT_DATA_KEY, TENANT_ID, LOGIN_INFO_KEY, PROJ_CFG_KEY])
+    };
+  }
+};
+
+// src/utils/cache/persistent.ts
+var ls = createLocalStorage();
+var ss = createSessionStorage();
+var localMemory = new Memory(DEFAULT_CACHE_TIME);
+var sessionMemory = new Memory(DEFAULT_CACHE_TIME);
+function initPersistentMemory() {
+  const localCache = ls.get(APP_LOCAL_CACHE_KEY);
+  const sessionCache = ss.get(APP_SESSION_CACHE_KEY);
+  localCache && localMemory.resetCache(localCache);
+  sessionCache && sessionMemory.resetCache(sessionCache);
+}
+var Persistent = class {
+  static getLocal(key) {
+    return localMemory.get(key)?.value;
+  }
+  static setLocal(key, value, immediate = false) {
+    localMemory.set(key, toRaw(value));
+    immediate && ls.set(APP_LOCAL_CACHE_KEY, localMemory.getCache);
+  }
+  static removeLocal(key, immediate = false) {
+    localMemory.remove(key);
+    immediate && ls.set(APP_LOCAL_CACHE_KEY, localMemory.getCache);
+  }
+  static clearLocal(immediate = false) {
+    localMemory.clear();
+    immediate && ls.clear();
+  }
+  static getSession(key) {
+    return sessionMemory.get(key)?.value;
+  }
+  static setSession(key, value, immediate = false) {
+    sessionMemory.set(key, toRaw(value));
+    immediate && ss.set(APP_SESSION_CACHE_KEY, sessionMemory.getCache);
+  }
+  static removeSession(key, immediate = false) {
+    sessionMemory.remove(key);
+    immediate && ss.set(APP_SESSION_CACHE_KEY, sessionMemory.getCache);
+  }
+  static clearSession(immediate = false) {
+    sessionMemory.clear();
+    immediate && ss.clear();
+  }
+  static clearAll(immediate = false) {
+    sessionMemory.clear();
+    localMemory.clear();
+    if (immediate) {
+      ls.clear();
+      ss.clear();
+    }
+  }
+};
+window.addEventListener("beforeunload", function() {
+  ls.set(APP_LOCAL_CACHE_KEY, {
+    ...omit_default(localMemory.getCache, LOCK_INFO_KEY),
+    ...pick_default(ls.get(APP_LOCAL_CACHE_KEY), [TOKEN_KEY, USER_INFO_KEY, LOCK_INFO_KEY])
+  });
+  ss.set(APP_SESSION_CACHE_KEY, {
+    ...omit_default(sessionMemory.getCache, LOCK_INFO_KEY),
+    ...pick_default(ss.get(APP_SESSION_CACHE_KEY), [TOKEN_KEY, USER_INFO_KEY, LOCK_INFO_KEY])
+  });
+});
+function storageChange(e) {
+  const { key, newValue, oldValue } = e;
+  if (!key) {
+    Persistent.clearAll();
+    return;
+  }
+  if (!!newValue && !!oldValue) {
+    if (APP_LOCAL_CACHE_KEY === key) {
+      Persistent.clearLocal();
+    }
+    if (APP_SESSION_CACHE_KEY === key) {
+      Persistent.clearSession();
+    }
+  }
+}
+window.addEventListener("storage", storageChange);
+initPersistentMemory();
+
+// src/settings/projectSetting.ts
+init_define_APP_INFO();
+
+// src/enums/menuEnum.ts
+init_define_APP_INFO();
+
+// src/enums/appEnum.ts
+init_define_APP_INFO();
+
+// src/settings/designSetting.ts
+init_define_APP_INFO();
+var darkMode = "light" /* LIGHT */;
+var HEADER_PRESET_BG_COLOR_LIST = [
+  "#ffffff",
+  "#151515",
+  "#009688",
+  "#5172DC",
+  "#018ffb",
+  "#409eff",
+  "#e74c3c",
+  "#24292e",
+  "#394664",
+  "#001529",
+  "#383f45"
+];
+var SIDE_BAR_BG_COLOR_LIST = [
+  "#001529",
+  "#212121",
+  "#273352",
+  "#ffffff",
+  "#191b24",
+  "#191a23",
+  "#304156",
+  "#001628",
+  "#28333E",
+  "#344058",
+  "#383f45"
+];
+
+// build/config/themeConfig.ts
+init_define_APP_INFO();
+var primaryColor = "#1890FF";
+
+// src/settings/projectSetting.ts
+var setting = {
+  showSettingButton: true,
+  showDarkModeToggle: true,
+  settingButtonPosition: "auto" /* AUTO */,
+  permissionMode: "BACK" /* BACK */,
+  permissionCacheType: 1 /* LOCAL */,
+  sessionTimeoutProcessing: 0 /* ROUTE_JUMP */,
+  themeColor: primaryColor,
+  grayMode: false,
+  colorWeak: false,
+  fullContent: false,
+  contentMode: "full" /* FULL */,
+  showLogo: true,
+  showFooter: false,
+  headerSetting: {
+    bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
+    fixed: true,
+    show: true,
+    theme: "light" /* LIGHT */,
+    useLockPage: true,
+    showFullScreen: true,
+    showDoc: true,
+    showNotice: true,
+    showSearch: true
+  },
+  menuSetting: {
+    bgColor: SIDE_BAR_BG_COLOR_LIST[0],
+    fixed: true,
+    collapsed: false,
+    collapsedShowTitle: false,
+    canDrag: false,
+    show: true,
+    hidden: false,
+    menuWidth: 210,
+    mode: "inline" /* INLINE */,
+    type: "sidebar" /* SIDEBAR */,
+    theme: "dark" /* DARK */,
+    split: false,
+    topMenuAlign: "center",
+    trigger: "HEADER" /* HEADER */,
+    accordion: true,
+    closeMixSidebarOnChange: false,
+    mixSideTrigger: "click" /* CLICK */,
+    mixSideFixed: false
+  },
+  multiTabsSetting: {
+    cache: false,
+    show: true,
+    canDrag: true,
+    showQuick: true,
+    showRedo: true,
+    showFold: true,
+    theme: "card" /* CARD */
+  },
+  transitionSetting: {
+    enable: true,
+    basicTransition: "fade-slide" /* FADE_SIDE */,
+    openPageLoading: true,
+    openNProgress: true
+  },
+  openKeepAlive: true,
+  lockTime: 0,
+  showBreadCrumb: true,
+  showBreadCrumbIcon: true,
+  useErrorHandle: false,
+  useOpenBackTop: true,
+  canEmbedIFramePage: true,
+  closeMessageOnSwitch: true,
+  removeAllHttpPending: false
+};
+var projectSetting_default = setting;
+
+// src/utils/auth/index.ts
+var { permissionCacheType } = projectSetting_default;
+var isLocal = permissionCacheType === 1 /* LOCAL */;
+function getToken() {
+  return getAuthCache(TOKEN_KEY);
+}
+function getTenantId() {
+  return getAuthCache(TENANT_ID);
+}
+function getAuthCache(key) {
+  const fn = isLocal ? Persistent.getLocal : Persistent.getSession;
+  return fn(key);
+}
+function setAuthCache(key, value) {
+  const fn = isLocal ? Persistent.setLocal : Persistent.setSession;
+  return fn(key, value, true);
+}
+
+// src/api/sys/user.ts
+init_define_APP_INFO();
+
+// src/utils/http/axios/index.ts
+var axios_exports = {};
+__export(axios_exports, {
+  defHttp: () => defHttp
+});
+init_define_APP_INFO();
+
+// src/utils/http/axios/Axios.ts
+init_define_APP_INFO();
+var import_axios2 = __toESM(require_axios());
+var import_qs = __toESM(require_lib());
+
+// src/utils/http/axios/axiosCancel.ts
+init_define_APP_INFO();
+var import_axios = __toESM(require_axios());
+var pendingMap = /* @__PURE__ */ new Map();
+var getPendingUrl = (config) => [config.method, config.url].join("&");
+var AxiosCanceler = class {
+  addPending(config) {
+    this.removePending(config);
+    const url = getPendingUrl(config);
+    config.cancelToken = config.cancelToken || new import_axios.default.CancelToken((cancel) => {
+      if (!pendingMap.has(url)) {
+        pendingMap.set(url, cancel);
+      }
+    });
+  }
+  removeAllPending() {
+    pendingMap.forEach((cancel) => {
+      cancel && isFunction(cancel) && cancel();
+    });
+    pendingMap.clear();
+  }
+  removePending(config) {
+    const url = getPendingUrl(config);
+    if (pendingMap.has(url)) {
+      const cancel = pendingMap.get(url);
+      cancel && cancel(url);
+      pendingMap.delete(url);
+    }
+  }
+  reset() {
+    pendingMap = /* @__PURE__ */ new Map();
+  }
+};
+
+// src/enums/httpEnum.ts
+init_define_APP_INFO();
+
+// src/utils/http/axios/axiosTransform.ts
+init_define_APP_INFO();
+
+// src/utils/http/axios/Axios.ts
+var { createMessage } = useMessage();
+var VAxios = class {
+  constructor(options) {
+    __publicField(this, "axiosInstance");
+    __publicField(this, "options");
+    this.options = options;
+    this.axiosInstance = import_axios2.default.create(options);
+    this.setupInterceptors();
+  }
+  createAxios(config) {
+    this.axiosInstance = import_axios2.default.create(config);
+  }
+  getTransform() {
+    const { transform: transform2 } = this.options;
+    return transform2;
+  }
+  getAxios() {
+    return this.axiosInstance;
+  }
+  configAxios(config) {
+    if (!this.axiosInstance) {
+      return;
+    }
+    this.createAxios(config);
+  }
+  setHeader(headers) {
+    if (!this.axiosInstance) {
+      return;
+    }
+    Object.assign(this.axiosInstance.defaults.headers, headers);
+  }
+  setupInterceptors() {
+    const transform2 = this.getTransform();
+    if (!transform2) {
+      return;
+    }
+    const { requestInterceptors, requestInterceptorsCatch, responseInterceptors, responseInterceptorsCatch } = transform2;
+    const axiosCanceler = new AxiosCanceler();
+    this.axiosInstance.interceptors.request.use((config) => {
+      const {
+        headers: { ignoreCancelToken }
+      } = config;
+      const ignoreCancel = ignoreCancelToken !== void 0 ? ignoreCancelToken : this.options.requestOptions?.ignoreCancelToken;
+      !ignoreCancel && axiosCanceler.addPending(config);
+      if (requestInterceptors && isFunction(requestInterceptors)) {
+        config = requestInterceptors(config, this.options);
+      }
+      return config;
+    }, void 0);
+    requestInterceptorsCatch && isFunction(requestInterceptorsCatch) && this.axiosInstance.interceptors.request.use(void 0, requestInterceptorsCatch);
+    this.axiosInstance.interceptors.response.use((res) => {
+      res && axiosCanceler.removePending(res.config);
+      if (responseInterceptors && isFunction(responseInterceptors)) {
+        res = responseInterceptors(res);
+      }
+      return res;
+    }, void 0);
+    responseInterceptorsCatch && isFunction(responseInterceptorsCatch) && this.axiosInstance.interceptors.response.use(void 0, responseInterceptorsCatch);
+  }
+  uploadFile(config, params, callback) {
+    const formData = new window.FormData();
+    const customFilename = params.name || "file";
+    if (params.filename) {
+      formData.append(customFilename, params.file, params.filename);
+    } else {
+      formData.append(customFilename, params.file);
+    }
+    const glob = useGlobSetting();
+    config.baseURL = glob.uploadUrl;
+    if (params.data) {
+      Object.keys(params.data).forEach((key) => {
+        const value = params.data[key];
+        if (Array.isArray(value)) {
+          value.forEach((item2) => {
+            formData.append(`${key}[]`, item2);
+          });
+          return;
+        }
+        formData.append(key, params.data[key]);
+      });
+    }
+    return this.axiosInstance.request({
+      ...config,
+      method: "POST",
+      data: formData,
+      headers: {
+        "Content-type": "multipart/form-data;charset=UTF-8" /* FORM_DATA */,
+        ignoreCancelToken: true
+      }
+    }).then((res) => {
+      if (callback?.success && isFunction(callback?.success)) {
+        callback?.success(res?.data);
+      } else if (callback?.isReturnResponse) {
+        return Promise.resolve(res?.data);
+      } else {
+        if (res.data.success == true && res.data.code == 200) {
+          createMessage.success(res.data.message);
+        } else {
+          createMessage.error(res.data.message);
+        }
+      }
+    });
+  }
+  supportFormData(config) {
+    const headers = config.headers || this.options.headers;
+    const contentType = headers?.["Content-Type"] || headers?.["content-type"];
+    if (contentType !== "application/x-www-form-urlencoded;charset=UTF-8" /* FORM_URLENCODED */ || !Reflect.has(config, "data") || config.method?.toUpperCase() === "GET" /* GET */) {
+      return config;
+    }
+    return {
+      ...config,
+      data: import_qs.default.stringify(config.data, { arrayFormat: "brackets" })
+    };
+  }
+  get(config, options) {
+    return this.request({ ...config, method: "GET" }, options);
+  }
+  post(config, options) {
+    return this.request({ ...config, method: "POST" }, options);
+  }
+  put(config, options) {
+    return this.request({ ...config, method: "PUT" }, options);
+  }
+  delete(config, options) {
+    return this.request({ ...config, method: "DELETE" }, options);
+  }
+  request(config, options) {
+    let conf = cloneDeep_default(config);
+    const transform2 = this.getTransform();
+    const { requestOptions } = this.options;
+    const opt = Object.assign({}, requestOptions, options);
+    const { beforeRequestHook, requestCatchHook, transformRequestHook } = transform2 || {};
+    if (beforeRequestHook && isFunction(beforeRequestHook)) {
+      conf = beforeRequestHook(conf, opt);
+    }
+    conf.requestOptions = opt;
+    conf = this.supportFormData(conf);
+    return new Promise((resolve, reject) => {
+      this.axiosInstance.request(conf).then((res) => {
+        if (transformRequestHook && isFunction(transformRequestHook)) {
+          try {
+            const ret = transformRequestHook(res, opt);
+            config.success && config.success(res.data);
+            resolve(ret);
+          } catch (err) {
+            reject(err || new Error("request error!"));
+          }
+          return;
+        }
+        resolve(res);
+      }).catch((e) => {
+        if (requestCatchHook && isFunction(requestCatchHook)) {
+          reject(requestCatchHook(e, opt));
+          return;
+        }
+        if (import_axios2.default.isAxiosError(e)) {
+        }
+        reject(e);
+      });
+    });
+  }
+  uploadMyFile(url, formData) {
+    const glob = useGlobSetting();
+    return this.axiosInstance.request({
+      url,
+      baseURL: glob.uploadUrl,
+      method: "POST",
+      data: formData,
+      headers: {
+        "Content-type": "multipart/form-data;charset=UTF-8" /* FORM_DATA */,
+        ignoreCancelToken: true
+      }
+    });
+  }
+};
+
+// src/utils/http/axios/checkStatus.ts
+init_define_APP_INFO();
+var { createMessage: createMessage2, createErrorModal } = useMessage();
+var error = createMessage2.error;
+var stp = projectSetting_default.sessionTimeoutProcessing;
+function checkStatus(status, msg, errorMessageMode = "message") {
+  const { t: t2 } = useI18n();
+  const userStore = useUserStoreWithOut();
+  let errMessage = "";
+  switch (status) {
+    case 400:
+      errMessage = `${msg}`;
+      break;
+    case 401:
+      userStore.setToken(void 0);
+      errMessage = msg || t2("sys.api.errMsg401");
+      if (stp === 1 /* PAGE_COVERAGE */) {
+        userStore.setSessionTimeout(true);
+      } else {
+        userStore.logout(true);
+      }
+      break;
+    case 403:
+      errMessage = t2("sys.api.errMsg403");
+      break;
+    case 404:
+      errMessage = t2("sys.api.errMsg404");
+      break;
+    case 405:
+      errMessage = t2("sys.api.errMsg405");
+      break;
+    case 408:
+      errMessage = t2("sys.api.errMsg408");
+      break;
+    case 500:
+      errMessage = t2("sys.api.errMsg500");
+      break;
+    case 501:
+      errMessage = t2("sys.api.errMsg501");
+      break;
+    case 502:
+      errMessage = t2("sys.api.errMsg502");
+      break;
+    case 503:
+      errMessage = t2("sys.api.errMsg503");
+      break;
+    case 504:
+      errMessage = t2("sys.api.errMsg504");
+      break;
+    case 505:
+      errMessage = t2("sys.api.errMsg505");
+      break;
+    default:
+  }
+  if (errMessage) {
+    if (errorMessageMode === "modal") {
+      createErrorModal({ title: t2("sys.api.errorTip"), content: errMessage });
+    } else if (errorMessageMode === "message") {
+      error({ content: errMessage, key: `global_error_message_status_${status}` });
+    }
+  }
+}
+
+// src/utils/encryption/signMd5Utils.js
+init_define_APP_INFO();
+var import_md5 = __toESM(require_md5());
+var signatureSecret = "dd05f1c54d63749eda95f9fa6d49v442a";
+var signMd5Utils = class {
+  static sortAsc(jsonObj) {
+    let arr = new Array();
+    let num = 0;
+    for (let i in jsonObj) {
+      arr[num] = i;
+      num++;
+    }
+    let sortArr = arr.sort();
+    let sortObj = {};
+    for (let i in sortArr) {
+      sortObj[sortArr[i]] = jsonObj[sortArr[i]];
+    }
+    return sortObj;
+  }
+  static getSign(url, requestParams) {
+    let urlParams = this.parseQueryString(url);
+    let jsonObj = this.mergeObject(urlParams, requestParams);
+    let requestBody = this.sortAsc(jsonObj);
+    delete requestBody._t;
+    return (0, import_md5.default)(JSON.stringify(requestBody) + signatureSecret).toUpperCase();
+  }
+  static parseQueryString(url) {
+    let urlReg = /^[^\?]+\?([\w\W]+)$/, paramReg = /([^&=]+)=([\w\W]*?)(&|$|#)/g, urlArray = urlReg.exec(url), result = {};
+    let lastpathVariable = url.substring(url.lastIndexOf("/") + 1);
+    if (lastpathVariable.includes(",")) {
+      if (lastpathVariable.includes("?")) {
+        lastpathVariable = lastpathVariable.substring(0, lastpathVariable.indexOf("?"));
+      }
+      result["x-path-variable"] = decodeURI(lastpathVariable);
+    }
+    if (urlArray && urlArray[1]) {
+      let paramString = urlArray[1], paramResult;
+      while ((paramResult = paramReg.exec(paramString)) != null) {
+        if (this.myIsNaN(paramResult[2])) {
+          paramResult[2] = paramResult[2].toString();
+        }
+        result[paramResult[1]] = paramResult[2];
+      }
+    }
+    return result;
+  }
+  static mergeObject(objectOne, objectTwo) {
+    if (objectTwo && Object.keys(objectTwo).length > 0) {
+      for (let key in objectTwo) {
+        if (objectTwo.hasOwnProperty(key) === true) {
+          if (this.myIsNaN(objectTwo[key])) {
+            objectTwo[key] = objectTwo[key].toString();
+          }
+          objectOne[key] = objectTwo[key];
+        }
+      }
+    }
+    return objectOne;
+  }
+  static urlEncode(param, key, encode) {
+    if (param == null)
+      return "";
+    let paramStr = "";
+    let t2 = typeof param;
+    if (t2 == "string" || t2 == "number" || t2 == "boolean") {
+      paramStr += "&" + key + "=" + (encode == null || encode ? encodeURIComponent(param) : param);
+    } else {
+      for (let i in param) {
+        let k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i);
+        paramStr += this.urlEncode(param[i], k, encode);
+      }
+    }
+    return paramStr;
+  }
+  static getTimestamp() {
+    return new Date().getTime();
+  }
+  static myIsNaN(value) {
+    return typeof value === "number" && !isNaN(value);
+  }
+};
+
+// src/store/modules/errorLog.ts
+init_define_APP_INFO();
+
+// src/enums/exceptionEnum.ts
+init_define_APP_INFO();
+
+// src/store/modules/errorLog.ts
+var useErrorLogStore = defineStore({
+  id: "app-error-log",
+  state: () => ({
+    errorLogInfoList: null,
+    errorLogListCount: 0
+  }),
+  getters: {
+    getErrorLogInfoList() {
+      return this.errorLogInfoList || [];
+    },
+    getErrorLogListCount() {
+      return this.errorLogListCount;
+    }
+  },
+  actions: {
+    addErrorLogInfo(info) {
+      const item2 = {
+        ...info,
+        time: formatToDateTime(new Date())
+      };
+      this.errorLogInfoList = [item2, ...this.errorLogInfoList || []];
+      this.errorLogListCount += 1;
+    },
+    setErrorLogListCount(count) {
+      this.errorLogListCount = count;
+    },
+    addAjaxErrorInfo(error2) {
+      const { useErrorHandle } = projectSetting_default;
+      if (!useErrorHandle) {
+        return;
+      }
+      const errInfo = {
+        message: error2.message,
+        type: "ajax" /* AJAX */
+      };
+      if (error2.response) {
+        const { config: { url = "", data: params = "", method = "get", headers = {} } = {}, data = {} } = error2.response;
+        errInfo.url = url;
+        errInfo.name = "Ajax Error!";
+        errInfo.file = "-";
+        errInfo.stack = JSON.stringify(data);
+        errInfo.detail = JSON.stringify({ params, method, headers });
+      }
+      this.addErrorLogInfo(errInfo);
+    }
+  }
+});
+function useErrorLogStoreWithOut() {
+  return useErrorLogStore(store);
+}
+
+// src/utils/http/axios/helper.ts
+init_define_APP_INFO();
+var import_dayjs = __toESM(require_dayjs_min());
+var DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm";
+function joinTimestamp(join, restful = false) {
+  if (!join) {
+    return restful ? "" : {};
+  }
+  const now = new Date().getTime();
+  if (restful) {
+    return `?_t=${now}`;
+  }
+  return { _t: now };
+}
+function formatRequestDate(params) {
+  if (Object.prototype.toString.call(params) !== "[object Object]") {
+    return;
+  }
+  for (const key in params) {
+    if (import_dayjs.default.isDayjs(params[key])) {
+      params[key] = params[key].format(DATE_TIME_FORMAT);
+    }
+    if (isString(key)) {
+      const value = params[key];
+      if (value) {
+        try {
+          params[key] = isString(value) ? value.trim() : value;
+        } catch (error2) {
+          throw new Error(error2);
+        }
+      }
+    }
+    if (isObject(params[key])) {
+      formatRequestDate(params[key]);
+    }
+  }
+}
+
+// src/utils/http/axios/index.ts
+var globSetting = useGlobSetting();
+var urlPrefix = globSetting.urlPrefix;
+var { createMessage: createMessage3, createErrorModal: createErrorModal2 } = useMessage();
+var transform = {
+  transformRequestHook: (res, options) => {
+    const { t: t2 } = useI18n();
+    const { isTransformResponse, isReturnNativeResponse } = options;
+    if (isReturnNativeResponse) {
+      return res;
+    }
+    if (!isTransformResponse) {
+      return res.data;
+    }
+    const { data } = res;
+    if (!data) {
+      throw new Error(t2("sys.api.apiRequestFailed"));
+    }
+    const { code, result, message, success } = data;
+    const hasSuccess = data && Reflect.has(data, "code") && (code === 0 /* SUCCESS */ || code === 200);
+    if (hasSuccess) {
+      if (success && message && options.successMessageMode === "success") {
+        createMessage3.success(message);
+      }
+      return result;
+    }
+    let timeoutMsg = "";
+    switch (code) {
+      case 401 /* TIMEOUT */:
+        timeoutMsg = t2("sys.api.timeoutMessage");
+        const userStore = useUserStoreWithOut();
+        userStore.setToken(void 0);
+        userStore.logout(true);
+        break;
+      default:
+        if (message) {
+          timeoutMsg = message;
+        }
+    }
+    if (options.errorMessageMode === "modal") {
+      createErrorModal2({ title: t2("sys.api.errorTip"), content: timeoutMsg });
+    } else if (options.errorMessageMode === "message") {
+      createMessage3.error(timeoutMsg);
+    }
+    throw new Error(timeoutMsg || t2("sys.api.apiRequestFailed"));
+  },
+  beforeRequestHook: (config, options) => {
+    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix: urlPrefix2 } = options;
+    if (joinPrefix) {
+      config.url = `${urlPrefix2}${config.url}`;
+    }
+    if (apiUrl && isString(apiUrl)) {
+      config.url = `${apiUrl}${config.url}`;
+    }
+    const params = config.params || {};
+    const data = config.data || false;
+    formatDate && data && !isString(data) && formatRequestDate(data);
+    if (config.method?.toUpperCase() === "GET" /* GET */) {
+      if (!isString(params)) {
+        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+      } else {
+        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
+        config.params = void 0;
+      }
+    } else {
+      if (!isString(params)) {
+        formatDate && formatRequestDate(params);
+        if (Reflect.has(config, "data") && config.data && Object.keys(config.data).length > 0) {
+          config.data = data;
+          config.params = params;
+        } else {
+          config.data = params;
+          config.params = void 0;
+        }
+        if (joinParamsToUrl) {
+          config.url = setObjToUrlParams(config.url, Object.assign({}, config.params, config.data));
+        }
+      } else {
+        config.url = config.url + params;
+        config.params = void 0;
+      }
+    }
+    return config;
+  },
+  requestInterceptors: (config, options) => {
+    const token2 = getToken();
+    let tenantid = getTenantId();
+    if (token2 && config?.requestOptions?.withToken !== false) {
+      config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token2}` : token2;
+      config.headers["X-Access-Token" /* TOKEN */] = token2;
+      config.headers["X-TIMESTAMP" /* TIMESTAMP */] = signMd5Utils.getTimestamp();
+      config.headers["X-Sign" /* Sign */] = signMd5Utils.getSign(config.url, config.params);
+      if (!tenantid) {
+        tenantid = 0;
+      }
+      config.headers["tenant-id" /* TENANT_ID */] = tenantid;
+      config.headers["X-Version" /* VERSION */] = "v3";
+      let routeParams = router.currentRoute.value.params;
+      if (routeParams.appId) {
+        config.headers["X-Low-App-ID" /* X_LOW_APP_ID */] = routeParams.appId;
+        if (routeParams.lowAppFilter) {
+          config.params = { ...config.params, ...JSON.parse(routeParams.lowAppFilter) };
+          delete routeParams.lowAppFilter;
+        }
+      }
+    }
+    return config;
+  },
+  responseInterceptors: (res) => {
+    return res;
+  },
+  responseInterceptorsCatch: (error2) => {
+    const { t: t2 } = useI18n();
+    const errorLogStore = useErrorLogStoreWithOut();
+    errorLogStore.addAjaxErrorInfo(error2);
+    const { response, code, message, config } = error2 || {};
+    const errorMessageMode = config?.requestOptions?.errorMessageMode || "none";
+    const msg = response?.data?.message ?? "";
+    const err = error2?.toString?.() ?? "";
+    let errMessage = "";
+    try {
+      if (code === "ECONNABORTED" && message.indexOf("timeout") !== -1) {
+        errMessage = t2("sys.api.apiTimeoutMessage");
+      }
+      if (err?.includes("Network Error")) {
+        errMessage = t2("sys.api.networkExceptionMsg");
+      }
+      if (errMessage) {
+        if (errorMessageMode === "modal") {
+          createErrorModal2({ title: t2("sys.api.errorTip"), content: errMessage });
+        } else if (errorMessageMode === "message") {
+          createMessage3.error(errMessage);
+        }
+        return Promise.reject(error2);
+      }
+    } catch (error3) {
+      throw new Error(error3);
+    }
+    checkStatus(error2?.response?.status, msg, errorMessageMode);
+    return Promise.reject(error2);
+  }
+};
+function createAxios(opt) {
+  return new VAxios(
+    deepMerge(
+      {
+        authenticationScheme: "",
+        timeout: 10 * 1e3,
+        headers: { "Content-Type": "application/json;charset=UTF-8" /* JSON */ },
+        transform,
+        requestOptions: {
+          joinPrefix: true,
+          isReturnNativeResponse: false,
+          isTransformResponse: true,
+          joinParamsToUrl: false,
+          formatDate: true,
+          errorMessageMode: "message",
+          successMessageMode: "success",
+          apiUrl: globSetting.apiUrl,
+          urlPrefix,
+          joinTime: true,
+          ignoreCancelToken: true,
+          withToken: true
+        }
+      },
+      opt || {}
+    )
+  );
+}
+var defHttp = createAxios();
+
+// src/api/sys/user.ts
+var { createErrorModal: createErrorModal3 } = useMessage();
+function loginApi(params, mode = "modal") {
+  return defHttp.post(
+    {
+      url: "/sys/login" /* Login */,
+      params
+    },
+    {
+      errorMessageMode: mode
+    }
+  );
+}
+function phoneLoginApi(params, mode = "modal") {
+  return defHttp.post(
+    {
+      url: "/sys/phoneLogin" /* phoneLogin */,
+      params
+    },
+    {
+      errorMessageMode: mode
+    }
+  );
+}
+function getUserInfo() {
+  return defHttp.get({ url: "/sys/user/getUserInfo" /* GetUserInfo */ }, { errorMessageMode: "none" }).catch((e) => {
+    if (e && (e.message.includes("timeout") || e.message.includes("401"))) {
+      const userStore = useUserStoreWithOut();
+      userStore.setToken("");
+      setAuthCache(TOKEN_KEY, null);
+      router.push("/login" /* BASE_LOGIN */);
+    }
+  });
+}
+function getPermCode() {
+  return defHttp.get({ url: "/sys/permission/getPermCode" /* GetPermCode */ });
+}
+function doLogout() {
+  return defHttp.get({ url: "/sys/logout" /* Logout */ });
+}
+function thirdLogin(params, mode = "modal") {
+  return defHttp.get(
+    {
+      url: `${"/sys/thirdLogin/getLoginUser" /* thirdLogin */}/${params.token}/${params.thirdType}`
+    },
+    {
+      errorMessageMode: mode
+    }
+  );
+}
+async function validateCasLogin(params) {
+  let url = "/sys/cas/client/validateLogin" /* validateCasLogin */;
+  return defHttp.get({ url, params });
+}
+
+// src/enums/jeecgEnum.ts
+init_define_APP_INFO();
+
+// src/hooks/web/useSso.ts
+init_define_APP_INFO();
+var globSetting2 = useGlobSetting();
+var openSso = globSetting2.openSso;
+function useSso() {
+  let locationUrl = "http://" + window.location.host + "/";
+  async function ssoLogin() {
+    if (openSso == "true") {
+      let token2 = getToken();
+      let ticket = getUrlParam("ticket");
+      if (!token2) {
+        if (ticket) {
+          await validateCasLogin({
+            ticket,
+            service: locationUrl
+          }).then((res) => {
+            const userStore = useUserStore();
+            userStore.setToken(res.token);
+            return userStore.afterLoginAction(true, {});
+          });
+        } else {
+          window.location.href = globSetting2.casBaseUrl + "/login?service=" + encodeURIComponent(locationUrl);
+        }
+      }
+    }
+  }
+  async function ssoLoginOut() {
+    window.location.href = globSetting2.casBaseUrl + "/logout?service=" + encodeURIComponent(locationUrl);
+  }
+  return { ssoLogin, ssoLoginOut };
+}
+
+// src/store/modules/user.ts
+var useUserStore = defineStore({
+  id: "app-user",
+  state: () => ({
+    userInfo: null,
+    token: void 0,
+    roleList: [],
+    dictItems: [],
+    sessionTimeout: false,
+    lastUpdateTime: 0,
+    tenantid: "",
+    loginInfo: null
+  }),
+  getters: {
+    getUserInfo() {
+      return this.userInfo || getAuthCache(USER_INFO_KEY) || {};
+    },
+    getLoginInfo() {
+      return this.loginInfo || getAuthCache(LOGIN_INFO_KEY) || {};
+    },
+    getToken() {
+      return this.token || getAuthCache(TOKEN_KEY);
+    },
+    getAllDictItems() {
+      return this.dictItems || getAuthCache(DB_DICT_DATA_KEY);
+    },
+    getRoleList() {
+      return this.roleList.length > 0 ? this.roleList : getAuthCache(ROLES_KEY);
+    },
+    getSessionTimeout() {
+      return !!this.sessionTimeout;
+    },
+    getLastUpdateTime() {
+      return this.lastUpdateTime;
+    },
+    getTenant() {
+      return this.tenantid || getAuthCache(TENANT_ID);
+    }
+  },
+  actions: {
+    setToken(info) {
+      this.token = info ? info : "";
+      setAuthCache(TOKEN_KEY, info);
+    },
+    setRoleList(roleList) {
+      this.roleList = roleList;
+      setAuthCache(ROLES_KEY, roleList);
+    },
+    setUserInfo(info) {
+      this.userInfo = info;
+      this.lastUpdateTime = new Date().getTime();
+      setAuthCache(USER_INFO_KEY, info);
+    },
+    setLoginInfo(info) {
+      this.loginInfo = info;
+      setAuthCache(LOGIN_INFO_KEY, info);
+    },
+    setAllDictItems(dictItems) {
+      this.dictItems = dictItems;
+      setAuthCache(DB_DICT_DATA_KEY, dictItems);
+    },
+    setTenant(id) {
+      this.tenantid = id;
+      setAuthCache(TENANT_ID, id);
+    },
+    setSessionTimeout(flag) {
+      this.sessionTimeout = flag;
+    },
+    resetState() {
+      this.userInfo = null;
+      this.dictItems = [];
+      this.token = "";
+      this.roleList = [];
+      this.sessionTimeout = false;
+    },
+    async login(params) {
+      try {
+        const { goHome = true, mode, ...loginParams } = params;
+        const data = await loginApi(loginParams, mode);
+        const { token: token2 } = data;
+        this.setToken(token2);
+        return this.afterLoginAction(goHome, data);
+      } catch (error2) {
+        return Promise.reject(error2);
+      }
+    },
+    async qrCodeLogin(token2) {
+      try {
+        this.setToken(token2);
+        return this.afterLoginAction(true, {});
+      } catch (error2) {
+        return Promise.reject(error2);
+      }
+    },
+    async afterLoginAction(goHome, data) {
+      if (!this.getToken)
+        return null;
+      const userInfo = await this.getUserInfoAction();
+      const sessionTimeout = this.sessionTimeout;
+      if (sessionTimeout) {
+        this.setSessionTimeout(false);
+      } else {
+        const permissionStore = usePermissionStore();
+        if (!permissionStore.isDynamicAddedRoute) {
+          const routes2 = await permissionStore.buildRoutesAction();
+          routes2.forEach((route) => {
+            router.addRoute(route);
+          });
+          router.addRoute(PAGE_NOT_FOUND_ROUTE);
+          permissionStore.setDynamicAddedRoute(true);
+        }
+        await this.setLoginInfo({ ...data, isLogin: true });
+        localStorage.setItem("drag-base-url" /* DRAG_BASE_URL */, useGlobSetting().domainUrl);
+        goHome && await router.replace(userInfo && userInfo.homePath || "/dashboard/analysis" /* BASE_HOME */);
+      }
+      return data;
+    },
+    async phoneLogin(params) {
+      try {
+        const { goHome = true, mode, ...loginParams } = params;
+        const data = await phoneLoginApi(loginParams, mode);
+        const { token: token2 } = data;
+        this.setToken(token2);
+        return this.afterLoginAction(goHome, data);
+      } catch (error2) {
+        return Promise.reject(error2);
+      }
+    },
+    async getUserInfoAction() {
+      if (!this.getToken) {
+        return null;
+      }
+      const { userInfo, sysAllDictItems } = await getUserInfo();
+      if (userInfo) {
+        const { roles = [] } = userInfo;
+        if (isArray(roles)) {
+          const roleList = roles.map((item2) => item2.value);
+          this.setRoleList(roleList);
+        } else {
+          userInfo.roles = [];
+          this.setRoleList([]);
+        }
+        this.setUserInfo(userInfo);
+      }
+      if (sysAllDictItems) {
+        this.setAllDictItems(sysAllDictItems);
+      }
+      return userInfo;
+    },
+    async logout(goLogin = false) {
+      if (this.getToken) {
+        try {
+          await doLogout();
+        } catch {
+          console.log("\u6CE8\u9500Token\u5931\u8D25");
+        }
+      }
+      this.setToken("");
+      setAuthCache(TOKEN_KEY, null);
+      this.setSessionTimeout(false);
+      this.setUserInfo(null);
+      this.setLoginInfo(null);
+      localStorage.removeItem("drag-base-url" /* DRAG_BASE_URL */);
+      const openSso2 = useGlobSetting().openSso;
+      if (openSso2 == "true") {
+        await useSso().ssoLoginOut();
+      }
+      goLogin && await router.push("/login" /* BASE_LOGIN */);
+    },
+    async ThirdLogin(params) {
+      try {
+        const { goHome = true, mode, ...ThirdLoginParams } = params;
+        const data = await thirdLogin(ThirdLoginParams, mode);
+        const { token: token2 } = data;
+        this.setToken(token2);
+        return this.afterLoginAction(goHome, data);
+      } catch (error2) {
+        return Promise.reject(error2);
+      }
+    },
+    confirmLoginOut() {
+      const { createConfirm } = useMessage();
+      const { t: t2 } = useI18n();
+      createConfirm({
+        iconType: "warning",
+        title: t2("sys.app.logoutTip"),
+        content: t2("sys.app.logoutMessage"),
+        onOk: async () => {
+          await this.logout(true);
+        }
+      });
+    }
+  }
+});
+function useUserStoreWithOut() {
+  return useUserStore(store);
+}
+
+// src/store/modules/app.ts
+init_define_APP_INFO();
+var timeId;
+var useAppStore = defineStore({
+  id: "app",
+  state: () => ({
+    darkMode: void 0,
+    pageLoading: false,
+    projectConfig: Persistent.getLocal(PROJ_CFG_KEY),
+    beforeMiniInfo: {},
+    messageHrefParams: {}
+  }),
+  getters: {
+    getPageLoading() {
+      return this.pageLoading;
+    },
+    getDarkMode() {
+      return this.darkMode || localStorage.getItem(APP_DARK_MODE_KEY_) || darkMode;
+    },
+    getBeforeMiniInfo() {
+      return this.beforeMiniInfo;
+    },
+    getProjectConfig() {
+      return this.projectConfig || {};
+    },
+    getHeaderSetting() {
+      return this.getProjectConfig.headerSetting;
+    },
+    getMenuSetting() {
+      return this.getProjectConfig.menuSetting;
+    },
+    getTransitionSetting() {
+      return this.getProjectConfig.transitionSetting;
+    },
+    getMultiTabsSetting() {
+      return this.getProjectConfig.multiTabsSetting;
+    },
+    getMessageHrefParams() {
+      return this.messageHrefParams;
+    }
+  },
+  actions: {
+    setPageLoading(loading) {
+      this.pageLoading = loading;
+    },
+    setDarkMode(mode) {
+      this.darkMode = mode;
+      localStorage.setItem(APP_DARK_MODE_KEY_, mode);
+    },
+    setBeforeMiniInfo(state) {
+      this.beforeMiniInfo = state;
+    },
+    setProjectConfig(config) {
+      this.projectConfig = deepMerge(this.projectConfig || {}, config);
+      Persistent.setLocal(PROJ_CFG_KEY, this.projectConfig);
+    },
+    async resetAllState() {
+      resetRouter();
+      Persistent.clearAll();
+    },
+    async setPageLoadingAction(loading) {
+      if (loading) {
+        clearTimeout(timeId);
+        timeId = setTimeout(() => {
+          this.setPageLoading(loading);
+        }, 50);
+      } else {
+        this.setPageLoading(loading);
+        clearTimeout(timeId);
+      }
+    },
+    setMessageHrefParams(params) {
+      this.messageHrefParams = params;
+    }
+  }
+});
+function useAppStoreWithOut() {
+  return useAppStore(store);
+}
+
+// src/router/helper/routeHelper.ts
+init_define_APP_INFO();
+
+// src/utils/monorepo/dynamicRouter.ts
+init_define_APP_INFO();
+var packageViews = {};
+
+// src/router/helper/routeHelper.ts
+var IFRAME = () => import("D:/jeecgboot-vue3-master/src/views/sys/iframe/FrameBlank.vue");
+var LayoutContent = () => import("D:/jeecgboot-vue3-master/src/layouts/default/content/index.vue");
+var LayoutMap = /* @__PURE__ */ new Map();
+LayoutMap.set("LAYOUT", LAYOUT);
+LayoutMap.set("IFRAME", IFRAME);
+LayoutMap.set("LayoutsContent", LayoutContent);
+var dynamicViewsModules;
+function asyncImportRoute(routes) {
+  if (!dynamicViewsModules) {
+    dynamicViewsModules = import.meta.glob("../../views/**/*.{vue,tsx}");
+    dynamicViewsModules = Object.assign({}, dynamicViewsModules, packageViews);
+  }
+  if (!routes)
+    return;
+  routes.forEach((item) => {
+    if (item?.hidden) {
+      item.meta.hideMenu = true;
+      item.meta.hideBreadcrumb = true;
+    }
+    if (item?.route == 0) {
+      item.meta.ignoreRoute = true;
+    }
+    item.meta.ignoreKeepAlive = !item?.meta.keepAlive;
+    let token = getToken();
+    let tenantId = getTenantId();
+    item.component = (item.component || "").replace(/{{([^}}]+)?}}/g, (s1, s2) => eval(s2)).replace("${token}", token).replace("${tenantId}", tenantId);
+    if (/^\/?http(s)?/.test(item.component)) {
+      item.component = item.component.substring(1, item.component.length);
+    }
+    if (/^http(s)?/.test(item.component)) {
+      if (item.meta?.internalOrExternal) {
+        item.path = item.component;
+        item.path = item.path.replace("#", URL_HASH_TAB);
+      } else {
+        item.meta.frameSrc = item.component;
+      }
+      delete item.component;
+    }
+    if (!item.component && item.meta?.frameSrc) {
+      item.component = "IFRAME";
+    }
+    let { component, name } = item;
+    const { children } = item;
+    if (component) {
+      const layoutFound = LayoutMap.get(component.toUpperCase());
+      if (layoutFound) {
+        item.component = layoutFound;
+      } else {
+        if (component.indexOf("dashboard/") > -1) {
+          if (component.indexOf("/index") < 0) {
+            component = component + "/index";
+          }
+        }
+        item.component = dynamicImport(dynamicViewsModules, component);
+      }
+    } else if (name) {
+      item.component = getParentLayout();
+    }
+    children && asyncImportRoute(children);
+  });
+}
+function dynamicImport(dynamicViewsModules2, component2) {
+  const keys = Object.keys(dynamicViewsModules2);
+  const matchKeys = keys.filter((key) => {
+    const k = key.replace("../../views", "");
+    const startFlag = component2.startsWith("/");
+    const endFlag = component2.endsWith(".vue") || component2.endsWith(".tsx");
+    const startIndex = startFlag ? 0 : 1;
+    const lastIndex = endFlag ? k.length : k.lastIndexOf(".");
+    return k.substring(startIndex, lastIndex) === component2;
+  });
+  if (matchKeys?.length === 1) {
+    const matchKey = matchKeys[0];
+    return dynamicViewsModules2[matchKey];
+  } else if (matchKeys?.length > 1) {
+    warn(
+      "Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure"
+    );
+    return;
+  }
+}
+function transformObjToRoute(routeList) {
+  routeList.forEach((route) => {
+    const component2 = route.component;
+    if (component2) {
+      if (component2.toUpperCase() === "LAYOUT") {
+        route.component = LayoutMap.get(component2.toUpperCase());
+      } else {
+        route.children = [cloneDeep_default(route)];
+        route.component = LAYOUT;
+        route.name = `${route.name}Parent`;
+        route.path = "";
+        const meta = route.meta || {};
+        meta.single = true;
+        meta.affix = false;
+        route.meta = meta;
+      }
+    } else {
+      warn("\u8BF7\u6B63\u786E\u914D\u7F6E\u8DEF\u7531\uFF1A" + route?.name + "\u7684component\u5C5E\u6027");
+    }
+    route.children && asyncImportRoute(route.children);
+  });
+  return routeList;
+}
+function flatMultiLevelRoutes(routeModules) {
+  const modules2 = cloneDeep_default(routeModules);
+  for (let index = 0; index < modules2.length; index++) {
+    const routeModule = modules2[index];
+    if (!isMultipleRoute(routeModule)) {
+      continue;
+    }
+    promoteRouteLevel(routeModule);
+  }
+  return modules2;
+}
+function promoteRouteLevel(routeModule) {
+  let router2 = createRouter({
+    routes: [routeModule],
+    history: createWebHashHistory()
+  });
+  const routes2 = router2.getRoutes();
+  addToChildren(routes2, routeModule.children || [], routeModule);
+  router2 = null;
+  routeModule.children = routeModule.children?.map((item2) => omit_default(item2, "children"));
+}
+function addToChildren(routes2, children2, routeModule) {
+  for (let index = 0; index < children2.length; index++) {
+    const child = children2[index];
+    const route = routes2.find((item2) => item2.name === child.name);
+    if (!route) {
+      continue;
+    }
+    routeModule.children = routeModule.children || [];
+    if (!routeModule.children.find((item2) => item2.name === route.name)) {
+      routeModule.children?.push(route);
+    }
+    if (child.children?.length) {
+      addToChildren(routes2, child.children, routeModule);
+    }
+  }
+}
+function isMultipleRoute(routeModule) {
+  if (!routeModule || !Reflect.has(routeModule, "children") || !routeModule.children?.length) {
+    return false;
+  }
+  const children2 = routeModule.children;
+  let flag = false;
+  for (let index = 0; index < children2.length; index++) {
+    const child = children2[index];
+    if (child.children?.length) {
+      flag = true;
+      break;
+    }
+  }
+  return flag;
+}
+function addSlashToRouteComponent(routeList) {
+  routeList.forEach((route) => {
+    let component2 = route.component;
+    if (component2) {
+      const layoutFound = LayoutMap.get(component2);
+      if (!layoutFound) {
+        route.component = component2.startsWith("/") ? component2 : `/${component2}`;
+      }
+    }
+    route.children && addSlashToRouteComponent(route.children);
+  });
+  return routeList;
+}
+
+// src/router/helper/menuHelper.ts
+init_define_APP_INFO();
+
+// src/utils/helper/treeHelper.ts
+init_define_APP_INFO();
+var DEFAULT_CONFIG = {
+  id: "id",
+  children: "children",
+  pid: "pid"
+};
+var getConfig = (config) => Object.assign({}, DEFAULT_CONFIG, config);
+function filter(tree, func, config = {}) {
+  config = getConfig(config);
+  const children2 = config.children;
+  function listFilter(list) {
+    return list.map((node) => ({ ...node })).filter((node) => {
+      node[children2] = node[children2] && listFilter(node[children2]);
+      return func(node) || node[children2] && node[children2].length;
+    });
+  }
+  return listFilter(tree);
+}
+function treeMap(treeData, opt) {
+  return treeData.map((item2) => treeMapEach(item2, opt));
+}
+function treeMapEach(data, { children: children2 = "children", conversion }) {
+  const haveChildren = Array.isArray(data[children2]) && data[children2].length > 0;
+  const conversionData = conversion(data) || {};
+  if (haveChildren) {
+    return {
+      ...conversionData,
+      [children2]: data[children2].map(
+        (i) => treeMapEach(i, {
+          children: children2,
+          conversion
+        })
+      )
+    };
+  } else {
+    return {
+      ...conversionData
+    };
+  }
+}
+
+// src/router/helper/menuHelper.ts
+function joinParentPath(menus, parentPath = "") {
+  for (let index = 0; index < menus.length; index++) {
+    const menu = menus[index];
+    if (!(menu.path.startsWith("/") || isUrl(menu.path))) {
+      menu.path = `${parentPath}/${menu.path}`;
+    }
+    if (menu?.children?.length) {
+      joinParentPath(menu.children, menu.meta?.hidePathForChildren ? parentPath : menu.path);
+    }
+  }
+}
+function transformRouteToMenu(routeModList, routerMapping = false) {
+  const cloneRouteModList = cloneDeep_default(routeModList);
+  const routeList = [];
+  cloneRouteModList.forEach((item2) => {
+    if (routerMapping && item2.meta.hideChildrenInMenu && typeof item2.redirect === "string") {
+      item2.path = item2.redirect;
+    }
+    if (item2.meta?.single) {
+      const realItem = item2?.children?.[0];
+      realItem && routeList.push(realItem);
+    } else {
+      routeList.push(item2);
+    }
+  });
+  const list = treeMap(routeList, {
+    conversion: (node) => {
+      const { meta: { title, hideMenu = false } = {} } = node;
+      return {
+        ...node.meta || {},
+        meta: node.meta,
+        name: title,
+        hideMenu,
+        path: node.path,
+        ...node.redirect ? { redirect: node.redirect } : {}
+      };
+    }
+  });
+  joinParentPath(list);
+  return cloneDeep_default(list);
+}
+
+// src/api/sys/menu.ts
+init_define_APP_INFO();
+var getMenuList = () => {
+  return new Promise((resolve) => {
+    defHttp.get({ url: "/sys/permission/getUserPermissionByToken" /* GetMenuList */ }).then((res) => {
+      if (Array.isArray(res)) {
+        resolve(res);
+      } else {
+        resolve(res["menu"]);
+      }
+    });
+  });
+};
+var switchVue3Menu = () => {
+  return new Promise((resolve) => {
+    defHttp.get({ url: "/sys/switchVue3Menu" /* SwitchVue3Menu */ });
+  });
+};
+
+// src/store/modules/permission.ts
+var usePermissionStore = defineStore({
+  id: "app-permission",
+  state: () => ({
+    permCodeList: [],
+    isDynamicAddedRoute: false,
+    lastBuildMenuTime: 0,
+    backMenuList: [],
+    frontMenuList: [],
+    authList: [],
+    allAuthList: [],
+    sysSafeMode: false,
+    onlineSubTableAuthMap: {}
+  }),
+  getters: {
+    getPermCodeList() {
+      return this.permCodeList;
+    },
+    getBackMenuList() {
+      return this.backMenuList;
+    },
+    getFrontMenuList() {
+      return this.frontMenuList;
+    },
+    getLastBuildMenuTime() {
+      return this.lastBuildMenuTime;
+    },
+    getIsDynamicAddedRoute() {
+      return this.isDynamicAddedRoute;
+    },
+    getOnlineSubTableAuth: (state) => {
+      return (code) => state.onlineSubTableAuthMap[code];
+    }
+  },
+  actions: {
+    setPermCodeList(codeList) {
+      this.permCodeList = codeList;
+    },
+    setBackMenuList(list) {
+      this.backMenuList = list;
+      list?.length > 0 && this.setLastBuildMenuTime();
+    },
+    setFrontMenuList(list) {
+      this.frontMenuList = list;
+    },
+    setLastBuildMenuTime() {
+      this.lastBuildMenuTime = new Date().getTime();
+    },
+    setDynamicAddedRoute(added) {
+      this.isDynamicAddedRoute = added;
+    },
+    resetState() {
+      this.isDynamicAddedRoute = false;
+      this.permCodeList = [];
+      this.backMenuList = [];
+      this.lastBuildMenuTime = 0;
+    },
+    async changePermissionCode() {
+      const systemPermission = await getPermCode();
+      const codeList = systemPermission.codeList;
+      this.setPermCodeList(codeList);
+      this.setAuthData(systemPermission);
+    },
+    async buildRoutesAction() {
+      const { t: t2 } = useI18n();
+      const userStore = useUserStore();
+      const appStore = useAppStoreWithOut();
+      let routes2 = [];
+      const roleList = toRaw(userStore.getRoleList) || [];
+      const { permissionMode = projectSetting_default.permissionMode } = appStore.getProjectConfig;
+      const routeFilter = (route) => {
+        const { meta } = route;
+        const { roles } = meta || {};
+        if (!roles)
+          return true;
+        return roleList.some((role) => roles.includes(role));
+      };
+      const routeRemoveIgnoreFilter = (route) => {
+        const { meta } = route;
+        const { ignoreRoute } = meta || {};
+        return !ignoreRoute;
+      };
+      const patchHomeAffix = (routes3) => {
+        if (!routes3 || routes3.length === 0)
+          return;
+        let homePath = userStore.getUserInfo.homePath || "/dashboard/analysis" /* BASE_HOME */;
+        function patcher(routes4, parentPath = "") {
+          if (parentPath)
+            parentPath = parentPath + "/";
+          routes4.forEach((route) => {
+            const { path, children: children2, redirect } = route;
+            const currentPath = path.startsWith("/") ? path : parentPath + path;
+            if (currentPath === homePath) {
+              if (redirect) {
+                homePath = route.redirect;
+              } else {
+                route.meta = Object.assign({}, route.meta, { affix: true });
+                throw new Error("end");
+              }
+            }
+            children2 && children2.length > 0 && patcher(children2, currentPath);
+          });
+        }
+        try {
+          patcher(routes3);
+        } catch (e) {
+        }
+        return;
+      };
+      switch (permissionMode) {
+        case "ROLE" /* ROLE */:
+          routes2 = filter(asyncRoutes, routeFilter);
+          routes2 = routes2.filter(routeFilter);
+          routes2 = flatMultiLevelRoutes(routes2);
+          break;
+        case "ROUTE_MAPPING" /* ROUTE_MAPPING */:
+          routes2 = filter(asyncRoutes, routeFilter);
+          routes2 = routes2.filter(routeFilter);
+          const menuList = transformRouteToMenu(routes2, true);
+          routes2 = filter(routes2, routeRemoveIgnoreFilter);
+          routes2 = routes2.filter(routeRemoveIgnoreFilter);
+          menuList.sort((a, b) => {
+            return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
+          });
+          this.setFrontMenuList(menuList);
+          routes2 = flatMultiLevelRoutes(routes2);
+          break;
+        case "BACK" /* BACK */:
+          const { createMessage: createMessage4, createWarningModal } = useMessage();
+          let routeList = [];
+          try {
+            this.changePermissionCode();
+            routeList = await getMenuList();
+            let hasIndex = false;
+            let hasIcon = false;
+            for (let menuItem of routeList) {
+              if (!hasIndex) {
+                hasIndex = menuItem.component === "layouts/default/index";
+              }
+              if (!hasIcon) {
+                hasIcon = !!menuItem.meta?.icon?.includes(":");
+              }
+              if (hasIcon || hasIndex) {
+                break;
+              }
+            }
+            if (!hasIcon && !hasIndex) {
+              setTimeout(
+                () => createWarningModal({
+                  title: "\u68C0\u6D4B\u63D0\u793A",
+                  content: "\u5F53\u524D\u83DC\u5355\u8868\u662F <b>Vue2\u7248\u672C</b>\uFF0C\u5BFC\u81F4\u83DC\u5355\u52A0\u8F7D\u5F02\u5E38!<br>\u70B9\u51FB\u786E\u8BA4\uFF0C\u5207\u6362\u5230Vue3\u7248\u83DC\u5355\uFF01",
+                  onOk: function() {
+                    switchVue3Menu();
+                    location.reload();
+                  }
+                }),
+                100
+              );
+            }
+          } catch (error2) {
+            console.error(error2);
+          }
+          routeList = addSlashToRouteComponent(routeList);
+          routeList = transformObjToRoute(routeList);
+          const backMenuList = transformRouteToMenu(routeList);
+          this.setBackMenuList(backMenuList);
+          routeList = filter(routeList, routeRemoveIgnoreFilter);
+          routeList = routeList.filter(routeRemoveIgnoreFilter);
+          routeList = flatMultiLevelRoutes(routeList);
+          routes2 = [PAGE_NOT_FOUND_ROUTE, ...routeList];
+          break;
+      }
+      routes2.push(ERROR_LOG_ROUTE);
+      patchHomeAffix(routes2);
+      return routes2;
+    },
+    setAuthData(systemPermission) {
+      this.authList = systemPermission.auth;
+      this.allAuthList = systemPermission.allAuth;
+      this.sysSafeMode = systemPermission.sysSafeMode;
+    },
+    setAuthList(authList) {
+      this.authList = authList;
+    },
+    setAllAuthList(authList) {
+      this.allAuthList = authList;
+    },
+    setOnlineSubTableAuth(code, hideBtnList) {
+      this.onlineSubTableAuthMap[code] = hideBtnList;
+    }
+  }
+});
+
+export {
+  getAuthCache,
+  router,
+  usePermissionStore,
+  useUserStore,
+  defHttp,
+  axios_exports
+};
+//# sourceMappingURL=chunk-MXTOG34P.js.map

@@ -1,0 +1,91 @@
+import {
+  useGlobSetting
+} from "./chunk-ANLUEKLO.js";
+import {
+  merge_default,
+  random_default
+} from "./chunk-EW6PF333.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/common/compUtils.ts
+init_define_APP_INFO();
+var globSetting = useGlobSetting();
+var baseApiUrl = globSetting.domainUrl;
+var getFileAccessHttpUrl = (fileUrl, prefix = "http") => {
+  let result = fileUrl;
+  try {
+    if (fileUrl && fileUrl.length > 0 && !fileUrl.startsWith(prefix)) {
+      let isArray2 = fileUrl.indexOf("[") != -1;
+      if (!isArray2) {
+        let prefix2 = `${baseApiUrl}/sys/common/static/`;
+        if (!fileUrl.startsWith(prefix2)) {
+          result = `${prefix2}${fileUrl}`;
+        }
+      }
+    }
+  } catch (err) {
+  }
+  return result;
+};
+function randomString(length, chats) {
+  if (!length)
+    length = 1;
+  if (!chats) {
+    chats = "0123456789qwertyuioplkjhgfdsazxcvbnm";
+  }
+  let str = "";
+  for (let i = 0; i < length; i++) {
+    let num = random_default(0, chats.length - 1);
+    str += chats[num];
+  }
+  return str;
+}
+function simpleDebounce(fn, delay = 100) {
+  let timer = null;
+  return function() {
+    let args = arguments;
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
+function filterObj(obj) {
+  if (!(typeof obj == "object")) {
+    return;
+  }
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key) && (obj[key] == null || obj[key] == void 0 || obj[key] === "")) {
+      delete obj[key];
+    }
+  }
+  return obj;
+}
+function underLine2CamelCase(string) {
+  return string.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+function bindMapFormSchema(spanMap, spanTypeDef) {
+  return function(s, spanType = spanTypeDef) {
+    return merge_default(
+      {
+        disabledLabelWidth: true
+      },
+      spanMap[spanType],
+      s
+    );
+  };
+}
+
+export {
+  getFileAccessHttpUrl,
+  randomString,
+  simpleDebounce,
+  filterObj,
+  underLine2CamelCase,
+  bindMapFormSchema
+};
+//# sourceMappingURL=chunk-25RI66DN.js.map

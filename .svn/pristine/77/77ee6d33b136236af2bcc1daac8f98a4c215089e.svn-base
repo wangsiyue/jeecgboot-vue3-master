@@ -1,0 +1,501 @@
+import {
+  downloadByData
+} from "./chunk-DIKQ64XW.js";
+import {
+  cloneDeep
+} from "./chunk-4O4AOII7.js";
+import {
+  filterDictText
+} from "./chunk-UY63CZ3T.js";
+import {
+  defHttp,
+  router
+} from "./chunk-MXTOG34P.js";
+import {
+  printarea_default
+} from "./chunk-BRDDJTJW.js";
+import {
+  z
+} from "./chunk-XWHZ74CA.js";
+import {
+  require_print
+} from "./chunk-NSDSWO3A.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  isFunction
+} from "./chunk-RX5I5ULI.js";
+import {
+  computed,
+  nextTick,
+  reactive,
+  ref,
+  watch
+} from "./chunk-JQQZ4WSS.js";
+import {
+  __toESM,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/utils/propTypes.ts
+init_define_APP_INFO();
+var propTypes = z({
+  func: void 0,
+  bool: void 0,
+  string: void 0,
+  number: void 0,
+  object: void 0,
+  integer: void 0
+});
+propTypes.extend([
+  {
+    name: "style",
+    getter: true,
+    type: [String, Object],
+    default: void 0
+  },
+  {
+    name: "VNodeChild",
+    getter: true,
+    type: void 0
+  }
+]);
+
+// src/hooks/web/usePrintJS.ts
+init_define_APP_INFO();
+var import_print_js = __toESM(require_print());
+function printJS(configuration) {
+  if (configuration?.type === "html") {
+    printNb(configuration.printable);
+  } else {
+    return (0, import_print_js.default)(configuration);
+  }
+}
+function printNb(domId) {
+  if (domId) {
+    localPrint(domId);
+  } else {
+    window.print();
+  }
+}
+var closeBtn = true;
+function localPrint(domId) {
+  if (typeof domId === "string" && !domId.startsWith("#")) {
+    domId = "#" + domId;
+  }
+  nextTick(() => {
+    if (closeBtn) {
+      closeBtn = false;
+      new printarea_default({
+        el: domId,
+        endCallback() {
+          closeBtn = true;
+        }
+      });
+    }
+  });
+}
+
+// node_modules/@jeecg/online/useChartRender.js
+init_define_APP_INFO();
+import Bar from "D:/jeecgboot-vue3-master/src/components/chart/Bar.vue";
+import Pie from "D:/jeecgboot-vue3-master/src/components/chart/Pie.vue";
+import BarMulti from "D:/jeecgboot-vue3-master/src/components/chart/BarMulti.vue";
+import LineMulti from "D:/jeecgboot-vue3-master/src/components/chart/LineMulti.vue";
+var ChartRenderProps = {
+  title: propTypes.string,
+  chartsData: propTypes.object,
+  asComponent: propTypes.bool.def(false)
+};
+var ChartRenderEmits = ["error"];
+var ChartRenderComponents = {
+  LineMulti,
+  BarMulti,
+  Pie,
+  Bar
+};
+var ChartRenderCommon = {
+  components: ChartRenderComponents,
+  props: ChartRenderProps,
+  emits: ChartRenderEmits
+};
+var errorText = {
+  jsonFormattingFailed: "JSON\u5B57\u7B26\u4E32\u683C\u5F0F\u5316\u5931\u8D25"
+};
+function useChartRender(props, { emit }) {
+  const {
+    createMessage: $message,
+    createConfirm: $confirm,
+    createInfoModal: $info,
+    createErrorModal: $error,
+    createSuccessModal: $success,
+    createWarningModal: $warning
+  } = useMessage();
+  const headId = ref(null);
+  const height = ref("400px");
+  const activeKey = ref("bar");
+  const chartTypes = ref([]);
+  const pageSwitch = ref(true);
+  const printId = computed(() => `print-content-${headId.value}`);
+  const lineParams = reactive({
+    chartData: []
+  });
+  const barParams = reactive({
+    chartData: []
+  });
+  const pieParams = reactive({
+    chartData: []
+  });
+  const barLineParams = reactive({
+    dataSource: []
+  });
+  const tableParams = reactive({
+    fixedColumns: [
+      {
+        title: "#",
+        key: "rowIndex",
+        width: "10%",
+        align: "center",
+        customRender: function({ record, index }) {
+          if (record.isTotal === true) {
+            return "\u603B\u8BA1";
+          } else {
+            return parseInt(index) + 1;
+          }
+        }
+      }
+    ],
+    columns: [],
+    dataSource: []
+  });
+  const extendJsHandlerIsolation = reactive({});
+  const extendJsHandler = computed({
+    get() {
+      if (headId.value == null) {
+        return null;
+      } else {
+        return extendJsHandlerIsolation[headId.value];
+      }
+    },
+    set(obj) {
+      if (headId.value != null) {
+        extendJsHandlerIsolation[headId.value] = obj;
+      }
+    }
+  });
+  const hasLine = computed(() => chartTypes.value.includes("line"));
+  const hasBar = computed(() => chartTypes.value.includes("bar"));
+  const hasPie = computed(() => chartTypes.value.includes("pie"));
+  const hasTable = ref(false);
+  const lineProps = computed(() => {
+    return {
+      type: "line",
+      height: height.value,
+      chartData: lineParams.chartData,
+      onClick(params) {
+        emitExtendJsEvent(params);
+      }
+    };
+  });
+  const barProps = computed(() => {
+    return {
+      height: height.value,
+      chartData: barParams.chartData,
+      onClick(params) {
+        emitExtendJsEvent(params);
+      }
+    };
+  });
+  const pieProps = computed(() => {
+    return {
+      height: height.value,
+      chartData: pieParams.chartData,
+      onClick(params) {
+        emitExtendJsEvent(params);
+      }
+    };
+  });
+  const barLineProps = computed(() => {
+    return {
+      height: height.value,
+      dataSource: barLineParams.dataSource,
+      onClick(_event, _chart) {
+        console.debug("barLineProps-click: ", arguments);
+      }
+    };
+  });
+  const chartCardProps = computed(() => {
+    return {
+      title: props.title,
+      headStyle: { paddingLeft: "20px" },
+      bodyStyle: { padding: "10px" },
+      bordered: !props.asComponent
+    };
+  });
+  const tableCardProps = computed(() => {
+    return {
+      title: "\u6570\u636E\u660E\u7EC6",
+      headStyle: { paddingLeft: "20px" },
+      bodyStyle: { padding: "0" },
+      style: { marginTop: "20px" },
+      bordered: !props.asComponent
+    };
+  });
+  const exportButtonProps = computed(() => {
+    return {
+      type: "primary",
+      preIcon: "ant-design:download",
+      text: "\u5BFC\u51FA",
+      style: { margin: "12px" }
+    };
+  });
+  const pageSwitchProps = computed(() => {
+    return {
+      checkedChildren: "\u5206\u9875",
+      unCheckedChildren: "\u5206\u9875",
+      style: {
+        position: "absolute",
+        top: "17px",
+        right: "12px"
+      }
+    };
+  });
+  const tableProps = computed(() => {
+    return {
+      size: "middle",
+      rowKey: "id",
+      pagination: pageSwitch.value ? { pageSize: 10 } : false,
+      columns: tableParams.columns,
+      dataSource: tableParams.dataSource,
+      style: { borderTop: "1px solid #e8e8e8" }
+    };
+  });
+  const showPrint = computed(() => !props.asComponent);
+  const showDetail = computed(() => props.asComponent);
+  watch(() => props.chartsData, (data) => parseChartsData(data), { immediate: true });
+  function executeExtendJs(headId, jsCode) {
+    if (!jsCode || !headId) {
+      return;
+    }
+    let onClick = { line: null, bar: null, pie: null };
+    eval(`;(function () {
+      ${jsCode}
+    })();`);
+    if (extendJsHandler.value == null) {
+      extendJsHandler.value = { click: onClick };
+    } else {
+      extendJsHandler.value.click = onClick;
+    }
+  }
+  const onClickThis = {
+    $router: router,
+    $http: defHttp,
+    $message,
+    $confirm,
+    $info,
+    $error,
+    $success,
+    $warning
+  };
+  function emitExtendJsEvent(params) {
+    if (extendJsHandler.value != null) {
+      let clickType = params.seriesType;
+      let fn = extendJsHandler.value.click[clickType];
+      if (isFunction(fn)) {
+        fn.call(onClickThis, params);
+      }
+    }
+  }
+  function parseChartsData(chartsData) {
+    if (chartsData == null)
+      return null;
+    let { head, data, items, dictOptions } = chartsData;
+    if (head == null)
+      return;
+    let { id, xaxisField, yaxisField, dataType, cgrSql, graphType, extendJs } = head;
+    headId.value = id;
+    executeExtendJs(id, extendJs);
+    try {
+      data = dataType === "sql" || dataType === "api" ? data : JSON.parse(cgrSql);
+    } catch (e) {
+      emit("error", errorText.jsonFormattingFailed);
+      return;
+    }
+    let dictList = dictOptions[xaxisField];
+    let graphTypes = graphType.split(",");
+    activeKey.value = graphTypes[0];
+    chartTypes.value = graphTypes;
+    let yaxisFields = yaxisField.split(",");
+    let fieldMap = /* @__PURE__ */ new Map();
+    items.forEach((item) => fieldMap.set(item.fieldName, item));
+    let index = graphTypes.indexOf("table");
+    hasTable.value = index !== -1;
+    if (hasTable.value) {
+      graphTypes.splice(index, 1);
+    }
+    let parseOption = { graphTypes, data, items, fieldMap, xaxisField, yaxisFields, dictList, dictOptions };
+    parseLineData(parseOption);
+    parseBarData(parseOption);
+    parsePicData(parseOption);
+    parseTableData(parseOption);
+  }
+  function parseCommonData(option) {
+    var _a;
+    let { data, fieldMap, xaxisField, yaxisFields, dictList } = option;
+    let chartData = [];
+    for (let yField of yaxisFields) {
+      for (let item of data) {
+        let name = item[xaxisField];
+        if (dictList) {
+          name = filterDictText(dictList, name);
+        }
+        chartData.push({
+          name,
+          value: item[yField],
+          type: ((_a = fieldMap.get(yField)) == null ? void 0 : _a.fieldTxt) || yField
+        });
+      }
+    }
+    return chartData;
+  }
+  function parseLineData(option) {
+    let { graphTypes } = option;
+    if (graphTypes.includes("line")) {
+      lineParams.chartData = parseCommonData(option);
+    }
+  }
+  function parseBarData(option) {
+    let { graphTypes } = option;
+    if (graphTypes.includes("bar")) {
+      barParams.chartData = parseCommonData(option);
+    }
+  }
+  function parsePicData(option) {
+    let { graphTypes, data, xaxisField, yaxisFields, dictList } = option;
+    let yField = yaxisFields[0];
+    if (graphTypes.includes("pie")) {
+      let chartData = [];
+      for (let item of data) {
+        let name = item[xaxisField];
+        if (dictList) {
+          name = filterDictText(dictList, name);
+        }
+        chartData.push({
+          name,
+          value: item[yField]
+        });
+      }
+      pieParams.chartData = chartData;
+    }
+  }
+  function parseTableData(option) {
+    let { data, items, xaxisField, yaxisFields, dictList, dictOptions } = option;
+    if (hasTable.value) {
+      tableParams.dataSource = data.map((item, index) => {
+        item.id = index;
+        let pieData = {
+          item: item[xaxisField],
+          count: item[yaxisFields[0]]
+        };
+        if (dictList) {
+          pieData.item = filterDictText(dictList, pieData.item);
+        }
+        return item;
+      });
+      let tableColumns = cloneDeep(tableParams.fixedColumns);
+      let isTotals = [];
+      items.forEach((item) => {
+        if (item.isShow === "Y") {
+          let column = {
+            align: "center",
+            width: "10%",
+            title: item.fieldTxt,
+            dataIndex: item.fieldName
+          };
+          if (item.dictCode) {
+            column.customRender = ({ text }) => filterDictText(dictOptions[item.fieldName], text);
+          }
+          tableColumns.push(column);
+          if (item.isTotal === "Y")
+            isTotals.push(item.fieldName);
+        }
+      });
+      tableParams.columns = tableColumns;
+      if (isTotals.length > 0) {
+        let totalRow = { id: tableParams.dataSource.length, isTotal: true };
+        isTotals.forEach((column) => {
+          let count = 0;
+          tableParams.dataSource.forEach((row) => {
+            count += parseFloat(row[column]);
+          });
+          totalRow[column] = isNaN(count) ? "\u5305\u542B\u975E\u6570\u5B57\u5185\u5BB9" : count.toFixed(2);
+        });
+        tableParams.dataSource.push(totalRow);
+      }
+    }
+  }
+  function onExportXls() {
+    let fileName = props.title;
+    defHttp.get({
+      url: "/online/graphreport/api/exportXlsById",
+      params: {
+        id: headId.value,
+        name: fileName
+      },
+      responseType: "blob"
+    }, { isTransformResponse: false }).then((data) => {
+      if (!data || data.size == 0) {
+        $message.warning("\u5BFC\u51FA\u5931\u8D25\uFF01");
+        return;
+      }
+      downloadByData(data, fileName + ".xls");
+    });
+  }
+  function onPrint() {
+    printJS({
+      type: "html",
+      printable: "#" + printId.value
+    });
+  }
+  function onGoToDetail() {
+    goToInfo(props.chartsData);
+  }
+  function goToInfo(data) {
+    let url = `/online/graphreport/chart/${data.head.id}`;
+    router.push({ path: url });
+  }
+  return {
+    headId,
+    printId,
+    height,
+    activeKey,
+    chartTypes,
+    pageSwitch,
+    showPrint,
+    showDetail,
+    hasLine,
+    hasBar,
+    hasPie,
+    hasTable,
+    lineProps,
+    barProps,
+    pieProps,
+    tableProps,
+    barLineProps,
+    chartCardProps,
+    tableCardProps,
+    exportButtonProps,
+    pageSwitchProps,
+    extendJsHandlerIsolation,
+    onPrint,
+    onGoToDetail,
+    onExportXls
+  };
+}
+
+export {
+  ChartRenderCommon,
+  useChartRender
+};
+//# sourceMappingURL=chunk-MDX7UCLE.js.map

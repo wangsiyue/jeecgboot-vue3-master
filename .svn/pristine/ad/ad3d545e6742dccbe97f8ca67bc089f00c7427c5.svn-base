@@ -1,0 +1,15 @@
+import {
+  default_default
+} from "./chunk-3UC42JCT.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/ant-design-vue/es/locale/en_US.js
+init_define_APP_INFO();
+var en_US_default = default_default;
+
+export {
+  en_US_default
+};
+//# sourceMappingURL=chunk-JTWWQTIY.js.map

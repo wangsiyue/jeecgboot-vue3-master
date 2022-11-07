@@ -1,0 +1,239 @@
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+import { defineComponent, resolveComponent, openBlock, createElementBlock, Fragment, createElementVNode, normalizeClass, createVNode, withCtx, createBlock, createCommentVNode, createTextVNode, ref, h } from "vue";
+import { router } from "/@/router";
+import { useListPage } from "/@/hooks/system/useListPage";
+import { l as list, A as Api, d as doBatchDelete, q as queryParamsList } from "./graphreport.api.js";
+import { BasicTable, TableAction } from "/@/components/Table";
+import ExcelButton from "/@/components/jeecg/ExcelButton.vue";
+import { useModal } from "/@/components/Modal";
+import { useCopyModal } from "/@/hooks/web/useCopyModal";
+import GraphreportModal from "./GraphreportModal.js";
+import { _ as _export_sfc } from "./index.js";
+import "/@/utils/http/axios";
+import "/@/components/Form/index";
+import "/@/hooks/web/useMessage";
+import "/@/views/system/user/user.api";
+import "/@/utils/common/compUtils";
+import "/@/store/modules/permission";
+import "./FieldTable.js";
+import "/@/components/jeecg/JVxeTable/types";
+import "./useMessageOnline.js";
+import "ant-design-vue";
+import "@ant-design/icons-vue";
+import "/@/utils/is";
+import "./ParamsTable.js";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "vue-router";
+const _sfc_main = defineComponent({
+  name: "GraphreportList",
+  components: { ExcelButton, BasicTable, TableAction, GraphreportModal },
+  setup() {
+    const { prefixCls, doRequest, doDeleteRecord, tableContext } = useListPage({
+      designScope: "online-graphreport-list",
+      tableProps: {
+        api: list,
+        columns: [
+          { title: "\u56FE\u8868\u540D\u79F0", dataIndex: "name" },
+          { title: "\u7F16\u7801", dataIndex: "code" },
+          { title: "\u6570\u636E", dataIndex: "cgrSql" },
+          { title: "Y\u8F74\u6587\u5B57", dataIndex: "yaxisText" },
+          { title: "X\u8F74\u5B57\u6BB5", dataIndex: "xaxisField" }
+        ],
+        formConfig: {
+          labelWidth: 200,
+          schemas: [
+            { label: "\u56FE\u8868\u540D\u79F0", field: "name", component: "JInput" },
+            { label: "\u7F16\u7801", field: "code", component: "JInput" }
+          ]
+        }
+      }
+    });
+    const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
+    const excelConfig = {
+      export: {
+        name: "Online\u56FE\u8868",
+        url: Api.exportXls
+      },
+      import: {
+        url: Api.importXls,
+        success: reload
+      }
+    };
+    const [registerFormModal, formModal] = useModal();
+    function onAdd() {
+      formModal.openModal(true, { isUpdate: false });
+    }
+    function onEdit(record) {
+      formModal.openModal(true, { isUpdate: true, record });
+    }
+    function onBatchDelete() {
+      return __async(this, null, function* () {
+        doRequest(() => doBatchDelete(selectedRowKeys.value));
+      });
+    }
+    function onGoToTest(record) {
+      router.push("/online/graphreport/chart/" + record.id);
+    }
+    const { createCopyModal } = useCopyModal();
+    function onShowOnlineUrl(record) {
+      return __async(this, null, function* () {
+        let baseUrl = `/online/graphreport/chart/${record.id}`;
+        let copyText = ref(baseUrl);
+        createCopyModal({
+          title: `\u914D\u7F6E\u5730\u5740\u3010${record.name}\u3011`,
+          content: () => h("div", {}, copyText.value),
+          copyText
+        });
+        let result = yield queryParamsList(record.id);
+        if (result && result.length > 0) {
+          let str = "?";
+          result.forEach((item) => {
+            str += item.paramName + "=${" + item.paramName + "}&";
+          });
+          str = str.substring(0, str.length - 1);
+          copyText.value = `${baseUrl}${str}`;
+        }
+      });
+    }
+    function getTableAction(record) {
+      return [
+        {
+          label: "\u7F16\u8F91",
+          onClick: () => onEdit(record)
+        }
+      ];
+    }
+    function getDropDownAction(record) {
+      return [
+        {
+          label: "\u529F\u80FD\u6D4B\u8BD5",
+          onClick: () => onGoToTest(record)
+        },
+        {
+          label: "\u914D\u7F6E\u5730\u5740",
+          onClick: () => onShowOnlineUrl(record)
+        },
+        {
+          label: "\u5220\u9664",
+          popConfirm: {
+            title: "\u786E\u5B9A\u5220\u9664\u5417\uFF1F",
+            placement: "left",
+            confirm: () => doDeleteRecord(() => doBatchDelete([record.id]))
+          }
+        }
+      ];
+    }
+    return {
+      reload,
+      prefixCls,
+      rowSelection,
+      selectedRowKeys,
+      onAdd,
+      getTableAction,
+      getDropDownAction,
+      onBatchDelete,
+      registerTable,
+      registerFormModal,
+      excelConfig
+    };
+  }
+});
+const _hoisted_1 = /* @__PURE__ */ createTextVNode("\u65B0\u589E");
+const _hoisted_2 = /* @__PURE__ */ createElementVNode("span", null, "\u5220\u9664", -1);
+const _hoisted_3 = /* @__PURE__ */ createElementVNode("span", null, "\u6279\u91CF\u64CD\u4F5C", -1);
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_ExcelButton = resolveComponent("ExcelButton");
+  const _component_a_icon = resolveComponent("a-icon");
+  const _component_a_menu_item = resolveComponent("a-menu-item");
+  const _component_a_menu = resolveComponent("a-menu");
+  const _component_a_dropdown = resolveComponent("a-dropdown");
+  const _component_TableAction = resolveComponent("TableAction");
+  const _component_BasicTable = resolveComponent("BasicTable");
+  const _component_GraphreportModal = resolveComponent("GraphreportModal");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createElementVNode("div", {
+      class: normalizeClass(_ctx.prefixCls)
+    }, [
+      createVNode(_component_BasicTable, {
+        onRegister: _ctx.registerTable,
+        rowSelection: _ctx.rowSelection
+      }, {
+        tableTitle: withCtx(() => [
+          createVNode(_component_a_button, {
+            onClick: _ctx.onAdd,
+            type: "primary",
+            preIcon: "ant-design:plus"
+          }, {
+            default: withCtx(() => [
+              _hoisted_1
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(_component_ExcelButton, { config: _ctx.excelConfig }, null, 8, ["config"]),
+          _ctx.selectedRowKeys.length > 0 ? (openBlock(), createBlock(_component_a_dropdown, { key: 0 }, {
+            overlay: withCtx(() => [
+              createVNode(_component_a_menu, null, {
+                default: withCtx(() => [
+                  createVNode(_component_a_menu_item, {
+                    key: "1",
+                    onClick: _ctx.onBatchDelete
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(_component_a_icon, { type: "delete" }),
+                      _hoisted_2
+                    ]),
+                    _: 1
+                  }, 8, ["onClick"])
+                ]),
+                _: 1
+              })
+            ]),
+            default: withCtx(() => [
+              createVNode(_component_a_button, null, {
+                default: withCtx(() => [
+                  _hoisted_3,
+                  createVNode(_component_a_icon, { type: "down" })
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          })) : createCommentVNode("", true)
+        ]),
+        action: withCtx(({ record }) => [
+          createVNode(_component_TableAction, {
+            actions: _ctx.getTableAction(record),
+            dropDownActions: _ctx.getDropDownAction(record)
+          }, null, 8, ["actions", "dropDownActions"])
+        ]),
+        _: 1
+      }, 8, ["onRegister", "rowSelection"])
+    ], 2),
+    createVNode(_component_GraphreportModal, {
+      onRegister: _ctx.registerFormModal,
+      onSuccess: _ctx.reload
+    }, null, 8, ["onRegister", "onSuccess"])
+  ], 64);
+}
+var GraphreportList = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export { GraphreportList as default };

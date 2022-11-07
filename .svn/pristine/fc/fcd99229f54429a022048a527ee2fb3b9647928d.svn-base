@@ -1,0 +1,69 @@
+import { defineComponent, inject, ref, computed, watch, resolveComponent, openBlock, createBlock, normalizeProps, mergeProps, createCommentVNode } from "vue";
+import ErrorTip from "./ErrorTip.js";
+import ChartTabsRender from "./ChartTabsRender.js";
+import ChartSingleRender from "./ChartSingleRender.js";
+import ChartDoubleRender from "./ChartDoubleRender.js";
+import { _ as _export_sfc } from "./index.js";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "/@/hooks/web/useMessage";
+import "vue-router";
+import "./useChartRender.js";
+import "/@/router";
+import "/@/utils/propTypes";
+import "/@/hooks/web/usePrintJS";
+import "/@/utils/file/download";
+import "/@/utils/dict/JDictSelectUtil";
+import "/@/components/chart/Bar.vue";
+import "/@/components/chart/Pie.vue";
+import "/@/components/chart/BarMulti.vue";
+import "/@/components/chart/LineMulti.vue";
+import "/@/utils/http/axios";
+import "/@/utils/is";
+import "./cloneDeep.js";
+import "./_arrayPush.js";
+import "./isArray.js";
+const _sfc_main = defineComponent({
+  name: "ChartAutoRender",
+  components: { ErrorTip, ChartTabsRender, ChartSingleRender, ChartDoubleRender },
+  props: {
+    chartsData: { type: Object, default: null },
+    isCombination: { type: Boolean, default: false }
+  },
+  setup(props) {
+    const setErrorTip = inject("setErrorTip");
+    const chartTitle = ref(null);
+    const displayTemplate = ref("tab");
+    const dataSource = ref({});
+    const isTabs = computed(() => displayTemplate.value === "tab");
+    const isSingle = computed(() => displayTemplate.value === "single");
+    const isDouble = computed(() => displayTemplate.value === "double");
+    const templateProps = computed(() => {
+      return {
+        title: props.isCombination ? null : chartTitle.value,
+        chartsData: props.chartsData,
+        isCombination: props.isCombination,
+        onError: (tip) => setErrorTip(tip)
+      };
+    });
+    watch(() => props.chartsData, () => parseChartsData(props.chartsData), { immediate: true });
+    function parseChartsData(data) {
+      if (data) {
+        chartTitle.value = data.head.name;
+        displayTemplate.value = data.head.displayTemplate;
+        dataSource.value = data;
+        if (!isTabs.value && !isDouble.value && !isSingle.value) {
+          setErrorTip("\u672A\u8BC6\u522B\u7684\u5E03\u5C40\u6A21\u5F0F");
+        }
+      }
+    }
+    return { isTabs, isSingle, isDouble, templateProps };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_ChartTabsRender = resolveComponent("ChartTabsRender");
+  const _component_ChartSingleRender = resolveComponent("ChartSingleRender");
+  const _component_ChartDoubleRender = resolveComponent("ChartDoubleRender");
+  return _ctx.isTabs ? (openBlock(), createBlock(_component_ChartTabsRender, normalizeProps(mergeProps({ key: 0 }, _ctx.templateProps)), null, 16)) : _ctx.isSingle ? (openBlock(), createBlock(_component_ChartSingleRender, normalizeProps(mergeProps({ key: 1 }, _ctx.templateProps)), null, 16)) : _ctx.isDouble ? (openBlock(), createBlock(_component_ChartDoubleRender, normalizeProps(mergeProps({ key: 2 }, _ctx.templateProps)), null, 16)) : createCommentVNode("", true);
+}
+var ChartAutoRender = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export { ChartAutoRender as default };

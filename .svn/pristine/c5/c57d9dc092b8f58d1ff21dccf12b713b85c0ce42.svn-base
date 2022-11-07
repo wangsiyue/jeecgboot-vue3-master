@@ -1,0 +1,289 @@
+import {
+  OnlineForm
+} from "./chunk-IOHEGZVO.js";
+import {
+  getRefPromise
+} from "./chunk-BPK5V6L7.js";
+import {
+  BasicModal,
+  useModalInner
+} from "./chunk-SMLIOOAP.js";
+import {
+  defHttp
+} from "./chunk-64MZJWVI.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  createBlock,
+  createTextVNode,
+  createVNode,
+  defineAsyncComponent,
+  defineComponent,
+  markRaw,
+  mergeProps,
+  nextTick,
+  openBlock,
+  reactive,
+  ref,
+  resolveComponent,
+  resolveDynamicComponent,
+  watch,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/OnlineCustomModal.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var DEF_CONFIG = {
+  code: "",
+  title: "\u81EA\u5B9A\u4E49\u5F39\u6846",
+  width: 600,
+  row: {},
+  hide: [],
+  show: [],
+  requestUrl: "",
+  tableType: "",
+  foreignKeys: "",
+  formComponent: ""
+};
+var _sfc_main = defineComponent({
+  name: "OnlineCustomModal",
+  components: {
+    OnlineForm,
+    BasicModal
+  },
+  setup(_props, { emit }) {
+    const onlineFormCompRef = ref();
+    const id = ref("");
+    const title = ref("\u81EA\u5B9A\u4E49\u5F39\u6846");
+    const width = ref(600);
+    let onlineHideFields = [];
+    let onlineShowFields = [];
+    let onlineFormEditUrl = "";
+    let currentRowData = {};
+    const url = {
+      loadFormItems: "/online/cgform/api/getFormItem/",
+      optPre: "/online/cgform/api/form/"
+    };
+    const modalStyle = { "position": "relative" };
+    const confirmLoading = ref(false);
+    const formRendered = ref(false);
+    function renderSuccess() {
+      formRendered.value = true;
+    }
+    const isOnlineForm = ref(true);
+    const [registerModal, { setModalProps, closeModal }] = useModalInner((params) => __async(this, null, function* () {
+      setModalProps({ confirmLoading: false });
+      resetParams(params);
+      yield nextTick(() => __async(this, null, function* () {
+        if (!params.formComponent) {
+          yield showOnlineForm();
+        } else {
+          showCustomForm(params.formComponent);
+        }
+      }));
+    }));
+    function resetParams(params) {
+      let options = Object.assign({}, DEF_CONFIG, params);
+      id.value = options.code;
+      title.value = options.title;
+      width.value = options.width;
+      onlineHideFields = options.hide || [];
+      onlineShowFields = options.show || [];
+      onlineFormEditUrl = getOnlineFormEditUrl(options.requestUrl);
+      currentRowData = options.row;
+    }
+    function getOnlineFormEditUrl(requestUrl) {
+      if (requestUrl) {
+        return requestUrl;
+      } else {
+        return url.optPre + id.value;
+      }
+    }
+    const submitLoading = ref(false);
+    function handleSubmit() {
+      submitLoading.value = true;
+      if (isOnlineForm.value === true) {
+        onlineFormCompRef.value.handleSubmit();
+      } else {
+        customFormRef.value.handleSubmit();
+      }
+      setTimeout(() => {
+        submitLoading.value = true;
+      }, 3500);
+    }
+    function handleCancel() {
+      closeModal();
+    }
+    function handleSuccess(formData) {
+      emit("success", formData);
+      closeModal();
+    }
+    function showOnlineForm() {
+      return __async(this, null, function* () {
+        isOnlineForm.value = true;
+        yield getRefPromise(formRendered);
+        onlineFormCompRef.value.handleCustomFormSh(onlineShowFields, onlineHideFields);
+        onlineFormCompRef.value.handleCustomFormEdit(currentRowData, onlineFormEditUrl);
+      });
+    }
+    const formTemplate = ref(1);
+    watch(id, renderFormItems, { immediate: true });
+    function renderFormItems() {
+      return __async(this, null, function* () {
+        formRendered.value = false;
+        if (!id.value) {
+          return;
+        }
+        console.log("\u91CD\u65B0\u6E32\u67D3\u8868\u5355\u300B\u300B\u300B\u300Bmodal");
+        let result = yield loadFormItems();
+        let dataFormTemplate = result.head.formTemplate;
+        formTemplate.value = dataFormTemplate ? Number(dataFormTemplate) : 1;
+        nextTick(() => __async(this, null, function* () {
+          let myForm = yield getRefPromise(onlineFormCompRef);
+          myForm.createRootProperties(result);
+        }));
+      });
+    }
+    function loadFormItems() {
+      let url2 = `/online/cgform/api/getFormItem/${id.value}`;
+      return new Promise((resolve, reject) => {
+        defHttp.get({ url: url2 }, { isTransformResponse: false }).then((res) => {
+          console.log("\u8868\u5355\u7ED3\u679C\u300B\u300Bmodal:", res);
+          if (res.success) {
+            resolve(res.result);
+          } else {
+            reject(res.message);
+          }
+        }).catch(() => {
+          reject();
+        });
+      });
+    }
+    const customFormRef = ref();
+    const customFormComponent = reactive({
+      url: "",
+      is: "",
+      row: {}
+    });
+    function showCustomForm(formComponent) {
+      isOnlineForm.value = false;
+      customFormComponent.url = onlineFormEditUrl;
+      customFormComponent.row = currentRowData;
+      customFormComponent.is = markRaw(defineAsyncComponent(() => import(
+        /* @vite-ignore */
+        "/@/views/" + formComponent
+      )));
+    }
+    return {
+      registerModal,
+      title,
+      width,
+      modalStyle,
+      handleSubmit,
+      handleCancel,
+      id,
+      onlineFormCompRef,
+      formTemplate,
+      renderSuccess,
+      customFormRef,
+      customFormComponent,
+      open,
+      isOnlineForm,
+      confirmLoading,
+      submitLoading,
+      handleSuccess
+    };
+  }
+});
+var _hoisted_1 = createTextVNode("\u786E\u5B9A");
+var _hoisted_2 = createTextVNode("\u5173\u95ED");
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_online_form = resolveComponent("online-form");
+  const _component_a_spin = resolveComponent("a-spin");
+  const _component_BasicModal = resolveComponent("BasicModal");
+  return openBlock(), createBlock(_component_BasicModal, mergeProps({
+    title: _ctx.title,
+    width: _ctx.width
+  }, _ctx.$attrs, {
+    style: _ctx.modalStyle,
+    onRegister: _ctx.registerModal,
+    wrapClassName: "jeecg-online-modal",
+    onOk: _ctx.handleSubmit
+  }), {
+    footer: withCtx(() => [
+      createVNode(_component_a_button, {
+        key: "submit",
+        type: "primary",
+        onClick: _ctx.handleSubmit
+      }, {
+        default: withCtx(() => [
+          _hoisted_1
+        ]),
+        _: 1
+      }, 8, ["onClick"]),
+      createVNode(_component_a_button, {
+        key: "back",
+        onClick: _ctx.handleCancel
+      }, {
+        default: withCtx(() => [
+          _hoisted_2
+        ]),
+        _: 1
+      }, 8, ["onClick"])
+    ]),
+    default: withCtx(() => [
+      createVNode(_component_a_spin, { spinning: _ctx.confirmLoading }, {
+        default: withCtx(() => [
+          _ctx.isOnlineForm ? (openBlock(), createBlock(_component_online_form, {
+            key: 0,
+            ref: "onlineFormCompRef",
+            id: _ctx.id,
+            "form-template": _ctx.formTemplate,
+            onRendered: _ctx.renderSuccess,
+            onSuccess: _ctx.handleSuccess
+          }, null, 8, ["id", "form-template", "onRendered", "onSuccess"])) : (openBlock(), createBlock(resolveDynamicComponent(_ctx.customFormComponent.is), {
+            key: 1,
+            ref: "customFormRef",
+            url: _ctx.customFormComponent.url,
+            row: _ctx.customFormComponent.row,
+            onClose: _ctx.handleSuccess
+          }, null, 40, ["url", "row", "onClose"]))
+        ]),
+        _: 1
+      }, 8, ["spinning"])
+    ]),
+    _: 1
+  }, 16, ["title", "width", "style", "onRegister", "onOk"]);
+}
+var OnlineCustomModal = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  OnlineCustomModal
+};
+//# sourceMappingURL=chunk-4RZTIG73.js.map

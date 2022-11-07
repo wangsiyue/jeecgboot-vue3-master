@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:vue-types"],
+  "sourcesContent": ["import d from \"./node_modules/vue-types/dist/vue-types.modern.js\";export default d;\nexport * from \"./node_modules/vue-types/dist/vue-types.modern.js\""],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAkE,IAAO,oBAAQ;",
+  "names": []
+}

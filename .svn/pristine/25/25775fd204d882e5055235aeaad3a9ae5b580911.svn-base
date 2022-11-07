@@ -1,0 +1,118 @@
+import {
+  useI18n
+} from "./chunk-YLDRSUWQ.js";
+import {
+  isString
+} from "./chunk-RX5I5ULI.js";
+import {
+  modal_default
+} from "./chunk-IF4EKY7K.js";
+import {
+  message_default,
+  notification_default
+} from "./chunk-D65CINXV.js";
+import {
+  CheckCircleFilled_default,
+  CloseCircleFilled_default,
+  InfoCircleFilled_default
+} from "./chunk-SJ2YS27J.js";
+import {
+  h
+} from "./chunk-JQQZ4WSS.js";
+import {
+  __export,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/hooks/web/useMessage.ts
+var useMessage_exports = {};
+__export(useMessage_exports, {
+  useMessage: () => useMessage
+});
+init_define_APP_INFO();
+function getIcon(iconType) {
+  try {
+    if (iconType === "warning") {
+      return h(InfoCircleFilled_default, { "class": "modal-icon-warning" });
+    } else if (iconType === "success") {
+      return h(CheckCircleFilled_default, { "class": "modal-icon-success" });
+    } else if (iconType === "info") {
+      return h(InfoCircleFilled_default, { "class": "modal-icon-info" });
+    } else {
+      return h(CloseCircleFilled_default, { "class": "modal-icon-error" });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+function renderContent({ content }) {
+  try {
+    if (isString(content)) {
+      return h("div", h("div", { "innerHTML": content }));
+    } else {
+      return content;
+    }
+  } catch (e) {
+    console.log(e);
+    return content;
+  }
+}
+function createConfirm(options) {
+  const iconType = options.iconType || "warning";
+  Reflect.deleteProperty(options, "iconType");
+  const opt = {
+    centered: true,
+    icon: getIcon(iconType),
+    ...options,
+    content: renderContent(options)
+  };
+  return modal_default.confirm(opt);
+}
+var getBaseOptions = () => {
+  const { t } = useI18n();
+  return {
+    okText: t("common.okText"),
+    centered: true
+  };
+};
+function createModalOptions(options, icon) {
+  return {
+    ...getBaseOptions(),
+    ...options,
+    content: renderContent(options),
+    icon: getIcon(icon)
+  };
+}
+function createSuccessModal(options) {
+  return modal_default.success(createModalOptions(options, "success"));
+}
+function createErrorModal(options) {
+  return modal_default.error(createModalOptions(options, "close"));
+}
+function createInfoModal(options) {
+  return modal_default.info(createModalOptions(options, "info"));
+}
+function createWarningModal(options) {
+  return modal_default.warning(createModalOptions(options, "warning"));
+}
+notification_default.config({
+  placement: "topRight",
+  duration: 3
+});
+function useMessage() {
+  return {
+    createMessage: message_default,
+    notification: notification_default,
+    createConfirm,
+    createSuccessModal,
+    createErrorModal,
+    createInfoModal,
+    createWarningModal
+  };
+}
+
+export {
+  useMessage,
+  useMessage_exports
+};
+//# sourceMappingURL=chunk-C4IBJHIP.js.map

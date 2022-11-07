@@ -1,0 +1,17 @@
+import {
+  inject
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/hooks/core/useContext.ts
+init_define_APP_INFO();
+function useContext(key = Symbol(), defaultValue) {
+  return inject(key, defaultValue || {});
+}
+
+export {
+  useContext
+};
+//# sourceMappingURL=chunk-ZZBFKWCL.js.map

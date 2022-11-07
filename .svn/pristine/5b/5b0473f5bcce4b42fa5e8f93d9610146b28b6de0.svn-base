@@ -1,0 +1,203 @@
+import {
+  useMessageOnline
+} from "./chunk-J75HBRFQ.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import {
+  createBaseVNode,
+  createBlock,
+  createTextVNode,
+  createVNode,
+  defineComponent,
+  openBlock,
+  ref,
+  resolveComponent,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/FieldTable.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "ParamsTable",
+  props: {
+    loading: Boolean,
+    dataSource: Array
+  },
+  setup() {
+    const tableRef = ref();
+    const columns = ref([
+      {
+        title: "\u5B57\u6BB5\u540D",
+        key: "fieldName",
+        width: 180,
+        type: "input" /* input */,
+        defaultValue: "",
+        validateRules: [{ required: true, message: "${title}\u4E0D\u80FD\u4E3A\u7A7A" }],
+        placeholder: "\u8BF7\u8F93\u5165${title}"
+      },
+      {
+        title: "\u5B57\u6BB5\u6587\u672C",
+        key: "fieldTxt",
+        width: 180,
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u8F93\u5165${title}"
+      },
+      {
+        title: "\u5B57\u6BB5\u7C7B\u578B",
+        key: "fieldType",
+        width: 200,
+        type: "select" /* select */,
+        options: [
+          { title: "\u6570\u503C\u7C7B\u578B", value: "Integer" },
+          { title: "\u65E5\u671F\u7C7B\u578B", value: "Date" },
+          { title: "\u5B57\u7B26\u7C7B\u578B", value: "String" },
+          { title: "\u957F\u6574\u578B", value: "Long" }
+        ],
+        defaultValue: "",
+        placeholder: "\u8BF7\u9009\u62E9${title}"
+      },
+      {
+        title: "\u8BA1\u7B97\u603B\u8BA1",
+        key: "isTotal",
+        width: 80,
+        type: "checkbox" /* checkbox */,
+        defaultChecked: false,
+        customValue: ["Y", "N"]
+      },
+      {
+        title: "\u662F\u5426\u67E5\u8BE2",
+        key: "searchFlag",
+        width: 80,
+        type: "checkbox" /* checkbox */,
+        defaultChecked: false,
+        customValue: ["Y", "N"]
+      },
+      {
+        title: "\u67E5\u8BE2\u6A21\u5F0F",
+        key: "searchMode",
+        width: 180,
+        type: "select" /* select */,
+        options: [
+          { title: "\u5355\u6761\u4EF6\u67E5\u8BE2", value: "single" },
+          { title: "\u8303\u56F4\u67E5\u8BE2", value: "group" }
+        ],
+        defaultValue: "",
+        placeholder: "\u8BF7\u9009\u62E9${title}"
+      },
+      {
+        title: "\u5B57\u5178Code",
+        key: "dictCode",
+        width: 200,
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u9009\u62E9${title}"
+      },
+      {
+        title: "\u662F\u5426\u663E\u793A",
+        key: "isShow",
+        type: "checkbox" /* checkbox */,
+        defaultChecked: true,
+        customValue: ["Y", "N"]
+      }
+    ]);
+    const { createConfirm: $confirm } = useMessageOnline();
+    function fieldNameConvertCase(convertCase, name) {
+      $confirm({
+        iconType: "info",
+        title: "\u8F6C\u6362\u5B57\u6BB5\u540D",
+        content: `\u786E\u5B9A\u8981\u5C06\u6240\u6709\u7684\u5B57\u6BB5\u540D\u90FD\u8F6C\u6362\u4E3A${name}\u5417\uFF1F`,
+        onOk() {
+          let fn = `to${convertCase}Case`;
+          let values = tableRef.value.getTableData();
+          let newValues = values.map((item) => {
+            return {
+              rowKey: item.id,
+              values: {
+                fieldName: item["fieldName"][fn]()
+              }
+            };
+          });
+          tableRef.value.setValues(newValues);
+        }
+      });
+    }
+    return { tableRef, columns, fieldNameConvertCase };
+  }
+});
+var _hoisted_1 = createBaseVNode("span", null, "\u8F6C\u6362\u4E3A\u5927\u5199", -1);
+var _hoisted_2 = createBaseVNode("span", null, "\u8F6C\u6362\u4E3A\u5C0F\u5199", -1);
+var _hoisted_3 = createTextVNode("\u8F6C\u6362\u5B57\u6BB5\u540D");
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_icon = resolveComponent("a-icon");
+  const _component_a_menu_item = resolveComponent("a-menu-item");
+  const _component_a_menu = resolveComponent("a-menu");
+  const _component_a_button = resolveComponent("a-button");
+  const _component_a_dropdown = resolveComponent("a-dropdown");
+  const _component_JVxeTable = resolveComponent("JVxeTable");
+  return openBlock(), createBlock(_component_JVxeTable, {
+    ref: "tableRef",
+    toolbar: "",
+    rowNumber: "",
+    rowSelection: "",
+    dragSort: "",
+    sortKey: "orderNum",
+    loading: _ctx.loading,
+    columns: _ctx.columns,
+    dataSource: _ctx.dataSource,
+    height: 398
+  }, {
+    toolbarSuffix: withCtx(() => [
+      createVNode(_component_a_dropdown, null, {
+        overlay: withCtx(() => [
+          createVNode(_component_a_menu, null, {
+            default: withCtx(() => [
+              createVNode(_component_a_menu_item, {
+                key: "1",
+                onClick: _cache[0] || (_cache[0] = ($event) => _ctx.fieldNameConvertCase("Upper", "\u5927\u5199"))
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_a_icon, { type: "sort-descending" }),
+                  _hoisted_1
+                ]),
+                _: 1
+              }),
+              createVNode(_component_a_menu_item, {
+                key: "2",
+                onClick: _cache[1] || (_cache[1] = ($event) => _ctx.fieldNameConvertCase("Lower", "\u5C0F\u5199"))
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_a_icon, { type: "sort-ascending" }),
+                  _hoisted_2
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          })
+        ]),
+        default: withCtx(() => [
+          createVNode(_component_a_button, { preIcon: "ant-design:down" }, {
+            default: withCtx(() => [
+              _hoisted_3
+            ]),
+            _: 1
+          })
+        ]),
+        _: 1
+      })
+    ]),
+    _: 1
+  }, 8, ["loading", "columns", "dataSource"]);
+}
+var FieldTable = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  FieldTable
+};
+//# sourceMappingURL=chunk-OMOWJGCQ.js.map

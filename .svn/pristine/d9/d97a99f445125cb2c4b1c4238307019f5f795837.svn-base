@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:print-js"],
+  "sourcesContent": ["export default require(\"./node_modules/print-js/dist/print.js\");"],
+  "mappings": ";;;;;;;;AAAA;AAAA,IAAO,mBAAQ;",
+  "names": []
+}

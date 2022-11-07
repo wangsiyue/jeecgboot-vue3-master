@@ -1,0 +1,200 @@
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+import { useMessage } from "/@/hooks/web/useMessage";
+import { ref, watch, resolveComponent, openBlock, createBlock, unref, toRaw } from "vue";
+import { BasicForm, useForm } from "/@/components/Form/index";
+import { defHttp } from "/@/utils/http/axios";
+import { a as useFormItems, g as getRefPromise, l as loadFormFieldsDefVal } from "./useAutoForm.js";
+import { Loading } from "/@/components/Loading";
+import { _ as _export_sfc } from "./index.js";
+import "./FormSchemaFactory.js";
+import "/@/components/Form/src/jeecg/components/JUpload";
+import "/@/views/system/user/user.api";
+import "/@/store/modules/user";
+import "/@/utils";
+import "/@/utils/desform/customExpression";
+import "/@/components/Form/src/componentMap";
+import "./OnlineSelectCascade.js";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "vue-router";
+const baseUrl = "/online/cgform/api/subform";
+const _sfc_main = {
+  name: "OnlineSubForm",
+  components: {
+    BasicForm,
+    Loading
+  },
+  props: {
+    properties: {
+      type: Object,
+      required: true
+    },
+    mainId: {
+      type: String,
+      default: ""
+    },
+    table: {
+      type: String,
+      default: ""
+    },
+    formTemplate: {
+      type: Number,
+      default: 1
+    },
+    requiredFields: {
+      type: Array,
+      default: []
+    },
+    isUpdate: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  emits: ["formChange"],
+  setup(props, { emit }) {
+    console.log("\u8FDB\u5165online\u5B50\u8868\u8868\u5355\u9875\u9762\u300B\u300B\u300B\u300B" + props.table);
+    const onlineFormRef = ref(null);
+    const formRendered = ref(false);
+    useMessage();
+    const { formSchemas, defaultValueFields, changeDataIfArray2String, tableName, dbData, checkOnlyFieldValue, fieldDisplayStatus, createFormSchemas, baseColProps } = useFormItems(props, onlineFormRef);
+    const [registerForm, { setProps, validate, resetFields, setFieldsValue, getFieldsValue }] = useForm({
+      schemas: formSchemas,
+      showActionButtonGroup: false,
+      baseColProps
+    });
+    watch(() => props.table, () => {
+      tableName.value = props.table;
+    }, { immediate: true });
+    watch(() => props.properties, (valueObj) => {
+      console.log("\u4E3B\u8868properties\u6539\u53D8", props.properties);
+      formRendered.value = false;
+      addFormChangeEvent();
+      createFormSchemas(props.properties, props.requiredFields, checkOnlyFieldValue);
+      formRendered.value = true;
+    }, { deep: true, immediate: true });
+    watch(() => props.mainId, (valueObj) => {
+      console.log("\u4E3B\u8868ID\u6539\u53D8", props.mainId);
+      setTimeout(() => {
+        resetSubForm();
+      }, 100);
+    }, { immediate: true });
+    watch(() => props.disabled, (val) => {
+      setProps({ disabled: val });
+    });
+    function addFormChangeEvent() {
+      return __async(this, null, function* () {
+        let formRefObject = yield getRefPromise(onlineFormRef);
+        formRefObject.$formValueChange = (field, value) => {
+          let emitArgument = { [field]: value };
+          emit("formChange", emitArgument);
+        };
+      });
+    }
+    function handleDefaultValue() {
+      if (unref(props.isUpdate) === false) {
+        let fieldProperties = toRaw(defaultValueFields[tableName.value]);
+        loadFormFieldsDefVal(fieldProperties, (values) => {
+          setFieldsValue(values);
+        });
+      }
+    }
+    function resetSubForm() {
+      return __async(this, null, function* () {
+        yield getRefPromise(formRendered);
+        yield resetFields();
+        handleDefaultValue();
+        const { table, mainId } = props;
+        if (!table || !mainId) {
+          return;
+        }
+        let values = yield loadData(table, mainId);
+        dbData.value = values;
+        yield setFieldsValue(values);
+      });
+    }
+    function loadData(table, mainId) {
+      let url = `${baseUrl}/${table}/${mainId}`;
+      return new Promise((resolve, reject) => {
+        defHttp.get({ url }, { isTransformResponse: false }).then((res) => {
+          console.log(res);
+          if (res.success) {
+            resolve(res.result);
+          } else {
+            console.log(res.message);
+            reject();
+          }
+        });
+      }).finally(() => {
+        dbData.value = "";
+      });
+    }
+    function getAll() {
+      return new Promise((resolve, reject) => {
+        validate().then(() => {
+          let formData = getFieldsValue();
+          formData = changeDataIfArray2String(formData);
+          resolve(formData);
+        }).catch((e) => {
+          reject(e);
+        });
+      });
+    }
+    function getFormEvent() {
+      let row = getFieldsValue();
+      if (!row.id) {
+        row.id = "sub-change-temp-id";
+      }
+      return {
+        row,
+        target: context
+      };
+    }
+    function setValues(values) {
+      setFieldsValue(values);
+    }
+    const context = {
+      onlineFormRef,
+      baseColProps,
+      formSchemas,
+      registerForm,
+      setFieldsValue,
+      getFieldsValue,
+      getFormEvent,
+      setValues,
+      getAll,
+      sh: fieldDisplayStatus
+    };
+    return context;
+  }
+};
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BasicForm = resolveComponent("BasicForm");
+  return openBlock(), createBlock(_component_BasicForm, {
+    ref: "onlineFormRef",
+    onRegister: _ctx.registerForm
+  }, null, 8, ["onRegister"]);
+}
+var OnlineSubForm = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export { OnlineSubForm as default };

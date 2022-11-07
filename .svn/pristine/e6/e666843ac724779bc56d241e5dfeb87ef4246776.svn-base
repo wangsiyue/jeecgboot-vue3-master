@@ -1,0 +1,600 @@
+import {
+  ParamsTable
+} from "./chunk-BUAJKO2R.js";
+import {
+  FieldTable
+} from "./chunk-OMOWJGCQ.js";
+import {
+  duplicateCheck
+} from "./chunk-2UC6MOE4.js";
+import {
+  BasicForm,
+  useForm
+} from "./chunk-CWQVWJAJ.js";
+import {
+  bindMapFormSchema
+} from "./chunk-2D5MMSKL.js";
+import {
+  BasicModal,
+  useModalInner
+} from "./chunk-MHXJV5SW.js";
+import {
+  defHttp,
+  usePermissionStore
+} from "./chunk-MXTOG34P.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  isArray
+} from "./chunk-RX5I5ULI.js";
+import {
+  computed,
+  createBaseVNode,
+  createBlock,
+  createTextVNode,
+  createVNode,
+  defineComponent,
+  mergeProps,
+  nextTick,
+  openBlock,
+  reactive,
+  ref,
+  resolveComponent,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/GraphreportModal.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+function useFormSchemas(_, handler) {
+  const permissionStore = usePermissionStore();
+  const mapFormSchema = bindMapFormSchema({
+    one: {
+      colProps: { xs: 24, sm: 24 },
+      itemProps: {
+        labelCol: { xs: 24, sm: 2 },
+        wrapperCol: { xs: 24, sm: 22 }
+      }
+    },
+    tow: {
+      colProps: { xs: 24, sm: 12 },
+      itemProps: {
+        labelCol: { xs: 24, sm: 4 },
+        wrapperCol: { xs: 24, sm: 20 }
+      }
+    },
+    threeTow: {
+      colProps: { xs: 24, sm: 16 },
+      itemProps: {
+        labelCol: { xs: 24, sm: 3 },
+        wrapperCol: { xs: 24, sm: 21 }
+      }
+    },
+    three: {
+      colProps: { xs: 24, sm: 8 },
+      itemProps: {
+        labelCol: { xs: 24, sm: 6 },
+        wrapperCol: { xs: 24, sm: 18 }
+      }
+    }
+  }, "three");
+  const dataType = ref("sql");
+  const isCombination = ref("combination");
+  const formInfo = {
+    cgrSql: {
+      sql: { label: "\u67E5\u8BE2SQL", placeholder: "\u8BF7\u8F93\u5165\u67E5\u8BE2SQL", language: "sql" },
+      json: { label: "\u6570\u636EJSON", placeholder: "\u8BF7\u8F93\u5165\u6570\u636EJSON", language: "javascript" },
+      api: { label: "API\u63A5\u53E3", placeholder: "\u8BF7\u8F93\u5165API\u63A5\u53E3", language: "javascript" }
+    }
+  };
+  const cgrSqlFormInfo = computed(() => {
+    return formInfo.cgrSql[dataType.value];
+  });
+  const formSchemas = computed(() => {
+    var _a, _b, _c;
+    return [
+      { label: "ID", field: "id", component: "Input", show: false },
+      mapFormSchema({
+        label: "\u56FE\u8868\u540D\u79F0",
+        field: "name",
+        component: "Input",
+        required: true
+      }),
+      mapFormSchema({
+        label: "\u7F16\u7801",
+        field: "code",
+        component: "Input",
+        dynamicRules({ model }) {
+          return [
+            { required: true, message: "\u8BF7\u8F93\u5165\u7F16\u7801!" },
+            {
+              validator(_0, _1) {
+                return __async(this, arguments, function* ({}, value) {
+                  if (/[\u4E00-\u9FA5]/g.test(value)) {
+                    return Promise.reject("\u7F16\u7801\u4E0D\u80FD\u4E3A\u6C49\u5B57");
+                  }
+                  let { success, message } = yield duplicateCheck({
+                    tableName: "onl_graphreport_head",
+                    fieldName: "code",
+                    fieldVal: value,
+                    dataId: model.id
+                  });
+                  if (!success) {
+                    return Promise.reject(message);
+                  }
+                });
+              }
+            }
+          ];
+        }
+      }),
+      mapFormSchema({
+        label: "\u5C55\u793A\u6A21\u677F",
+        field: "displayTemplate",
+        component: "Select",
+        componentProps: {
+          options: [
+            { label: "Tab\u98CE\u683C", value: "tab" },
+            { label: "\u5355\u6392\u5E03\u5C40", value: "single" },
+            { label: "\u53CC\u6392\u5E03\u5C40", value: "double" }
+          ]
+        },
+        defaultValue: "tab"
+      }),
+      mapFormSchema({
+        label: "X\u8F74\u5B57\u6BB5",
+        field: "xaxisField",
+        component: "Input",
+        required: true
+      }),
+      mapFormSchema({
+        label: "Y\u8F74\u5B57\u6BB5",
+        field: "yaxisField",
+        component: "JDictSelectTag",
+        componentProps: {
+          mode: "tags",
+          open: false,
+          dictCode: "online_graph_display_template"
+        },
+        required: true
+      }, "threeTow"),
+      mapFormSchema({
+        label: "\u6570\u636E\u7C7B\u578B",
+        field: "dataType",
+        component: "JDictSelectTag",
+        componentProps: {
+          dictCode: "online_graph_data_type",
+          showChooseOption: false,
+          onChange: (value) => dataType.value = value
+        },
+        defaultValue: "sql"
+      }),
+      mapFormSchema({
+        label: "\u6570\u636E\u6E90",
+        field: "dbSource",
+        component: "Select",
+        componentProps: {
+          options: handler.dbSourceOptions.value
+        },
+        rules: [{ required: permissionStore.sysSafeMode, message: "\u8BF7\u9009\u62E9\u6570\u636E\u6E90\uFF01" }],
+        ifShow: ({ model }) => model.dataType === "sql"
+      }),
+      mapFormSchema({
+        label: "\u56FE\u8868\u7C7B\u578B",
+        field: "graphType",
+        component: "JDictSelectTag",
+        componentProps: {
+          mode: isCombination.value === "single" ? "default" : "multiple",
+          dictCode: "online_graph_type",
+          showChooseOption: false
+        },
+        defaultValue: ["bar"]
+      }, dataType.value === "sql" ? "three" : "threeTow"),
+      mapFormSchema({
+        label: "\u63CF\u8FF0",
+        field: "content",
+        component: "Input"
+      }, "one"),
+      mapFormSchema({
+        label: (_a = cgrSqlFormInfo.value) == null ? void 0 : _a.label,
+        field: "cgrSql",
+        required: true,
+        component: "JCodeEditor",
+        componentProps: {
+          placeholder: (_b = cgrSqlFormInfo.value) == null ? void 0 : _b.placeholder,
+          language: (_c = cgrSqlFormInfo.value) == null ? void 0 : _c.language,
+          fullScreen: true,
+          autoHeight: "!ie",
+          height: "150px"
+        },
+        dynamicRules() {
+          var _a2;
+          return [
+            {
+              required: true,
+              message: (_a2 = cgrSqlFormInfo.value) == null ? void 0 : _a2.placeholder
+            },
+            {
+              validator(_0, _1) {
+                return __async(this, arguments, function* ({}, value) {
+                  if (value && dataType.value === "json") {
+                    try {
+                      JSON.parse(value);
+                    } catch (e) {
+                      return Promise.reject("JSON\u683C\u5F0F\u4E0D\u6B63\u786E\uFF01");
+                    }
+                  }
+                });
+              }
+            }
+          ];
+        }
+      }, "one"),
+      mapFormSchema({
+        label: " ",
+        field: "cgrSql",
+        component: "Input",
+        slot: "SQLAnalyzeButton",
+        itemProps: { colon: false },
+        ifShow: ({ model }) => model.dataType === "sql"
+      }, "one"),
+      mapFormSchema({
+        label: "JS\u589E\u5F3A",
+        field: "extendJs",
+        component: "JCodeEditor",
+        componentProps: {
+          placeholder: "JS\u589E\u5F3A",
+          language: "javascript",
+          fullScreen: true,
+          autoHeight: "!ie",
+          height: "150px"
+        }
+      }, "one")
+    ];
+  });
+  return { formSchemas, dataType, isCombination };
+}
+var _sfc_main = defineComponent({
+  name: "GraphreportModal",
+  components: { ParamsTable, FieldTable, BasicModal, BasicForm },
+  emits: ["register", "success"],
+  setup(props, { emit }) {
+    const { createMessage: $message } = useMessage();
+    const isUpdate = ref(false);
+    const fieldTableRef = ref();
+    const paramsTableRef = ref();
+    let model = {};
+    const title = computed(() => isUpdate.value ? "\u7F16\u8F91" : "\u65B0\u589E");
+    const activeKey = ref("field");
+    const confirmLoading = ref(false);
+    const dbSourceOptions = ref([]);
+    const fieldTable = reactive({
+      dataSource: []
+    });
+    const paramsTable = reactive({
+      dataSource: []
+    });
+    const [registerModal, { closeModal }] = useModalInner((data) => {
+      var _a;
+      isUpdate.value = (_a = data == null ? void 0 : data.isUpdate) != null ? _a : false;
+      if (isUpdate.value) {
+        edit(data == null ? void 0 : data.record);
+      } else {
+        add();
+      }
+    });
+    const { formSchemas, dataType, isCombination } = useFormSchemas(props, {
+      dbSourceOptions
+    });
+    const [registerForm, { resetFields, clearValidate, setFieldsValue, validate }] = useForm({
+      schemas: formSchemas,
+      showActionButtonGroup: false,
+      labelAlign: "right"
+    });
+    function add() {
+      return __async(this, null, function* () {
+        var _a, _b;
+        fieldTable.dataSource = [];
+        paramsTable.dataSource = [];
+        yield nextTick();
+        (_b = (_a = fieldTableRef.value) == null ? void 0 : _a.tableRef) == null ? void 0 : _b.addRows({}, { setActive: false });
+        edit({});
+      });
+    }
+    function edit(record) {
+      return __async(this, null, function* () {
+        var _a;
+        confirmLoading.value = false;
+        activeKey.value = "field";
+        yield resetFields();
+        model = Object.assign({}, record);
+        model.dbSource = model.dbSource == null ? "" : model.dbSource;
+        if (isCombination.value === "combination" && typeof model.graphType === "string") {
+          model.graphType = model.graphType.split(",");
+        }
+        if (typeof model.yaxisField === "string") {
+          model.yaxisField = model.yaxisField.split(",");
+        }
+        yield setFieldsValue(model);
+        yield clearValidate();
+        dataType.value = (_a = model.dataType) != null ? _a : "sql";
+        if (model.id) {
+          requestSubData(model.id);
+        }
+      });
+    }
+    function requestSubData(headId) {
+      confirmLoading.value = true;
+      requestTabData("/online/graphreport/head/queryOnlGraphreportItemByMainId", { id: headId }, fieldTable).finally(() => {
+        confirmLoading.value = false;
+      });
+      requestTabData("/online/graphreport/params/listByHeadId", { headId }, paramsTable);
+    }
+    function requestTabData(url, params, tab) {
+      return defHttp.get({ url, params }).then((result) => {
+        tab.dataSource = result || [];
+      });
+    }
+    function onSQLAnalyze() {
+      return __async(this, null, function* () {
+        var _a, _b;
+        confirmLoading.value = true;
+        try {
+          let { cgrSql } = yield validate(["cgrSql"]);
+          let result = yield defHttp.get({ url: "/online/cgreport/head/parseSql", params: { sql: cgrSql } });
+          $message.success("\u89E3\u6790\u6210\u529F");
+          let newData = (result.fields || []).map((item) => {
+            item.isShow = item.isShow === 1 ? "Y" : "N";
+            return item;
+          });
+          let oldData = (_b = (_a = fieldTableRef.value) == null ? void 0 : _a.tableRef) == null ? void 0 : _b.getTableData();
+          fieldTable.dataSource = getTableData(oldData, newData, "fieldName");
+          paramsTable.dataSource = getTableData(paramsTable.dataSource, result.params || [], "paramName");
+        } finally {
+          confirmLoading.value = false;
+        }
+      });
+    }
+    function onSubmit() {
+      return __async(this, null, function* () {
+        var _a, _b, _c, _d;
+        try {
+          let mainValues = yield validate();
+          let errMap = yield (_b = (_a = fieldTableRef.value) == null ? void 0 : _a.tableRef) == null ? void 0 : _b.validateTable();
+          if (errMap) {
+            activeKey.value = "field";
+            return;
+          }
+          errMap = yield (_d = (_c = paramsTableRef.value) == null ? void 0 : _c.tableRef) == null ? void 0 : _d.validateTable();
+          if (errMap) {
+            activeKey.value = "params";
+            return;
+          }
+          let formData = classifyIntoFormData(mainValues);
+          confirmLoading.value = true;
+          yield request(formData);
+          emit("success");
+          closeModal();
+        } finally {
+          confirmLoading.value = false;
+        }
+      });
+    }
+    function request(params) {
+      if (isUpdate.value) {
+        return defHttp.put({ url: "/online/graphreport/head/edit", params });
+      } else {
+        return defHttp.post({ url: "/online/graphreport/head/add", params });
+      }
+    }
+    function classifyIntoFormData(mainValues) {
+      var _a, _b, _c, _d;
+      let main = Object.assign(model, mainValues);
+      if (isArray(main.graphType)) {
+        main.graphType = main.graphType.join(",");
+      }
+      if (isArray(main.yaxisField)) {
+        main.yaxisField = main.yaxisField.join(",");
+      }
+      return __spreadProps(__spreadValues({}, main), {
+        onlGraphreportItemList: (_b = (_a = fieldTableRef.value) == null ? void 0 : _a.tableRef) == null ? void 0 : _b.getTableData(),
+        paramsList: (_d = (_c = paramsTableRef.value) == null ? void 0 : _c.tableRef) == null ? void 0 : _d.getTableData()
+      });
+    }
+    function onCancel() {
+      closeModal();
+    }
+    function queryDataSourceOptions() {
+      return __async(this, null, function* () {
+        let url = "/sys/dataSource/options";
+        try {
+          let result = yield defHttp.get({ url });
+          dbSourceOptions.value = result || [];
+          dbSourceOptions.value.unshift({ label: "\u8BF7\u9009\u62E9", value: "" });
+        } catch (e) {
+          dbSourceOptions.value = [{ label: "\u52A0\u8F7D\u5931\u8D25", value: void 0 }];
+        }
+      });
+    }
+    queryDataSourceOptions();
+    return {
+      fieldTableRef,
+      paramsTableRef,
+      title,
+      confirmLoading,
+      activeKey,
+      fieldTable,
+      paramsTable,
+      onSubmit,
+      onCancel,
+      onSQLAnalyze,
+      registerModal,
+      registerForm
+    };
+  }
+});
+function getTableData(oldData, newData, columnName) {
+  newData.forEach((newItem) => {
+    for (let oldItem of oldData) {
+      if (oldItem[columnName] === newItem[columnName]) {
+        Object.assign(newItem, oldItem);
+        break;
+      }
+    }
+  });
+  return newData;
+}
+var _hoisted_1 = { style: { "flex": "1", "text-align": "right" } };
+var _hoisted_2 = createTextVNode("SQL\u89E3\u6790");
+var _hoisted_3 = createTextVNode("\u5173\u95ED");
+var _hoisted_4 = createTextVNode("\u4FDD\u5B58");
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_BasicForm = resolveComponent("BasicForm");
+  const _component_FieldTable = resolveComponent("FieldTable");
+  const _component_a_tab_pane = resolveComponent("a-tab-pane");
+  const _component_ParamsTable = resolveComponent("ParamsTable");
+  const _component_a_tabs = resolveComponent("a-tabs");
+  const _component_a_spin = resolveComponent("a-spin");
+  const _component_BasicModal = resolveComponent("BasicModal");
+  return openBlock(), createBlock(_component_BasicModal, mergeProps({
+    title: _ctx.title,
+    width: 1200,
+    maskClosable: false,
+    confirmLoading: _ctx.confirmLoading,
+    defaultFullscreen: ""
+  }, _ctx.$attrs, {
+    onCancel: _ctx.onCancel,
+    onRegister: _ctx.registerModal
+  }), {
+    footer: withCtx(() => [
+      createVNode(_component_a_button, { onClick: _ctx.onCancel }, {
+        default: withCtx(() => [
+          _hoisted_3
+        ]),
+        _: 1
+      }, 8, ["onClick"]),
+      createVNode(_component_a_button, {
+        type: "primary",
+        loading: _ctx.confirmLoading,
+        preIcon: "ant-design:save",
+        onClick: _ctx.onSubmit
+      }, {
+        default: withCtx(() => [
+          _hoisted_4
+        ]),
+        _: 1
+      }, 8, ["loading", "onClick"])
+    ]),
+    default: withCtx(() => [
+      createVNode(_component_a_spin, { spinning: _ctx.confirmLoading }, {
+        default: withCtx(() => [
+          createVNode(_component_BasicForm, { onRegister: _ctx.registerForm }, {
+            SQLAnalyzeButton: withCtx(() => [
+              createBaseVNode("div", _hoisted_1, [
+                createVNode(_component_a_button, {
+                  type: "primary",
+                  onClick: _ctx.onSQLAnalyze
+                }, {
+                  default: withCtx(() => [
+                    _hoisted_2
+                  ]),
+                  _: 1
+                }, 8, ["onClick"])
+              ])
+            ]),
+            _: 1
+          }, 8, ["onRegister"]),
+          createVNode(_component_a_tabs, {
+            activeKey: _ctx.activeKey,
+            "onUpdate:activeKey": _cache[0] || (_cache[0] = ($event) => _ctx.activeKey = $event)
+          }, {
+            default: withCtx(() => [
+              createVNode(_component_a_tab_pane, {
+                tab: "\u5217\u8868\u5B57\u6BB5",
+                key: "field",
+                forceRender: ""
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_FieldTable, {
+                    ref: "fieldTableRef",
+                    dataSource: _ctx.fieldTable.dataSource
+                  }, null, 8, ["dataSource"])
+                ]),
+                _: 1
+              }),
+              createVNode(_component_a_tab_pane, {
+                tab: "\u56FE\u8868\u53C2\u6570",
+                key: "params",
+                forceRender: ""
+              }, {
+                default: withCtx(() => [
+                  createVNode(_component_ParamsTable, {
+                    ref: "paramsTableRef",
+                    dataSource: _ctx.paramsTable.dataSource
+                  }, null, 8, ["dataSource"])
+                ]),
+                _: 1
+              })
+            ]),
+            _: 1
+          }, 8, ["activeKey"])
+        ]),
+        _: 1
+      }, 8, ["spinning"])
+    ]),
+    _: 1
+  }, 16, ["title", "confirmLoading", "onCancel", "onRegister"]);
+}
+var GraphreportModal = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  GraphreportModal
+};
+//# sourceMappingURL=chunk-ZLVLWP56.js.map

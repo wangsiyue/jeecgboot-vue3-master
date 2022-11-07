@@ -1,0 +1,15 @@
+import {
+  require_lib
+} from "./chunk-ARD7XY2B.js";
+import "./chunk-RLJKXQIA.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:qs
+init_define_APP_INFO();
+var qs_default = require_lib();
+export {
+  qs_default as default
+};
+//# sourceMappingURL=qs.js.map

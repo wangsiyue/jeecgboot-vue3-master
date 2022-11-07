@@ -1,0 +1,71 @@
+import {
+  defHttp
+} from "./chunk-64MZJWVI.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/auth.api.js
+init_define_APP_INFO();
+var authFieldLoadData = (cgformId, params) => defHttp.get({ url: `${"/online/cgform/api/authColumn"}/${cgformId}`, params });
+var authFieldUpdateStatus = (params) => defHttp.put({ url: "/online/cgform/api/authColumn", params });
+var authFieldUpdateCheckbox = (params) => defHttp.post({ url: "/online/cgform/api/authColumn", params });
+var authButtonLoadData = (cgformId, params) => defHttp.get({ url: `${"/online/cgform/api/authButton"}/${cgformId}`, params });
+var authButtonEnable = (params) => defHttp.post({ url: "/online/cgform/api/authButton", params });
+var authButtonDisable = (id, params) => defHttp.put({ url: `${"/online/cgform/api/authButton"}/${id}`, params });
+var authDataLoadData = (cgformId, params) => defHttp.get({ url: `${"/online/cgform/api/authData"}/${cgformId}`, params });
+var authDataUpdateStatus = (params) => defHttp.put({ url: "/online/cgform/api/authData", params });
+var authDataSaveOrUpdate = (params, isUpdate) => {
+  if (isUpdate) {
+    return defHttp.put({ url: "/online/cgform/api/authData", params });
+  } else {
+    return defHttp.post({ url: "/online/cgform/api/authData", params });
+  }
+};
+var authDataDelete = (id, params) => defHttp.delete({ url: `${"/online/cgform/api/authData"}/${id}`, params });
+var authFieldLoadTree = (cgformId, authType, params) => {
+  let url = `${"/online/cgform/api/authPage"}/${cgformId}/${authType}`;
+  return defHttp.get({ url, params });
+};
+var authDataLoadTree = (cgformId, params) => {
+  let url = `${"/online/cgform/api/validAuthData"}/${cgformId}`;
+  return defHttp.get({ url, params });
+};
+var authButtonLoadTree = (cgformId, authType, params) => {
+  let url = `${"/online/cgform/api/authPage"}/${cgformId}/${authType}`;
+  return defHttp.get({ url, params });
+};
+var loadRoleAuthChecked = (params) => defHttp.get({ url: "/online/cgform/api/roleAuth", params });
+var saveAuthField = (roleId, cgformId, params) => {
+  let url = `${"/online/cgform/api/roleColumnAuth"}/${roleId}/${cgformId}`;
+  return defHttp.post({ url, params });
+};
+var saveAuthData = (roleId, cgformId, params) => {
+  let url = `${"/online/cgform/api/roleDataAuth"}/${roleId}/${cgformId}`;
+  return defHttp.post({ url, params });
+};
+var saveAuthButton = (roleId, cgformId, params) => {
+  let url = `${"/online/cgform/api/roleButtonAuth"}/${roleId}/${cgformId}`;
+  return defHttp.post({ url, params });
+};
+
+export {
+  authFieldLoadData,
+  authFieldUpdateStatus,
+  authFieldUpdateCheckbox,
+  authButtonLoadData,
+  authButtonEnable,
+  authButtonDisable,
+  authDataLoadData,
+  authDataUpdateStatus,
+  authDataSaveOrUpdate,
+  authDataDelete,
+  authFieldLoadTree,
+  authDataLoadTree,
+  authButtonLoadTree,
+  loadRoleAuthChecked,
+  saveAuthField,
+  saveAuthData,
+  saveAuthButton
+};
+//# sourceMappingURL=chunk-TQDSPZNV.js.map

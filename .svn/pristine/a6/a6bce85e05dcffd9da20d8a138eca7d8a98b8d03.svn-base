@@ -1,0 +1,440 @@
+import {
+  ChartAutoRender
+} from "./chunk-5JDRAOWO.js";
+import {
+  getChartsData,
+  getParamsInfo
+} from "./chunk-HTLVLCAV.js";
+import {
+  ErrorTip
+} from "./chunk-4I2IAJF6.js";
+import "./chunk-OSKIKWTD.js";
+import "./chunk-P5ZLAR5B.js";
+import "./chunk-E5CDKR6P.js";
+import "./chunk-MDX7UCLE.js";
+import "./chunk-DIKQ64XW.js";
+import "./chunk-4O4AOII7.js";
+import {
+  BasicForm,
+  useForm
+} from "./chunk-CWQVWJAJ.js";
+import "./chunk-YFX4JODE.js";
+import "./chunk-UY63CZ3T.js";
+import "./chunk-TNMIRAD5.js";
+import "./chunk-EKOIBGOQ.js";
+import {
+  router
+} from "./chunk-MXTOG34P.js";
+import "./chunk-SAFWZAHM.js";
+import "./chunk-LZQJUVGN.js";
+import {
+  formatToDate
+} from "./chunk-GH3CBHGS.js";
+import "./chunk-BRDDJTJW.js";
+import "./chunk-XWHZ74CA.js";
+import "./chunk-NSDSWO3A.js";
+import "./chunk-ARD7XY2B.js";
+import "./chunk-H5XI7H7T.js";
+import "./chunk-GPOHKMTD.js";
+import "./chunk-RLJKXQIA.js";
+import "./chunk-RHCHCTS4.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import "./chunk-SQAXQJKY.js";
+import "./chunk-GE6AQLDJ.js";
+import {
+  isArray
+} from "./chunk-RX5I5ULI.js";
+import "./chunk-KVJ6VO5A.js";
+import "./chunk-WLZB43K5.js";
+import "./chunk-GJK6IZYL.js";
+import "./chunk-YTTBVVBT.js";
+import "./chunk-KIDT26GW.js";
+import "./chunk-EW6PF333.js";
+import "./chunk-SFFFXB4Y.js";
+import "./chunk-4VBCR2UY.js";
+import "./chunk-LU447FN7.js";
+import "./chunk-PCZNDPKY.js";
+import "./chunk-RNTI5KWT.js";
+import "./chunk-D2VLAI67.js";
+import "./chunk-6AC3D6AH.js";
+import "./chunk-ZQYRAJKZ.js";
+import "./chunk-Z3NVNWVB.js";
+import "./chunk-YXPBMO4E.js";
+import "./chunk-WTYZJWFF.js";
+import {
+  date_picker_default,
+  input_default,
+  input_number_default
+} from "./chunk-IF4EKY7K.js";
+import "./chunk-SOWJBRMK.js";
+import "./chunk-JTWWQTIY.js";
+import "./chunk-7GOB2L72.js";
+import "./chunk-GUMRFUUS.js";
+import "./chunk-D65CINXV.js";
+import "./chunk-3UC42JCT.js";
+import "./chunk-RL4BZ2NY.js";
+import "./chunk-MH4EPDFD.js";
+import "./chunk-L26JVTZY.js";
+import "./chunk-KAI4QMTN.js";
+import "./chunk-O3J5FWNC.js";
+import "./chunk-SJ2YS27J.js";
+import "./chunk-UFII5LNT.js";
+import "./chunk-FYK3HJMB.js";
+import {
+  Fragment,
+  computed,
+  createBlock,
+  createCommentVNode,
+  createElementBlock,
+  createVNode,
+  defineComponent,
+  h,
+  nextTick,
+  openBlock,
+  provide,
+  reactive,
+  ref,
+  resolveComponent,
+  watch,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import "./chunk-G5TZ7427.js";
+import "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/GraphreportAutoChart.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/chart/Bar.vue";
+import "D:/jeecgboot-vue3-master/src/components/chart/Pie.vue";
+import "D:/jeecgboot-vue3-master/src/components/chart/BarMulti.vue";
+import "D:/jeecgboot-vue3-master/src/components/chart/LineMulti.vue";
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+function useParseFormSchemas(chartsData, showSearchField) {
+  function parseFormSchemas() {
+    return __async(this, null, function* () {
+      let { head, items, dictOptions } = chartsData.value;
+      if (head.dataType === "sql") {
+        let formSchemas = [];
+        items.forEach((field) => {
+          if (field.searchFlag !== "Y")
+            return;
+          let isRange = field.searchMode === "group";
+          let schema = {};
+          let schemas = [];
+          if (field.dictCode && dictOptions[field.dictCode]) {
+            schema.component = "Select";
+            schema.componentProps = {
+              options: dictOptions[field.dictCode]
+            };
+          } else if (["Integer", "Long"].includes(field.fieldType)) {
+            schema.component = "InputNumber";
+            if (isRange) {
+              schema.render = getRangeRender(schemas, field, input_number_default);
+            }
+          } else if (field.fieldType === "Date") {
+            schema.component = "DatePicker";
+            schema.componentProps = {
+              format: "YYYY-MM-DD"
+            };
+            if (isRange) {
+              schema.render = getRangeRender(schemas, field, date_picker_default);
+            }
+          } else {
+            schema.component = "Input";
+            if (isRange) {
+              schema.render = getRangeRender(schemas, field, input_default);
+            }
+          }
+          formSchemas = formSchemas.concat(__spreadValues({
+            label: field.fieldTxt,
+            field: field.fieldName,
+            component: "Input",
+            itemProps: {
+              class: { "range-query": isRange }
+            }
+          }, schema)).concat(schemas);
+        });
+        showSearchField.value = formSchemas.length > 0;
+        yield nextTick();
+        return formSchemas;
+      } else {
+        showSearchField.value = false;
+        return null;
+      }
+    });
+  }
+  return { parseFormSchemas };
+}
+function getRangeRender(schemas, fieldItem, component) {
+  let { fieldTxt: label, fieldName: beginField } = fieldItem;
+  let endField = beginField + "_end";
+  schemas.push({ label: "", field: endField, component: "Input", show: false });
+  return function({ model }) {
+    return [
+      h(component, {
+        value: model[beginField],
+        "onUpdate:value": (v) => model[beginField] = v,
+        placeholder: "\u8BF7\u8F93\u5165\u5F00\u59CB" + label,
+        format: "YYYY-MM-DD"
+      }),
+      h("span", { class: "range-span" }, "~"),
+      h(component, {
+        value: model[endField],
+        "onUpdate:value": (v) => model[endField] = v,
+        placeholder: "\u8BF7\u8F93\u5165\u7ED3\u675F" + label,
+        format: "YYYY-MM-DD"
+      })
+    ];
+  };
+}
+var _sfc_main = defineComponent({
+  name: "GraphreportAutoChart",
+  components: { BasicForm, ErrorTip, ChartAutoRender },
+  props: {},
+  setup() {
+    provide("setErrorTip", setErrorTip);
+    const $route = router.currentRoute;
+    const loading = ref(false);
+    const code = computed(() => $route.value.params.code);
+    const errorTip = ref(null);
+    const errors = reactive({ resultIsEmpty: false });
+    const chartsData = ref();
+    const paramsMap = reactive({});
+    const selfParamsMap = reactive({});
+    const searchFormMap = reactive({});
+    const paramsRef = getPageComputed(paramsMap, "");
+    const selfParamsRef = getPageComputed(selfParamsMap);
+    const searchFormModal = getPageComputed(searchFormMap, {});
+    const showSearchField = ref(false);
+    const adaptiveColProps = { xs: 24, sm: 12, md: 12, lg: 8, xl: 8, xxl: 6 };
+    const [registerSearchForm, searchForm] = useForm({
+      schemas: [],
+      compact: true,
+      labelWidth: 120,
+      autoSubmitOnEnter: true,
+      rowProps: { gutter: 8 },
+      baseColProps: __spreadValues({}, adaptiveColProps),
+      labelCol: { xs: 24, sm: 8, md: 6, lg: 8, xl: 6, xxl: 6 },
+      wrapperCol: {},
+      showAdvancedButton: true,
+      autoAdvancedCol: 3,
+      actionColOptions: __spreadProps(__spreadValues({}, adaptiveColProps), {
+        style: { textAlign: "left" }
+      }),
+      resetFunc: onReset,
+      submitFunc: onSubmit
+    });
+    watch($route, () => {
+      selfParamsRef.value = null;
+      loadChartsData();
+    }, { immediate: true });
+    function setErrorTip(tip) {
+      errorTip.value = tip;
+    }
+    function loadChartsData() {
+      return __async(this, null, function* () {
+        loading.value = true;
+        if (!code.value) {
+          loading.value = false;
+          return false;
+        }
+        let params = { id: code.value, params: paramsRef.value };
+        if (selfParamsRef.value == null) {
+          selfParamsRef.value = {};
+          try {
+            let result = yield getParamsInfo({ headId: params.id });
+            if (result && result.length > 0) {
+              for (let i of result) {
+                selfParamsRef.value["self_" + i.paramName] = !$route.value.query[i.paramName] ? "" : $route.value.query[i.paramName];
+              }
+            }
+          } catch (e) {
+            return;
+          }
+        }
+        try {
+          let result = yield getChartsData(__spreadValues(__spreadValues({}, params), selfParamsRef.value));
+          let { head, data, items, dictOptions } = result;
+          if (data && data.length === 0) {
+            errors.resultIsEmpty = true;
+          } else {
+            errors.resultIsEmpty = false;
+            chartsData.value = { head, data, items, dictOptions };
+            parseChartsData();
+          }
+        } finally {
+          loading.value = false;
+        }
+      });
+    }
+    function getPageComputed(map, defVal) {
+      return computed({
+        get() {
+          if (map[code.value] == null) {
+            map[code.value] = defVal;
+          }
+          return map[code.value];
+        },
+        set: (val) => map[code.value] = val
+      });
+    }
+    const { parseFormSchemas } = useParseFormSchemas(chartsData, showSearchField);
+    function parseChartsData() {
+      return __async(this, null, function* () {
+        let schemas = yield parseFormSchemas();
+        if (schemas) {
+          searchForm.resetSchema(schemas);
+        }
+      });
+    }
+    function onReset() {
+      return __async(this, null, function* () {
+        paramsRef.value = "";
+        loadChartsData();
+      });
+    }
+    function onSubmit() {
+      return __async(this, null, function* () {
+        const data = yield searchForm.validate();
+        let { items } = chartsData.value;
+        let params = [];
+        for (let field of items) {
+          if (field.searchFlag !== "Y")
+            continue;
+          let values = null;
+          if (!field.searchMode)
+            field.searchMode = "single";
+          if (field.searchMode === "single") {
+            values = data[field.fieldName];
+          } else {
+            let _begin = data[field.fieldName];
+            let _end = data[`${field.fieldName}_end`];
+            values = [_begin, _end];
+          }
+          if (field.fieldType === "Date") {
+            values = formatDate(values);
+          }
+          if (values != null && (values[0] != null || values[1] != null)) {
+            params.push({
+              value: values,
+              fieldTxt: field.fieldTxt,
+              fieldName: field.fieldName,
+              fieldType: field.fieldType,
+              searchMode: field.searchMode
+            });
+          }
+        }
+        paramsRef.value = encodeURIComponent(JSON.stringify(params));
+        loadChartsData();
+      });
+    }
+    function formatDate(values) {
+      if (values) {
+        if (isArray(values)) {
+          if (values[0]) {
+            values[0] = formatToDate(values[0]);
+          }
+          if (values[1]) {
+            values[1] = formatToDate(values[1]);
+          }
+        } else {
+          return formatToDate(values);
+        }
+      }
+      return values;
+    }
+    return {
+      loading,
+      errors,
+      errorTip,
+      chartsData,
+      showSearchField,
+      searchFormModal,
+      registerSearchForm
+    };
+  }
+});
+var _hoisted_1 = { class: "p-2" };
+var _hoisted_2 = {
+  key: 0,
+  class: "search-field"
+};
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_ErrorTip = resolveComponent("ErrorTip");
+  const _component_BasicForm = resolveComponent("BasicForm");
+  const _component_ChartAutoRender = resolveComponent("ChartAutoRender");
+  const _component_a_spin = resolveComponent("a-spin");
+  return openBlock(), createElementBlock("div", _hoisted_1, [
+    createVNode(_component_a_spin, { spinning: _ctx.loading }, {
+      default: withCtx(() => [
+        _ctx.errorTip ? (openBlock(), createBlock(_component_ErrorTip, {
+          key: 0,
+          tip: _ctx.errorTip
+        }, null, 8, ["tip"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+          _ctx.showSearchField ? (openBlock(), createElementBlock("div", _hoisted_2, [
+            createVNode(_component_BasicForm, {
+              onRegister: _ctx.registerSearchForm,
+              model: _ctx.searchFormModal
+            }, null, 8, ["onRegister", "model"])
+          ])) : createCommentVNode("", true),
+          _ctx.errors.resultIsEmpty ? (openBlock(), createBlock(_component_ErrorTip, {
+            key: 1,
+            tip: "\u6CA1\u6709\u67E5\u8BE2\u5230\u4EFB\u4F55\u6570\u636E"
+          })) : (openBlock(), createBlock(_component_ChartAutoRender, {
+            key: 2,
+            chartsData: _ctx.chartsData
+          }, null, 8, ["chartsData"]))
+        ], 64))
+      ]),
+      _: 1
+    }, 8, ["spinning"])
+  ]);
+}
+var GraphreportAutoChart = _export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-39167fbc"]]);
+export {
+  GraphreportAutoChart as default
+};
+//# sourceMappingURL=GraphreportAutoChart-FPMDKEMM.js.map

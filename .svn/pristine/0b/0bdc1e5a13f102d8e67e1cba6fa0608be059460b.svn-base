@@ -1,0 +1,23 @@
+import { defHttp } from "/@/utils/http/axios";
+var Api = /* @__PURE__ */ ((Api2) => {
+  Api2["list"] = "/online/graphreport/head/list";
+  Api2["delete"] = "/online/graphreport/head/delete";
+  Api2["deleteBatch"] = "/online/graphreport/head/deleteBatch";
+  Api2["exportXls"] = "/online/graphreport/head/exportXls";
+  Api2["importXls"] = "/online/graphreport/head/importExcel";
+  Api2["paramsList"] = "/online/graphreport/params/listByHeadId";
+  Api2["getChartsData"] = "/online/graphreport/api/getChartsData";
+  Api2["getParamsInfo"] = "/online/graphreport/params/listByHeadId";
+  return Api2;
+})(Api || {});
+const list = (params) => defHttp.get({ url: "/online/graphreport/head/list", params });
+function doBatchDelete(idList) {
+  return defHttp.delete({
+    url: "/online/graphreport/head/deleteBatch",
+    params: { ids: idList.join(",") }
+  }, { joinParamsToUrl: true });
+}
+const queryParamsList = (headId) => defHttp.get({ url: "/online/graphreport/params/listByHeadId", params: { headId } });
+const getChartsData = (params) => defHttp.get({ url: "/online/graphreport/api/getChartsData", params });
+const getParamsInfo = (params) => defHttp.get({ url: "/online/graphreport/params/listByHeadId", params });
+export { Api as A, getChartsData as a, doBatchDelete as d, getParamsInfo as g, list as l, queryParamsList as q };

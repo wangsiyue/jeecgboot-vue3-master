@@ -1,0 +1,114 @@
+import {BasicColumn} from '/@/components/Table';
+import {FormSchema} from '/@/components/Table';
+import { rules} from '/@/utils/helper/validator';
+import { render } from '/@/utils/common/renderUtils';
+
+export const columns: BasicColumn[] = [
+    {
+    title: '整改期限',
+    dataIndex: 'term'
+   },
+   {
+    title: '监督检查ID',
+    dataIndex: 'checkId'
+   },
+   {
+    title: '主键',
+    dataIndex: 'opId'
+   },
+   {
+    title: '整改要求',
+    dataIndex: 'require'
+   },
+   {
+    title: '问题描述',
+    dataIndex: 'qusDes'
+   },
+   {
+    title: '问题类型',
+    dataIndex: 'qusType'
+   },
+   {
+    title: '整改完成时间',
+    dataIndex: 'finTime'
+   },
+   {
+    title: '整改完成情况',
+    dataIndex: 'finCondition'
+   },
+   {
+    title: '备注',
+    dataIndex: 'remark'
+   },
+];
+
+export const searchFormSchema: FormSchema[] = [
+ {
+    label: '整改期限',
+    field: 'term',
+    component: 'TimePicker'
+  },
+ {
+    label: '监督检查ID',
+    field: 'checkId',
+    component: 'Input'
+  },
+];
+
+export const formSchema: FormSchema[] = [
+  // TODO 主键隐藏字段，目前写死为ID
+  {label: '', field: 'id', component: 'Input', show: false},
+  {
+    label: '整改期限',
+    field: 'term',
+    component: 'DatePicker',
+    componentProps: {
+      showTime: true,
+      valueFormat: 'YYYY-MM-DD hh:mm:ss',
+    },
+  },
+  {
+    label: '监督检查ID',
+    field: 'checkId',
+    component: 'Input',
+  },
+  {
+    label: '主键',
+    field: 'opId',
+    component: 'Input',
+  },
+  {
+    label: '整改要求',
+    field: 'require',
+    component: 'Input',
+  },
+  {
+    label: '问题描述',
+    field: 'qusDes',
+    component: 'Input',
+  },
+  {
+    label: '问题类型',
+    field: 'qusType',
+    component: 'Input',
+  },
+  {
+    label: '整改完成时间',
+    field: 'finTime',
+    component: 'DatePicker',
+    componentProps: {
+      showTime: true,
+      valueFormat: 'YYYY-MM-DD hh:mm:ss',
+    },
+  },
+  {
+    label: '整改完成情况',
+    field: 'finCondition',
+    component: 'Input',
+  },
+  {
+    label: '备注',
+    field: 'remark',
+    component: 'Input',
+  },
+];

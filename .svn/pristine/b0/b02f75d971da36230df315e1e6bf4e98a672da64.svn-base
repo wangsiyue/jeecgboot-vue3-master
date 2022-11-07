@@ -1,0 +1,963 @@
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/components/Form/src/jeecg/components/JUpload/index.ts
+init_define_APP_INFO();
+
+// src/components/Form/src/jeecg/components/JUpload/upload.data.ts
+init_define_APP_INFO();
+
+// src/components/Form/src/jeecg/components/JUpload/index.ts
+import { default as default2 } from "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JUpload/JUpload.vue";
+import { default as default3 } from "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JUpload/JUploadModal.vue";
+
+// node_modules/@jeecg/online/FormSchemaFactory.js
+init_define_APP_INFO();
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var SUBMIT_FLOW_KEY = "jeecg_submit_form_and_flow";
+var SUBMIT_FLOW_ID = "flow_submit_id";
+var VALIDATE_FAILED = "validate-failed";
+var SETUP = "setup";
+var ENHANCEJS = "EnhanceJS";
+var FORM_VIEW_TO_QUERY_VIEW = {
+  "password": "text",
+  "file": "text",
+  "image": "text",
+  "textarea": "text",
+  "umeditor": "text",
+  "markdown": "text",
+  "checkbox": "list_multi",
+  "radio": "list"
+};
+var POP_CONTAINER = ".jeecg-online-modal .ant-modal-content";
+var IFormSchema = class {
+  constructor(key, data) {
+    this._data = data;
+    this.field = key;
+    this.label = data.title;
+    this.hidden = false;
+    this.order = data.order || 999;
+    this.required = false;
+    this.onlyValidator = "";
+    this.setFieldsValue = "";
+    this.hasChange = true;
+    if (key.indexOf("@") > 0) {
+      this.pre = key.substring(0, key.indexOf("@") + 1);
+    } else {
+      this.pre = "";
+    }
+    this.schemaProp = {};
+    this.searchForm = false;
+    this.disabled = false;
+    this.handleWidgetAttr(data);
+  }
+  getFormItemSchema() {
+    let schema = this.getItem();
+    this.addDefaultChangeEvent(schema);
+    return schema;
+  }
+  getItem() {
+    let fs = {
+      field: this.field,
+      label: this.label,
+      component: "Input"
+    };
+    let rules = this.getRule();
+    if (rules.length > 0 && this.onlyValidator) {
+      fs["rules"] = rules;
+    }
+    if (this.hidden === true) {
+      fs["show"] = false;
+    }
+    return fs;
+  }
+  setFormRef(ref) {
+    this.formRef = ref;
+  }
+  isHidden() {
+    this.hidden = true;
+    return this;
+  }
+  isRequired(array) {
+    if (array && array.length > 0) {
+      if (array.indexOf(this.field) >= 0) {
+        this.required = true;
+      }
+    }
+    return this;
+  }
+  getExtendData() {
+    let extend = {};
+    let { fieldExtendJson } = this._data;
+    if (fieldExtendJson) {
+      if (typeof fieldExtendJson == "string") {
+        try {
+          let json = JSON.parse(fieldExtendJson);
+          extend = __spreadValues({}, json);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return extend;
+  }
+  getRelatedHideFields() {
+    return [];
+  }
+  getPlaceholder() {
+    return "\u8BF7\u8F93\u5165" + this.label;
+  }
+  setOnlyValidateFun(validateFun) {
+    if (validateFun) {
+      this.onlyValidator = (rule, value) => __async(this, null, function* () {
+        let error = yield validateFun(rule, value);
+        if (!error) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(error);
+        }
+      });
+    }
+  }
+  getRule() {
+    let rules = [];
+    const { view, errorInfo, pattern, type } = this._data;
+    if (this.required === true) {
+      let msg = this.getPlaceholder();
+      if (errorInfo) {
+        msg = errorInfo;
+      }
+      if (view == "sel_depart" || view == "sel_user") {
+        this.schemaProp["required"] = true;
+      } else {
+        rules.push({ required: true, message: msg });
+      }
+    }
+    if (view == "sel_user") {
+      if (pattern === "only" && this.onlyValidator) {
+        rules.push({ validator: this.onlyValidator });
+      }
+    }
+    if (view === "list" || view === "radio" || view === "markdown" || view === "pca" || view.indexOf("sel") >= 0 || view === "time") {
+      return rules;
+    }
+    if (view.indexOf("upload") >= 0 || view.indexOf("file") >= 0 || view.indexOf("image") >= 0) {
+      return rules;
+    }
+    if (pattern) {
+      if (pattern === "only") {
+        if (this.onlyValidator) {
+          rules.push({ validator: this.onlyValidator });
+        }
+      } else if (pattern === "z") {
+        if (type == "number" || type == "integer")
+          ;
+        else {
+          rules.push({ pattern: /^-?\d+$/, message: "\u8BF7\u8F93\u5165\u6574\u6570" });
+        }
+      } else {
+        let msg = errorInfo || "\u6B63\u5219\u8868\u8FBE\u5F0F\u4E0D\u6B63\u786E";
+        rules.push({ pattern, message: msg });
+      }
+    }
+    return rules;
+  }
+  addDefaultChangeEvent(schema) {
+    if (this.hasChange) {
+      if (!schema.componentProps) {
+        schema.componentProps = {};
+      }
+      if (this.disabled == true) {
+        schema.componentProps.disabled = true;
+      }
+      if (!schema.componentProps.hasOwnProperty("onChange")) {
+        schema.componentProps["onChange"] = (value) => {
+          if (value instanceof Event) {
+            value = value.target.value;
+          }
+          if (value instanceof Array) {
+            value = value.join(",");
+          }
+          if (!this.formRef.value.$formValueChange) {
+            console.log("\u5F53\u524D\u8868\u5355\u65E0\u6CD5\u89E6\u53D1change\u4E8B\u4EF6,field\uFF1A" + this.field);
+          } else {
+            this.formRef.value.$formValueChange(this.field, value);
+          }
+        };
+      }
+    }
+    Object.keys(this.schemaProp).map((k) => {
+      schema[k] = this.schemaProp[k];
+    });
+  }
+  noChange() {
+    this.hasChange = false;
+  }
+  updateField(field) {
+    this.field = field;
+  }
+  setFunctionForFieldValue(func) {
+    if (func) {
+      this.setFieldsValue = func;
+    }
+  }
+  asSearchForm() {
+    this.searchForm = true;
+  }
+  getModalAsContainer() {
+    let ele = this.getPopContainer();
+    return document.querySelector(ele);
+  }
+  getPopContainer() {
+    if (this.searchForm === true) {
+      return "body";
+    } else {
+      return POP_CONTAINER;
+    }
+  }
+  handleWidgetAttr(data) {
+    if (data.ui) {
+      if (data.ui.widgetattrs) {
+        if (data.ui.widgetattrs.disabled == true) {
+          this.disabled = true;
+        }
+      }
+    }
+  }
+};
+var InputWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    if (this.hidden === true) {
+      item["show"] = false;
+    }
+    return item;
+  }
+};
+var DateFormat = ((DateFormat2) => {
+  DateFormat2["datetime"] = "YYYY-MM-DD HH:mm:ss";
+  DateFormat2["date"] = "YYYY-MM-DD";
+  return DateFormat2;
+})(DateFormat || {});
+var DateWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.format = DateFormat[data.view];
+    this.showTime = data.view == "date" ? false : true;
+  }
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "DatePicker",
+      componentProps: {
+        placeholder: `\u8BF7\u9009\u62E9${this.label}`,
+        showTime: this.showTime,
+        valueFormat: this.format,
+        style: {
+          width: "100%"
+        }
+      }
+    });
+  }
+};
+var SelectWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.options = this.getOptions(data["enum"]);
+  }
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "Select",
+      componentProps: {
+        options: this.options,
+        allowClear: true,
+        style: {
+          width: "100%"
+        },
+        getPopupContainer: (_node) => {
+          return this.getModalAsContainer();
+        }
+      }
+    });
+  }
+  getOptions(array) {
+    if (!array || array.length == 0) {
+      return [];
+    }
+    let arr = [];
+    for (let item of array) {
+      arr.push({
+        value: item.value,
+        label: item.title
+      });
+    }
+    return arr;
+  }
+};
+var PasswordWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "InputPassword"
+    });
+  }
+};
+var FileWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JUpload",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let json = this.getExtendData();
+    if (json && json.uploadnum) {
+      return {
+        maxCount: Number(json.uploadnum)
+      };
+    }
+    return {};
+  }
+};
+var ImageWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JUpload",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let props = {
+      fileType: "image" /* image */
+    };
+    let json = this.getExtendData();
+    if (json && json.uploadnum) {
+      props["maxCount"] = Number(json.uploadnum);
+    }
+    return props;
+  }
+};
+var TextAreaWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "InputTextArea"
+    });
+  }
+};
+var SelectMultiWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.dictTable = data["dictTable"];
+    this.dictText = data["dictText"];
+    this.dictCode = data["dictCode"];
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JSelectMultiple",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    if (!this.dictTable && !this.dictCode) {
+      return {};
+    } else {
+      let props = {};
+      if (!this.dictTable) {
+        props["dictCode"] = this.dictCode;
+      } else {
+        let temp = `${this.dictTable},${this.dictText},${this.dictCode}`;
+        props["dictCode"] = encodeURI(temp);
+      }
+      props["triggerChange"] = true;
+      props["popContainer"] = this.getPopContainer();
+      return props;
+    }
+  }
+};
+var SelectSearchWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.dict = encodeURI(`${data.dictTable},${data.dictText},${data.dictCode}`);
+  }
+  getItem() {
+    let item = super.getItem();
+    let popContainer = this.getPopContainer();
+    return Object.assign({}, item, {
+      component: "JSearchSelect",
+      componentProps: {
+        dict: this.dict,
+        pageSize: 6,
+        async: true,
+        popContainer
+      }
+    });
+  }
+};
+var PopupWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.code = data["code"];
+    this.multi = data["popupMulti"];
+    this.fieldConfig = this.getFieldConfig(data);
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JPopup",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let props = {
+      code: this.code,
+      multi: this.multi,
+      fieldConfig: this.fieldConfig
+    };
+    if (this.formRef) {
+      props["formElRef"] = this.formRef;
+    } else {
+      props["setFieldsValue"] = this.setFieldsValue;
+    }
+    return props;
+  }
+  getFieldConfig(data) {
+    let { destFields, orgFields } = data;
+    if (!destFields || destFields.length == 0) {
+      return [];
+    }
+    let arr1 = destFields.split(",");
+    let arr2 = orgFields.split(",");
+    let config = [];
+    const pre = this.pre;
+    for (let i = 0; i < arr1.length; i++) {
+      config.push({
+        target: pre + arr1[i],
+        source: arr2[i]
+      });
+    }
+    return config;
+  }
+};
+var TreeCategoryWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.multi = false;
+    this.pid = data["pidValue"];
+    this.textField = data["textField"];
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      componentProps,
+      component: "JCategorySelect"
+    });
+  }
+  getComponentProps() {
+    let pidValue = this.pid || "EMPTY_PID";
+    if (!this.textField) {
+      return {
+        multiple: this.multi,
+        pid: pidValue
+      };
+    } else {
+      return {
+        loadTriggleChange: true,
+        multiple: this.multi,
+        pid: pidValue,
+        back: this.textField,
+        onChange: (_val, backVal) => {
+          if (this.formRef) {
+            this.formRef.value.setFieldsValue(backVal);
+          }
+        }
+      };
+    }
+  }
+  getRelatedHideFields() {
+    let arr = [];
+    if (this.textField) {
+      arr.push(this.textField);
+    }
+    return arr;
+  }
+};
+var SelectDepartWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JSelectDept",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let extend = this.getExtendData();
+    let props = {
+      checkStrictly: true,
+      showButton: false
+    };
+    if (extend.text) {
+      props["labelKey"] = extend.text;
+    }
+    if (extend.store) {
+      props["rowKey"] = extend.store;
+    }
+    if (extend.multiSelect === false) {
+      props["multiple"] = false;
+    }
+    return props;
+  }
+};
+var SelectUserWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JSelectUser",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let extend = this.getExtendData();
+    let props = {
+      showSelected: false,
+      allowClear: true,
+      isRadioSelection: false
+    };
+    if (extend.text) {
+      props["labelKey"] = extend.text;
+    }
+    if (extend.store) {
+      props["rowKey"] = extend.store;
+    }
+    if (extend.multiSelect === false) {
+      props["isRadioSelection"] = true;
+    }
+    return props;
+  }
+};
+var EditorWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "JEditor",
+      componentProps: {}
+    });
+  }
+};
+var MarkdownWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "JMarkdownEditor",
+      componentProps: {}
+    });
+  }
+};
+var PcaWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "JAreaSelect"
+    });
+  }
+};
+var TreeSelectWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.dict = data["dict"];
+    this.pidField = data["pidField"];
+    this.pidValue = data["pidValue"];
+  }
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "JTreeSelect",
+      componentProps: {
+        dict: this.dict,
+        pidField: this.pidField,
+        pidValue: this.pidValue
+      }
+    });
+  }
+};
+var RadioWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.dictTable = data["dictTable"];
+    this.dictText = data["dictText"];
+    this.dictCode = data["dictCode"];
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JDictSelectTag",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    if (!this.dictTable && !this.dictCode) {
+      return {};
+    } else {
+      if (!this.dictTable) {
+        return {
+          dictCode: this.dictCode,
+          type: "radio"
+        };
+      } else {
+        let temp = `${this.dictTable},${this.dictText},${this.dictCode}`;
+        return {
+          dictCode: encodeURI(temp),
+          type: "radio"
+        };
+      }
+    }
+  }
+};
+var CheckboxWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.options = this.getOptions(data["enum"]);
+  }
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "JCheckbox",
+      componentProps: {
+        options: this.options,
+        triggerChange: true
+      }
+    });
+  }
+  getOptions(array) {
+    if (!array || array.length == 0) {
+      return [];
+    }
+    let arr = [];
+    for (let item of array) {
+      arr.push({
+        value: item.value,
+        label: item.title
+      });
+    }
+    return arr;
+  }
+};
+var SwitchWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.hasChange = false;
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "JSwitch",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let { fieldExtendJson } = this._data;
+    let options = ["Y", "N"];
+    if (fieldExtendJson) {
+      if (typeof fieldExtendJson == "string") {
+        let arr = JSON.parse(fieldExtendJson);
+        if (arr.length == 2) {
+          options = arr;
+        }
+      }
+    }
+    return {
+      options
+    };
+  }
+};
+var TimeWidget = class extends IFormSchema {
+  getItem() {
+    let item = super.getItem();
+    return Object.assign({}, item, {
+      component: "TimePicker",
+      componentProps: {
+        placeholder: `\u8BF7\u9009\u62E9${this.label}`,
+        valueFormat: "HH:mm:ss",
+        getPopupContainer: (_node) => {
+          return this.getModalAsContainer();
+        },
+        style: {
+          width: "100%"
+        }
+      }
+    });
+  }
+};
+var LinkDownWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    const { dictTable, dictText, dictCode, pidField, idField, origin, condition } = data;
+    this.table = dictTable;
+    this.txt = dictText;
+    this.store = dictCode;
+    this.idField = idField;
+    this.pidField = pidField;
+    this.origin = origin;
+    this.condition = condition;
+    this.options = [];
+    this.next = data.next || "";
+    this.type = data.type;
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "OnlineSelectCascade",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    let baseProp = {
+      table: this.table,
+      txt: this.txt,
+      store: this.store,
+      pidField: this.pidField,
+      idField: this.idField,
+      origin: this.origin,
+      pidValue: "-1",
+      style: {
+        width: "100%"
+      },
+      onChange: (value) => {
+        console.log("\u7EA7\u8054\u7EC4\u4EF6-onChange", value);
+        this.valueChange(value);
+      },
+      onNext: (pidValue) => {
+        console.log("\u7EA7\u8054\u7EC4\u4EF6-onNext", pidValue);
+        this.nextOptionsChange(pidValue);
+      }
+    };
+    if (this._data.origin === true) {
+      baseProp["condition"] = this.condition;
+    }
+    return baseProp;
+  }
+  nextOptionsChange(pidValue) {
+    return __async(this, null, function* () {
+      if (!this.formRef) {
+        console.error("\u8868\u5355\u5F15\u7528\u627E\u4E0D\u5230");
+        return;
+      }
+      if (!this.next) {
+        return;
+      }
+      let ref = this.formRef.value;
+      yield ref.updateSchema({
+        field: this.next,
+        componentProps: {
+          pidValue
+        }
+      });
+    });
+  }
+  valueChange(value) {
+    return __async(this, null, function* () {
+      if (!this.formRef) {
+        console.error("\u8868\u5355\u5F15\u7528\u627E\u4E0D\u5230");
+        return;
+      }
+      if (!this.next) {
+        return;
+      }
+      let ref = this.formRef.value;
+      ref.$formValueChange(this.field, value);
+      yield ref.setFieldsValue({ [this.next]: "" });
+    });
+  }
+};
+var SlotWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.slot = "";
+  }
+  getItem() {
+    let item = super.getItem();
+    let slot = this.slot;
+    return Object.assign({}, item, { slot });
+  }
+  groupDate() {
+    this.slot = "groupDate";
+    return this;
+  }
+  groupDatetime() {
+    this.slot = "groupDatetime";
+    return this;
+  }
+  groupNumber() {
+    this.slot = "groupNumber";
+    return this;
+  }
+};
+var NumberWidget = class extends IFormSchema {
+  constructor(key, data) {
+    super(key, data);
+    this.dbPointLength = data.dbPointLength;
+  }
+  getItem() {
+    let item = super.getItem();
+    let componentProps = this.getComponentProps();
+    return Object.assign({}, item, {
+      component: "InputNumber",
+      componentProps
+    });
+  }
+  getComponentProps() {
+    const props = {
+      style: {
+        width: "100%"
+      }
+    };
+    if (this.dbPointLength >= 0) {
+      props["precision"] = this.dbPointLength;
+    }
+    return props;
+  }
+};
+var FormSchemaFactory = class {
+  static createFormSchema(key, data) {
+    let view = data.view;
+    switch (view) {
+      case "password":
+        return new PasswordWidget(key, data);
+      case "list":
+        return new SelectWidget(key, data);
+      case "radio":
+        return new RadioWidget(key, data);
+      case "checkbox":
+        return new CheckboxWidget(key, data);
+      case "date":
+      case "datetime":
+        return new DateWidget(key, data);
+      case "time":
+        return new TimeWidget(key, data);
+      case "file":
+        return new FileWidget(key, data);
+      case "image":
+        return new ImageWidget(key, data);
+      case "textarea":
+        return new TextAreaWidget(key, data);
+      case "list_multi":
+        return new SelectMultiWidget(key, data);
+      case "sel_search":
+        return new SelectSearchWidget(key, data);
+      case "popup":
+        return new PopupWidget(key, data);
+      case "cat_tree":
+        return new TreeCategoryWidget(key, data);
+      case "sel_depart":
+        return new SelectDepartWidget(key, data);
+      case "sel_user":
+        return new SelectUserWidget(key, data);
+      case "umeditor":
+        return new EditorWidget(key, data);
+      case "markdown":
+        return new MarkdownWidget(key, data);
+      case "pca":
+        return new PcaWidget(key, data);
+      case "link_down":
+        return new LinkDownWidget(key, data);
+      case "sel_tree":
+        return new TreeSelectWidget(key, data);
+      case "switch":
+        return new SwitchWidget(key, data);
+      case "slot":
+        return new SlotWidget(key, data);
+      case "hidden":
+        return new InputWidget(key, data).isHidden();
+      default:
+        if (data.type == "number") {
+          return new NumberWidget(key, data);
+        } else {
+          return new InputWidget(key, data);
+        }
+    }
+  }
+  static createSlotFormSchema(key, data) {
+    let slotFs = new SlotWidget(key, data);
+    let view = data.view;
+    if (view == "date") {
+      slotFs.groupDate();
+    } else if (view == "datetime") {
+      slotFs.groupDatetime();
+    } else {
+      let type = data.type;
+      if (type == "number" || type == "integer") {
+        slotFs.groupNumber();
+      }
+    }
+    return slotFs;
+  }
+  static createIdField() {
+    return {
+      label: "",
+      field: "id",
+      component: "Input",
+      show: false
+    };
+  }
+};
+
+export {
+  SUBMIT_FLOW_KEY,
+  SUBMIT_FLOW_ID,
+  VALIDATE_FAILED,
+  SETUP,
+  ENHANCEJS,
+  FORM_VIEW_TO_QUERY_VIEW,
+  FormSchemaFactory
+};
+//# sourceMappingURL=chunk-PG6XMOQU.js.map

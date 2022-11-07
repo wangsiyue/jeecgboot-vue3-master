@@ -1,0 +1,99 @@
+<template>
+  <a-form class="antd-modal-form" ref="formRef" :model="formState" :rules="validatorRules">
+    <a-row>
+  <a-col :span="24">
+    <a-form-item label="省市区JAreaLinkage" :labelCol="labelCol" :wrapperCol="wrapperCol" v-bind="validateInfos.jssq">
+      <JAreaLinkage v-model:value="formState.jssq" placeholder="请输入省市区" />
+    </a-form-item>
+  </a-col>
+    </a-row>
+  </a-form>
+  <div>dfssssssssssss</div>
+</template>
+
+<script lang="ts"  >
+
+import { ref, reactive, defineExpose, nextTick } from 'vue';
+import { defHttp } from '/@/utils/http/axios';
+import { useMessage } from '/@/hooks/web/useMessage';
+import dayjs from 'dayjs';
+import { TimePicker, Form } from 'ant-design-vue';
+export default {
+  name: "test1"
+}
+
+const useForm = Form.useForm;
+const { resetFields, validate, validateInfos } = useForm(formState, validatorRules, { immediate: false });
+const validatorRules = {
+  name: [{ required: false, message: '请输入文本!' }],
+  miMa: [{ required: false, message: '请输入密码!' }],
+  ywzz: [{ required: false }, { pattern: '^[a-z|A-Z]{2,10}$', message: '不符合校验规则!' }],
+  xiala: [{ required: false, message: '请选择下拉组件!' }],
+  danxuan: [{ required: false, message: '请选择单选组件!' }],
+  duoxuan: [{ required: false, message: '请选择多选组件!' }],
+  riqi: [{ required: false, message: '请选择日期!' }],
+  shijian: [{ required: false, message: '请选择时间!' }],
+  wenjian: [{ required: false, message: '请上传文件!' }],
+  tupian: [{ required: false, message: '请上传图片!' }],
+  dhwb: [{ required: false, message: '请填写多行文本!' }],
+  xlss: [{ required: false, message: '请选择字典下拉搜索!' }],
+  popup: [{ required: false, message: '请选择popup弹窗!' }],
+  flzds: [{ required: false, message: '请选择分类字典树!' }],
+  yhxz: [{ required: false, message: '请选择用户!' }],
+  fwb: [{ required: false, message: '请填写富文本!' }],
+  shq: [{ required: false, message: '请选择省市级!' }],
+  ldzje: [{ required: false, message: '请输入JInputPop!' }],
+  ldzjs: [{ required: false, message: '请选择下拉输入框!' }],
+  zddtjxl: [{ required: false, message: '请选择多选输入框!' }],
+  yongHu: [{ required: false, message: '请选择用户!' }],
+  zhiWu: [{ required: false, message: '请选择职务!' }],
+  jueSe: [{ required: false, message: '请选择角色!' }],
+  zdys: [{ required: false, message: '请选择自定义树!' }],
+  jssq: [{ required: false, message: '请选择三级联动!' }],
+  zdbxl: [{ required: false, message: '请选择JTreeDict!' }],
+  zdmrz: [{ required: false, message: '请输入JCodeEditor!' }],
+  jsonParam: [{ required: false, message: '请输入参数!' }],
+  bmxz: [{ required: false, message: '请选择部门!' }],
+  yuanjia: [{ required: false, message: '请输入数值!' }],
+  nyrsfm: [{ required: false, message: '请选择年月日时分秒!' }],
+};
+const formState = reactive<Record<string, any>>({
+  name: '',
+  miMa: '',
+  ywzz: '',
+  xiala: '',
+  danxuan: '',
+  duoxuan: '',
+  riqi: '',
+  shijian: '',
+  wenjian: '',
+  tupian: '',
+  dhwb: '',
+  xlss: '',
+  popup: '',
+  flzds: '',
+  yhxz: '',
+  fwb: '',
+  shq: '',
+  ldzje: '',
+  ldzjs: '',
+  zddtjxl: '',
+  yongHu: '',
+  zhiWu: '',
+  jueSe: '',
+  zdys: '',
+  jssq: '',
+  zdbxl: '',
+  zdmrz: '',
+  jsonParam: '',
+  bmxz: '',
+  yuanjia: '',
+  nyrsfm: '',
+});
+
+import JAreaLinkage from '/@/components/Form/src/jeecg/components/JAreaLinkage.vue';
+</script>
+
+<style scoped>
+
+</style>

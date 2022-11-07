@@ -1,0 +1,10 @@
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/components/jeecg/JVxeTable/types.ts
+init_define_APP_INFO();
+
+// src/components/jeecg/JVxeTable/src/types/JVxeTypes.ts
+init_define_APP_INFO();
+//# sourceMappingURL=chunk-YFVM7TWR.js.map

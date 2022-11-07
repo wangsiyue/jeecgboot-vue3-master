@@ -1,0 +1,393 @@
+import {
+  useCopyModal
+} from "./chunk-NEQIUIVJ.js";
+import {
+  useMessageOnline
+} from "./chunk-J75HBRFQ.js";
+import {
+  useDrawer
+} from "./chunk-LRFXWKVL.js";
+import {
+  doBatchDelete,
+  doBatchRemove,
+  doCopyOnlineView,
+  doCopyTable,
+  doDatabaseSync,
+  list
+} from "./chunk-D775WV2P.js";
+import {
+  CgformPageType
+} from "./chunk-TVXRCUK6.js";
+import {
+  useListPage
+} from "./chunk-W2KVQNJD.js";
+import {
+  useModal
+} from "./chunk-MHXJV5SW.js";
+import {
+  isArray
+} from "./chunk-RX5I5ULI.js";
+import {
+  useRouter
+} from "./chunk-WLZB43K5.js";
+import {
+  Group_default2 as Group_default,
+  input_default,
+  radio_default
+} from "./chunk-IF4EKY7K.js";
+import {
+  h,
+  ref
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/useCgformList.js
+init_define_APP_INFO();
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+function useCgformList(options) {
+  const isNormalPage = options.pageType === CgformPageType.normal;
+  const router = useRouter();
+  const pageContext = useListPage({
+    designScope: options.designScope,
+    tableProps: {
+      api: list,
+      columns: options.columns,
+      formConfig: {
+        labelWidth: 200,
+        schemas: options.formSchemas
+      },
+      beforeFetch: (params) => {
+        let copyType = isNormalPage ? 0 : 1;
+        let physicId = isNormalPage ? void 0 : router.currentRoute.value.params.code;
+        if (isArray(params.tableType_MultiString)) {
+          params.tableType_MultiString = params.tableType_MultiString.join(",");
+        }
+        return Object.assign(params, { copyType, physicId });
+      }
+    }
+  });
+  const { tableContext, createMessage: $message } = pageContext;
+  console.log("my message is update ...");
+  const { createConfirm: $confirm } = useMessageOnline();
+  const [, { reload, setLoading }, { selectedRowKeys, selectedRows }] = tableContext;
+  const [registerCgformModal, cgformModal] = useModal();
+  const [registerDbToOnlineModal, dbToOnlineModal] = useModal();
+  const [registerCodeGeneratorModal, codeGeneratorModal] = useModal();
+  const [registerCustomButtonModal, customButtonModal] = useModal();
+  const [registerEnhanceJsModal, enhanceJsModal] = useModal();
+  const [registerEnhanceSqlModal, enhanceSqlModal] = useModal();
+  const [registerEnhanceJavaModal, enhanceJavaModal] = useModal();
+  const [registerAuthManagerDrawer, authManagerDrawer] = useDrawer();
+  const [registerAuthSetterModal, authSetterModal] = useModal();
+  function onAdd() {
+    cgformModal.openModal(true, { isUpdate: false });
+  }
+  function onEdit(record) {
+    cgformModal.openModal(true, { isUpdate: true, record });
+  }
+  function onDeleteBatch() {
+    let idList = selectedRowKeys.value;
+    if (idList.length <= 0) {
+      $message.warning("\u8BF7\u5148\u9009\u62E9\u4E00\u6761\u8BB0\u5F55\uFF01");
+      return;
+    }
+    $confirm({
+      title: "\u5220\u9664",
+      content: "<p>\u79FB\u9664\u53EA\u4F1A\u5220\u9664\u8868\u5355\u914D\u7F6E\uFF1B<br>\u5220\u9664\u5219\u4F1A\u5220\u9664\u5BF9\u5E94\u7684\u6570\u636E\u5E93\u8868\u4EE5\u53CA\u5B50\u8868\u4E14\u4E0D\u80FD\u6062\u590D\u3002<br>\u8BF7\u786E\u8BA4\u60A8\u7684\u64CD\u4F5C\u2026</p>",
+      iconType: "warning",
+      closable: true,
+      okText: "\u79FB\u9664",
+      cancelText: "\u5220\u9664",
+      cancelButtonProps: { danger: true },
+      onOk: () => __async(this, null, function* () {
+        return executeDelete(doBatchRemove, idList, true);
+      }),
+      onCancel(event) {
+        if (!(event == null ? void 0 : event.triggerCancel)) {
+          return executeDelete(doBatchDelete, idList, true);
+        }
+        return Promise.resolve();
+      }
+    });
+  }
+  function executeDelete(fn, idList, clearSelected = false) {
+    return __async(this, null, function* () {
+      try {
+        setLoading(true);
+        const res = yield fn(idList);
+        reload();
+        if (clearSelected) {
+          selectedRowKeys.value = [];
+        }
+        return res;
+      } finally {
+        setLoading(false);
+      }
+      return Promise.reject();
+    });
+  }
+  function onShowCustomButton() {
+    getSelectedRows(([row]) => customButtonModal.openModal(true, { row }));
+  }
+  function onShowEnhanceJs() {
+    getSelectedRows(([row]) => enhanceJsModal.openModal(true, { row }));
+  }
+  function onShowEnhanceSql() {
+    getSelectedRows(([row]) => enhanceSqlModal.openModal(true, { row }));
+  }
+  function onShowEnhanceJava() {
+    getSelectedRows(([row]) => enhanceJavaModal.openModal(true, { row }));
+  }
+  function onImportDbTable() {
+    dbToOnlineModal.openModal(true, {});
+  }
+  function getSelectedRows(fn, min = 1, max = 1) {
+    if (selectedRows.value.length < min) {
+      $message.warning(`\u8BF7\u5148\u81F3\u5C11\u9009\u4E2D ${min} \u6761\u8BB0\u5F55`);
+    } else if (selectedRows.value.length > max) {
+      $message.warning(`\u6700\u591A\u53EA\u80FD\u9009\u4E2D ${min} \u6761\u8BB0\u5F55`);
+    } else {
+      fn(selectedRows.value);
+    }
+  }
+  function onGenerateCode() {
+    if (selectedRows.value.length === 0) {
+      $message.warning("\u8BF7\u5148\u9009\u4E2D\u4E00\u6761\u8BB0\u5F55");
+    } else if (selectedRows.value.length > 1) {
+      $message.warning("\u4EE3\u7801\u751F\u6210\u53EA\u80FD\u9009\u4E2D\u4E00\u6761\u8BB0\u5F55");
+    } else {
+      let row = selectedRows.value[0];
+      if (!row) {
+        $message.warning("\u8BF7\u9009\u4E2D\u5F53\u524D\u9875\u7684\u6570\u636E\uFF01");
+      } else if (row.isDbSynch != "Y") {
+        $message.warning("\u8BF7\u5148\u540C\u6B65\u6570\u636E\u5E93\uFF01");
+      } else if (row.tableType == 3) {
+        $message.warning("\u8BF7\u9009\u4E2D\u8BE5\u8868\u5BF9\u5E94\u7684\u4E3B\u8868");
+      } else {
+        codeGeneratorModal.openModal(true, { code: row.id });
+      }
+    }
+  }
+  function onGoToTest(record) {
+    console.log(record);
+    if (record.isTree == "Y") {
+      router.push({ path: "/online/cgformTreeList/" + record.id });
+    } else {
+      router.push({ path: "/online/cgformList/" + record.id });
+    }
+  }
+  function onSyncDatabase(record) {
+    const syncMethod = ref("normal");
+    const disabled = ref(false);
+    const modalFunc = $confirm({
+      iconType: "info",
+      title: "\u540C\u6B65\u6570\u636E\u5E93",
+      content: () => h("div", {
+        style: "margin: 20px 0;"
+      }, h(Group_default, {
+        value: syncMethod.value,
+        disabled: disabled.value,
+        "onUpdate:value": (v) => syncMethod.value = v
+      }, () => [
+        h(radio_default, { value: "normal" }, () => "\u666E\u901A\u540C\u6B65\uFF08\u4FDD\u7559\u8868\u6570\u636E\uFF09"),
+        h(radio_default, { value: "force" }, () => "\u5F3A\u5236\u540C\u6B65\uFF08\u5220\u9664\u8868\uFF0C\u91CD\u65B0\u751F\u6210\uFF09")
+      ])),
+      maskClosable: true,
+      okText: "\u5F00\u59CB\u540C\u6B65",
+      onOk() {
+        return __async(this, null, function* () {
+          disabled.value = true;
+          modalFunc.update({
+            maskClosable: false,
+            keyboard: false,
+            okText: "\u540C\u6B65\u4E2D\u2026",
+            okButtonProps: { loading: disabled.value },
+            cancelButtonProps: { disabled: disabled.value }
+          });
+          try {
+            yield doDatabaseSync(record.id, syncMethod.value);
+          } catch (e) {
+            $message.warn(e.message || e);
+          } finally {
+            reload();
+          }
+        });
+      }
+    });
+  }
+  const { createCopyModal } = useCopyModal();
+  function onShowOnlineUrl(record) {
+    let onlineUrl;
+    if (record.themeTemplate === "erp") {
+      onlineUrl = `/online/cgformErpList/${record.id}`;
+    } else if (record.themeTemplate === "innerTable") {
+      onlineUrl = `/online/cgformInnerTableList/${record.id}`;
+    } else if (record.themeTemplate === "tab") {
+      onlineUrl = `/online/cgformTabList/${record.id}`;
+    } else if (record.isTree == "Y") {
+      onlineUrl = `/online/cgformTreeList/${record.id}`;
+    } else {
+      onlineUrl = `/online/cgformList/${record.id}`;
+    }
+    createCopyModal({
+      title: `\u83DC\u5355\u94FE\u63A5\u3010${record.tableTxt}\u3011`,
+      content: onlineUrl,
+      copyText: onlineUrl
+    });
+  }
+  function onCopyTable(record) {
+    const tableName = ref(record.tableName + "_copy");
+    $confirm({
+      title: "\u590D\u5236\u8868",
+      content: () => h("div", {
+        style: "margin: 20px 0;"
+      }, [
+        "\u8BF7\u8F93\u5165\u65B0\u8868\u540D\uFF1A",
+        h(input_default, {
+          value: tableName.value,
+          "onUpdate:value": (v) => tableName.value = v
+        })
+      ]),
+      iconType: "info",
+      closable: true,
+      okText: "\u590D\u5236",
+      onOk() {
+        if (!tableName.value) {
+          $message.warning("\u8BF7\u8F93\u5165\u65B0\u8868\u540D");
+        } else if (tableName.value === record.tableName) {
+          $message.warning("\u65B0\u8868\u540D\u548C\u65E7\u8868\u540D\u4E0D\u80FD\u4E00\u81F4");
+        } else {
+          doCopyTable(record.id, tableName.value).then(reload);
+        }
+      }
+    });
+  }
+  function getTableAction(record) {
+    return [
+      {
+        label: "\u7F16\u8F91",
+        onClick: () => onEdit(record)
+      }
+    ];
+  }
+  function getDropDownAction(record) {
+    return [
+      {
+        label: "\u540C\u6B65\u6570\u636E\u5E93",
+        onClick: () => onSyncDatabase(record),
+        ifShow: () => isNormalPage && record.isDbSynch != "Y"
+      },
+      {
+        label: "\u529F\u80FD\u6D4B\u8BD5",
+        onClick: () => onGoToTest(record),
+        ifShow: () => isNormalPage ? record.isDbSynch == "Y" && record.tableType !== 3 : true
+      },
+      {
+        label: "\u914D\u7F6E\u5730\u5740",
+        onClick: () => onShowOnlineUrl(record),
+        ifShow: () => isNormalPage ? record.isDbSynch == "Y" && record.tableType !== 3 : true
+      },
+      {
+        label: "\u6743\u9650\u63A7\u5236",
+        onClick: () => authManagerDrawer.openDrawer(true, { cgformId: record.id })
+      },
+      {
+        label: "\u89D2\u8272\u6388\u6743",
+        onClick: () => authSetterModal.openModal(true, { cgformId: record.id })
+      },
+      {
+        label: "\u751F\u6210\u89C6\u56FE",
+        popConfirm: {
+          title: "\u786E\u5B9A\u751F\u6210\u89C6\u56FE\u5417\uFF1F",
+          placement: "left",
+          confirm: () => {
+            setLoading(true);
+            doCopyOnlineView(record.id).then(() => {
+              $message.success("\u5DF2\u6210\u529F\u751F\u6210\u89C6\u56FE");
+            }).finally(() => {
+              setLoading(false);
+              reload();
+            });
+          }
+        },
+        ifShow: () => isNormalPage
+      },
+      {
+        label: "\u89C6\u56FE\u7BA1\u7406",
+        onClick: () => router.push(`/online/copyform/${record.id}`),
+        ifShow: () => isNormalPage && record.hascopy == 1
+      },
+      {
+        label: "\u590D\u5236\u8868",
+        onClick: () => onCopyTable(record),
+        ifShow: () => isNormalPage
+      },
+      {
+        label: "\u79FB\u9664",
+        popConfirm: {
+          title: "\u786E\u5B9A\u79FB\u9664\u5417\uFF1F",
+          placement: "left",
+          confirm: () => executeDelete(doBatchRemove, [record.id])
+        }
+      },
+      {
+        label: "\u5220\u9664",
+        popConfirm: {
+          title: "\u786E\u5B9A\u5220\u9664\u5417\uFF1F",
+          placement: "left",
+          confirm: () => executeDelete(doBatchDelete, [record.id])
+        },
+        ifShow: () => isNormalPage
+      }
+    ];
+  }
+  return {
+    router,
+    pageContext,
+    onAdd,
+    onDeleteBatch,
+    onImportDbTable,
+    onGenerateCode,
+    onShowCustomButton,
+    onShowEnhanceJs,
+    onShowEnhanceSql,
+    onShowEnhanceJava,
+    getTableAction,
+    getDropDownAction,
+    registerCustomButtonModal,
+    registerEnhanceJsModal,
+    registerEnhanceSqlModal,
+    registerEnhanceJavaModal,
+    registerAuthManagerDrawer,
+    registerAuthSetterModal,
+    registerCgformModal,
+    registerDbToOnlineModal,
+    registerCodeGeneratorModal
+  };
+}
+
+export {
+  useCgformList
+};
+//# sourceMappingURL=chunk-O6RCE4TK.js.map

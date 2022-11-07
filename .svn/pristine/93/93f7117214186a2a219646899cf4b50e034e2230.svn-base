@@ -1,0 +1,15 @@
+import {
+  require_foldcode
+} from "./chunk-XOTQYFLC.js";
+import "./chunk-AULFBRMP.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:codemirror_addon_fold_foldcode_js
+init_define_APP_INFO();
+var codemirror_addon_fold_foldcode_js_default = require_foldcode();
+export {
+  codemirror_addon_fold_foldcode_js_default as default
+};
+//# sourceMappingURL=codemirror_addon_fold_foldcode_js.js.map

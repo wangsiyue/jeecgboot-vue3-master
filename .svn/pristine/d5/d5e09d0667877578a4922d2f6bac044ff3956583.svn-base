@@ -1,0 +1,90 @@
+import {
+  defHttp
+} from "./chunk-64MZJWVI.js";
+import {
+  useGlobSetting
+} from "./chunk-ANLUEKLO.js";
+import {
+  useMessage
+} from "./chunk-C4IBJHIP.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/hooks/system/useMethods.ts
+init_define_APP_INFO();
+var { createMessage, createWarningModal } = useMessage();
+var glob = useGlobSetting();
+var XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+var XLSX_FILE_SUFFIX = ".xlsx";
+function useMethods() {
+  async function exportXls(name, url, params, isXlsx = false) {
+    const data = await defHttp.get({ url, params, responseType: "blob" }, { isTransformResponse: false });
+    if (!data) {
+      createMessage.warning("\u6587\u4EF6\u4E0B\u8F7D\u5931\u8D25");
+      return;
+    }
+    if (!name || typeof name != "string") {
+      name = "\u5BFC\u51FA\u6587\u4EF6";
+    }
+    let blobOptions = { type: "application/vnd.ms-excel" };
+    let fileSuffix = ".xls";
+    if (isXlsx === true) {
+      blobOptions["type"] = XLSX_MIME_TYPE;
+      fileSuffix = XLSX_FILE_SUFFIX;
+    }
+    if (typeof window.navigator.msSaveBlob !== "undefined") {
+      window.navigator.msSaveBlob(new Blob([data], blobOptions), name + fileSuffix);
+    } else {
+      let url2 = window.URL.createObjectURL(new Blob([data], blobOptions));
+      let link = document.createElement("a");
+      link.style.display = "none";
+      link.href = url2;
+      link.setAttribute("download", name + fileSuffix);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url2);
+    }
+  }
+  async function importXls(data, url, success) {
+    const isReturn = (fileInfo) => {
+      try {
+        if (fileInfo.code === 201) {
+          let {
+            message,
+            result: { msg, fileUrl, fileName }
+          } = fileInfo;
+          let href = glob.uploadUrl + fileUrl;
+          createWarningModal({
+            title: message,
+            centered: false,
+            content: `<div>
+                                <span>${msg}</span><br/> 
+                                <span>\u5177\u4F53\u8BE6\u60C5\u8BF7<a href = ${href} download = ${fileName}> \u70B9\u51FB\u4E0B\u8F7D </a> </span> 
+                              </div>`
+          });
+        } else if (fileInfo.code === 500) {
+          createMessage.error(fileInfo.message || `${data.file.name} \u5BFC\u5165\u5931\u8D25`);
+        } else {
+          createMessage.success(fileInfo.message || `${data.file.name} \u6587\u4EF6\u4E0A\u4F20\u6210\u529F`);
+        }
+      } catch (error) {
+        console.log("\u5BFC\u5165\u7684\u6570\u636E\u5F02\u5E38", error);
+      } finally {
+        typeof success === "function" ? success(fileInfo) : "";
+      }
+    };
+    await defHttp.uploadFile({ url }, { file: data.file }, { success: isReturn });
+  }
+  return {
+    handleExportXls: (name, url, params) => exportXls(name, url, params),
+    handleImportXls: (data, url, success) => importXls(data, url, success),
+    handleExportXlsx: (name, url, params) => exportXls(name, url, params, true)
+  };
+}
+
+export {
+  useMethods
+};
+//# sourceMappingURL=chunk-CB466JPU.js.map

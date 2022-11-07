@@ -1,0 +1,265 @@
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+import { defineComponent, ref, computed, unref, nextTick, watch, reactive, resolveComponent, openBlock, createBlock, mergeProps, withCtx, createElementBlock, Fragment, renderList, createTextVNode, toDisplayString, createCommentVNode, createVNode } from "vue";
+import { BasicModal, useModalInner } from "/@/components/Modal";
+import { defHttp } from "/@/utils/http/axios";
+import { g as getRefPromise } from "./useAutoForm.js";
+import { O as OnlineForm } from "./OnlineForm.js";
+import { _ as _export_sfc } from "./index.js";
+import "./FormSchemaFactory.js";
+import "/@/components/Form/src/jeecg/components/JUpload";
+import "/@/views/system/user/user.api";
+import "/@/store/modules/user";
+import "/@/utils";
+import "/@/utils/desform/customExpression";
+import "/@/components/Form/src/componentMap";
+import "./OnlineSelectCascade.js";
+import "/@/hooks/web/useMessage";
+import "/@/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "vue-router";
+import "/@/components/Form/index";
+import "/@/components/Loading";
+import "./OnlineSubForm.js";
+import "./pick.js";
+import "./isArray.js";
+import "./toString.js";
+import "./_arrayPush.js";
+const singleWidth = 800;
+const one2ManyWidth = 1100;
+const _sfc_main = defineComponent({
+  name: "OnlineModal",
+  props: {
+    id: {
+      type: String,
+      default: ""
+    }
+  },
+  components: {
+    BasicModal,
+    OnlineForm
+  },
+  emits: ["success", "register"],
+  setup(props, { emit }) {
+    console.log("\u8FDB\u5165\u8868\u5355\u5F39\u6846\u300B\u300B\u300B\u300Bmodal");
+    const onlineFormCompRef = ref(null);
+    const disableSubmit = ref(false);
+    const formTemplate = ref(1);
+    const cgButtonList = ref([]);
+    const formRendered = ref(false);
+    const modalMinWidth = ref(0);
+    const isTreeForm = ref(false);
+    const pidFieldName = ref("");
+    const submitLoading = ref(false);
+    const title = computed(() => {
+      if (unref(disableSubmit) === true) {
+        return "\u8BE6\u60C5";
+      }
+      if (unref(isUpdate) === true) {
+        return "\u7F16\u8F91";
+      }
+      return "\u65B0\u589E";
+    });
+    const [registerModal, { setModalProps, closeModal }] = useModalInner((data) => __async(this, null, function* () {
+      setModalProps({ confirmLoading: false });
+      isUpdate.value = data.isUpdate;
+      disableSubmit.value = data.disableSubmit || false;
+      yield nextTick(() => __async(this, null, function* () {
+        yield getRefPromise(formRendered);
+        yield onlineFormCompRef.value.show(data == null ? void 0 : data.isUpdate, data == null ? void 0 : data.record, data == null ? void 0 : data.param);
+      }));
+    }));
+    function renderSuccess(extConfig) {
+      formRendered.value = true;
+      modalMinWidth.value = extConfig.modalMinWidth;
+      if (extConfig.modelFullscreen == 1) {
+        setModalProps({ defaultFullscreen: true });
+      } else {
+        setModalProps({ defaultFullscreen: false });
+      }
+    }
+    watch(() => props.id, renderFormItems, { immediate: true });
+    function renderFormItems() {
+      return __async(this, null, function* () {
+        formRendered.value = false;
+        if (!props.id) {
+          return;
+        }
+        console.log("\u91CD\u65B0\u6E32\u67D3\u8868\u5355\u300B\u300B\u300B\u300Bmodal");
+        let result = yield loadFormItems();
+        let dataFormTemplate = result.head.formTemplate;
+        formTemplate.value = dataFormTemplate ? Number(dataFormTemplate) : 1;
+        cgButtonList.value = result.cgButtonList;
+        isTreeForm.value = result.head.isTree === "Y";
+        pidFieldName.value = result.head.treeParentIdField || "";
+        nextTick(() => __async(this, null, function* () {
+          let myForm = yield getRefPromise(onlineFormCompRef);
+          myForm.createRootProperties(result);
+        }));
+      });
+    }
+    function loadFormItems() {
+      let url = `/online/cgform/api/getFormItem/${props.id}`;
+      return new Promise((resolve, reject) => {
+        defHttp.get({ url }, { isTransformResponse: false }).then((res) => {
+          console.log("\u8868\u5355\u7ED3\u679C\u300B\u300Bmodal:", res);
+          if (res.success) {
+            resolve(res.result);
+          } else {
+            reject(res.message);
+          }
+        }).catch(() => {
+          reject();
+        });
+      });
+    }
+    const modalWidth = computed(() => {
+      let diff = 200 * (formTemplate.value - 1);
+      let width = (!unref(single) ? one2ManyWidth : singleWidth) + diff;
+      width = calcModalMixWidth(width);
+      let minWidth = modalMinWidth.value;
+      console.log({ minWidth });
+      if (minWidth && width < minWidth) {
+        width = minWidth;
+      }
+      console.log({ width });
+      return width;
+    });
+    function calcModalMixWidth(width) {
+      let minWidth = extConfigJson.modalMinWidth;
+      if (minWidth != null && minWidth !== "") {
+        try {
+          minWidth = Number.parseInt(minWidth);
+          if (width < minWidth) {
+            return minWidth;
+          }
+        } catch (e) {
+          console.warn("error modalMinWidth value: ", minWidth);
+        }
+      }
+      return width;
+    }
+    const isUpdate = ref(false);
+    const single = ref(true);
+    const extConfigJson = reactive({});
+    function handleCgButtonClick(optType, buttonCode) {
+      onlineFormCompRef.value.handleCgButtonClick(optType, buttonCode);
+    }
+    function handleSubmit() {
+      submitLoading.value = true;
+      setTimeout(() => {
+        submitLoading.value = false;
+      }, 1500);
+      onlineFormCompRef.value.handleSubmit();
+    }
+    function handleCancel() {
+      closeModal();
+    }
+    function handleSuccess(formData) {
+      emit("success", formData);
+      closeModal();
+    }
+    const that = {
+      title,
+      onlineFormCompRef,
+      formRendered,
+      renderSuccess,
+      registerModal,
+      handleSubmit,
+      handleSuccess,
+      handleCancel,
+      modalWidth,
+      formTemplate,
+      disableSubmit,
+      cgButtonList,
+      handleCgButtonClick,
+      isTreeForm,
+      pidFieldName,
+      submitLoading
+    };
+    return that;
+  }
+});
+const _hoisted_1 = /* @__PURE__ */ createTextVNode("\u786E\u5B9A");
+const _hoisted_2 = /* @__PURE__ */ createTextVNode("\u5173\u95ED");
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_button = resolveComponent("a-button");
+  const _component_online_form = resolveComponent("online-form");
+  const _component_BasicModal = resolveComponent("BasicModal");
+  return openBlock(), createBlock(_component_BasicModal, mergeProps({
+    title: _ctx.title,
+    width: _ctx.modalWidth
+  }, _ctx.$attrs, {
+    onRegister: _ctx.registerModal,
+    wrapClassName: "jeecg-online-modal",
+    onOk: _ctx.handleSubmit
+  }), {
+    footer: withCtx(() => [
+      (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.cgButtonList, (btn) => {
+        return openBlock(), createBlock(_component_a_button, {
+          key: btn.id,
+          type: "primary",
+          onClick: ($event) => _ctx.handleCgButtonClick(btn.optType, btn.buttonCode),
+          preIcon: btn.buttonIcon ? "ant-design:" + btn.buttonIcon : ""
+        }, {
+          default: withCtx(() => [
+            createTextVNode(toDisplayString(btn.buttonName), 1)
+          ]),
+          _: 2
+        }, 1032, ["onClick", "preIcon"]);
+      }), 128)),
+      !_ctx.disableSubmit ? (openBlock(), createBlock(_component_a_button, {
+        key: "submit",
+        type: "primary",
+        onClick: _ctx.handleSubmit,
+        loading: _ctx.submitLoading
+      }, {
+        default: withCtx(() => [
+          _hoisted_1
+        ]),
+        _: 1
+      }, 8, ["onClick", "loading"])) : createCommentVNode("", true),
+      createVNode(_component_a_button, {
+        key: "back",
+        onClick: _ctx.handleCancel
+      }, {
+        default: withCtx(() => [
+          _hoisted_2
+        ]),
+        _: 1
+      }, 8, ["onClick"])
+    ]),
+    default: withCtx(() => [
+      createVNode(_component_online_form, {
+        ref: "onlineFormCompRef",
+        id: _ctx.id,
+        disabled: _ctx.disableSubmit,
+        "form-template": _ctx.formTemplate,
+        isTree: _ctx.isTreeForm,
+        pidField: _ctx.pidFieldName,
+        onRendered: _ctx.renderSuccess,
+        onSuccess: _ctx.handleSuccess
+      }, null, 8, ["id", "disabled", "form-template", "isTree", "pidField", "onRendered", "onSuccess"])
+    ]),
+    _: 1
+  }, 16, ["title", "width", "onRegister", "onOk"]);
+}
+var OnlineAutoModal = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export { OnlineAutoModal as default };

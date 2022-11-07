@@ -1,0 +1,21 @@
+import {
+  __esm,
+  __toCommonJS,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/ant-design-vue/es/form/interface.js
+var interface_exports = {};
+var init_interface = __esm({
+  "node_modules/ant-design-vue/es/form/interface.js"() {
+    init_define_APP_INFO();
+  }
+});
+
+// dep:ant-design-vue_es_form_interface
+init_define_APP_INFO();
+var ant_design_vue_es_form_interface_default = (init_interface(), __toCommonJS(interface_exports));
+export {
+  ant_design_vue_es_form_interface_default as default
+};
+//# sourceMappingURL=ant-design-vue_es_form_interface.js.map

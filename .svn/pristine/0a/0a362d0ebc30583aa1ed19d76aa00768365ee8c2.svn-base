@@ -1,0 +1,90 @@
+import {
+  ErrorTip
+} from "./chunk-VM2WJ5ZW.js";
+import {
+  ChartTabsRender
+} from "./chunk-3BOMYDIP.js";
+import {
+  ChartSingleRender
+} from "./chunk-O3RGAYZJ.js";
+import {
+  ChartDoubleRender
+} from "./chunk-KONQTEPX.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  computed,
+  createBlock,
+  createCommentVNode,
+  defineComponent,
+  inject,
+  mergeProps,
+  openBlock,
+  ref,
+  resolveComponent,
+  watch
+} from "./chunk-JQQZ4WSS.js";
+import {
+  normalizeProps
+} from "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/ChartAutoRender.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/chart/Bar.vue";
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/chart/Pie.vue";
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/chart/BarMulti.vue";
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/chart/LineMulti.vue";
+var _sfc_main = defineComponent({
+  name: "ChartAutoRender",
+  components: { ErrorTip, ChartTabsRender, ChartSingleRender, ChartDoubleRender },
+  props: {
+    chartsData: { type: Object, default: null },
+    isCombination: { type: Boolean, default: false }
+  },
+  setup(props) {
+    const setErrorTip = inject("setErrorTip");
+    const chartTitle = ref(null);
+    const displayTemplate = ref("tab");
+    const dataSource = ref({});
+    const isTabs = computed(() => displayTemplate.value === "tab");
+    const isSingle = computed(() => displayTemplate.value === "single");
+    const isDouble = computed(() => displayTemplate.value === "double");
+    const templateProps = computed(() => {
+      return {
+        title: props.isCombination ? null : chartTitle.value,
+        chartsData: props.chartsData,
+        isCombination: props.isCombination,
+        onError: (tip) => setErrorTip(tip)
+      };
+    });
+    watch(() => props.chartsData, () => parseChartsData(props.chartsData), { immediate: true });
+    function parseChartsData(data) {
+      if (data) {
+        chartTitle.value = data.head.name;
+        displayTemplate.value = data.head.displayTemplate;
+        dataSource.value = data;
+        if (!isTabs.value && !isDouble.value && !isSingle.value) {
+          setErrorTip("\u672A\u8BC6\u522B\u7684\u5E03\u5C40\u6A21\u5F0F");
+        }
+      }
+    }
+    return { isTabs, isSingle, isDouble, templateProps };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_ChartTabsRender = resolveComponent("ChartTabsRender");
+  const _component_ChartSingleRender = resolveComponent("ChartSingleRender");
+  const _component_ChartDoubleRender = resolveComponent("ChartDoubleRender");
+  return _ctx.isTabs ? (openBlock(), createBlock(_component_ChartTabsRender, normalizeProps(mergeProps({ key: 0 }, _ctx.templateProps)), null, 16)) : _ctx.isSingle ? (openBlock(), createBlock(_component_ChartSingleRender, normalizeProps(mergeProps({ key: 1 }, _ctx.templateProps)), null, 16)) : _ctx.isDouble ? (openBlock(), createBlock(_component_ChartDoubleRender, normalizeProps(mergeProps({ key: 2 }, _ctx.templateProps)), null, 16)) : createCommentVNode("", true);
+}
+var ChartAutoRender = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  ChartAutoRender
+};
+//# sourceMappingURL=chunk-PA4ZIE3G.js.map

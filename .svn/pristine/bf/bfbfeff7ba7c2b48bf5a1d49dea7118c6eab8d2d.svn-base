@@ -1,0 +1,15 @@
+import {
+  require_javascript
+} from "./chunk-3CMMMJCL.js";
+import "./chunk-AULFBRMP.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:codemirror_mode_javascript_javascript_js
+init_define_APP_INFO();
+var codemirror_mode_javascript_javascript_js_default = require_javascript();
+export {
+  codemirror_mode_javascript_javascript_js_default as default
+};
+//# sourceMappingURL=codemirror_mode_javascript_javascript_js.js.map

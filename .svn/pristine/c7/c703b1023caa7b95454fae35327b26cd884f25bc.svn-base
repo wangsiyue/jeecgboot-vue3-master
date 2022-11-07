@@ -1,0 +1,36 @@
+import {
+  __commonJS,
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/tinymce/plugins/textcolor/plugin.js
+var require_plugin = __commonJS({
+  "node_modules/tinymce/plugins/textcolor/plugin.js"() {
+    init_define_APP_INFO();
+    (function() {
+      "use strict";
+      var global = tinymce.util.Tools.resolve("tinymce.PluginManager");
+      function Plugin() {
+        global.add("textcolor", function() {
+        });
+      }
+      Plugin();
+    })();
+  }
+});
+
+// node_modules/tinymce/plugins/textcolor/index.js
+var require_textcolor = __commonJS({
+  "node_modules/tinymce/plugins/textcolor/index.js"() {
+    init_define_APP_INFO();
+    require_plugin();
+  }
+});
+
+// dep:tinymce_plugins_textcolor
+init_define_APP_INFO();
+var tinymce_plugins_textcolor_default = require_textcolor();
+export {
+  tinymce_plugins_textcolor_default as default
+};
+//# sourceMappingURL=tinymce_plugins_textcolor.js.map

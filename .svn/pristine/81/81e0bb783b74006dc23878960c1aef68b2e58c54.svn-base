@@ -1,0 +1,16 @@
+import {
+  en_US_default
+} from "./chunk-JTWWQTIY.js";
+import "./chunk-3UC42JCT.js";
+import "./chunk-RL4BZ2NY.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:ant-design-vue_es_locale_en_US
+init_define_APP_INFO();
+var ant_design_vue_es_locale_en_US_default = en_US_default;
+export {
+  ant_design_vue_es_locale_en_US_default as default
+};
+//# sourceMappingURL=ant-design-vue_es_locale_en_US.js.map

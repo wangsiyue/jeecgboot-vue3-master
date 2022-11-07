@@ -1,0 +1,62 @@
+import {
+  NavigationFailureType,
+  RouterLink,
+  RouterView,
+  START_LOCATION_NORMALIZED,
+  createMemoryHistory,
+  createRouter,
+  createRouterMatcher,
+  createWebHashHistory,
+  createWebHistory,
+  isNavigationFailure,
+  loadRouteLocation,
+  matchedRouteKey,
+  onBeforeRouteLeave,
+  onBeforeRouteUpdate,
+  parseQuery,
+  routeLocationKey,
+  routerKey,
+  routerViewLocationKey,
+  stringifyQuery,
+  useLink,
+  useRoute,
+  useRouter,
+  viewDepthKey
+} from "./chunk-WLZB43K5.js";
+import "./chunk-KIDT26GW.js";
+import "./chunk-UFII5LNT.js";
+import "./chunk-FYK3HJMB.js";
+import "./chunk-JQQZ4WSS.js";
+import "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:vue-router
+init_define_APP_INFO();
+export {
+  NavigationFailureType,
+  RouterLink,
+  RouterView,
+  START_LOCATION_NORMALIZED as START_LOCATION,
+  createMemoryHistory,
+  createRouter,
+  createRouterMatcher,
+  createWebHashHistory,
+  createWebHistory,
+  isNavigationFailure,
+  loadRouteLocation,
+  matchedRouteKey,
+  onBeforeRouteLeave,
+  onBeforeRouteUpdate,
+  parseQuery,
+  routeLocationKey,
+  routerKey,
+  routerViewLocationKey,
+  stringifyQuery,
+  useLink,
+  useRoute,
+  useRouter,
+  viewDepthKey
+};
+//# sourceMappingURL=vue-router.js.map

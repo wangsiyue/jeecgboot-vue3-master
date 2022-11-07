@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../@jeecg/online/ErrorTip.js"],
+  "sourcesContent": ["import { defineComponent, h } from \"vue\";\nimport { _ as _export_sfc } from \"./index.js\";\nimport \"/@/components/jeecg/OnLine/JPopupOnlReport.vue\";\nimport \"/@/hooks/web/useMessage\";\nimport \"vue-router\";\nvar ErrorTip_vue_vue_type_style_index_0_scoped_true_lang = \"\";\nconst _sfc_main = defineComponent({\n  name: \"ErrorTip\",\n  props: {\n    tip: String,\n    tag: { type: String, default: \"div\" }\n  },\n  render() {\n    var _a;\n    return h(this.tag, {\n      class: [\"error-tip\"]\n    }, h(\"span\", {}, (_a = this.tip) != null ? _a : this.$slots.default));\n  }\n});\nvar ErrorTip = /* @__PURE__ */ _export_sfc(_sfc_main, [[\"__scopeId\", \"data-v-7e37d703\"]]);\nexport { ErrorTip as default };\n"],
+  "mappings": ";;;;;;;;;;;;AAAA;AAEA,OAAO;AAIP,IAAM,YAAY,gBAAgB;AAAA,EAChC,MAAM;AAAA,EACN,OAAO;AAAA,IACL,KAAK;AAAA,IACL,KAAK,EAAE,MAAM,QAAQ,SAAS,MAAM;AAAA,EACtC;AAAA,EACA,SAAS;AACP,QAAI;AACJ,WAAO,EAAE,KAAK,KAAK;AAAA,MACjB,OAAO,CAAC,WAAW;AAAA,IACrB,GAAG,EAAE,QAAQ,CAAC,IAAI,KAAK,KAAK,QAAQ,OAAO,KAAK,KAAK,OAAO,OAAO,CAAC;AAAA,EACtE;AACF,CAAC;AACD,IAAI,WAA2B,YAAY,WAAW,CAAC,CAAC,aAAa,iBAAiB,CAAC,CAAC;",
+  "names": []
+}

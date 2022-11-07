@@ -1,0 +1,19 @@
+import {
+  install,
+  install2
+} from "./chunk-OM3XUCHA.js";
+import "./chunk-5BNLYAFJ.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:echarts_renderers
+init_define_APP_INFO();
+
+// node_modules/echarts/renderers.js
+init_define_APP_INFO();
+export {
+  install2 as CanvasRenderer,
+  install as SVGRenderer
+};
+//# sourceMappingURL=echarts_renderers.js.map

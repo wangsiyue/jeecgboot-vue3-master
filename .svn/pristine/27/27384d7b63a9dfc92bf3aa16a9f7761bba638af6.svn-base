@@ -1,0 +1,14 @@
+import {
+  require_xe_utils
+} from "./chunk-ZMI5AU4K.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:xe-utils
+init_define_APP_INFO();
+var xe_utils_default = require_xe_utils();
+export {
+  xe_utils_default as default
+};
+//# sourceMappingURL=xe-utils.js.map

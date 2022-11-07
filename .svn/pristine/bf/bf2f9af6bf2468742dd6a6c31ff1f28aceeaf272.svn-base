@@ -1,0 +1,15 @@
+import {
+  defHttp
+} from "./chunk-64MZJWVI.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/views/system/user/user.api.ts
+init_define_APP_INFO();
+var duplicateCheck = (params) => defHttp.get({ url: "/sys/duplicate/check" /* duplicateCheck */, params }, { isTransformResponse: false });
+
+export {
+  duplicateCheck
+};
+//# sourceMappingURL=chunk-7ZEJXTWD.js.map

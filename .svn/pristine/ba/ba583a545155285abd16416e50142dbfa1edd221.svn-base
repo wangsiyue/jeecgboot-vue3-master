@@ -1,0 +1,14 @@
+import {
+  require_print
+} from "./chunk-NSDSWO3A.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:print-js
+init_define_APP_INFO();
+var print_js_default = require_print();
+export {
+  print_js_default as default
+};
+//# sourceMappingURL=print-js.js.map

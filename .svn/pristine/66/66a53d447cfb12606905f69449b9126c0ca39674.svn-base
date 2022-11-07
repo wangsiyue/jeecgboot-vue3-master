@@ -1,0 +1,105 @@
+import {
+  useTableSync
+} from "./chunk-N55FAH43.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import {
+  createBlock,
+  defineComponent,
+  openBlock,
+  ref,
+  resolveComponent
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/IndexTable.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var _sfc_main = defineComponent({
+  name: "IndexTable",
+  components: {},
+  props: {
+    actionButton: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
+  },
+  setup() {
+    const columns = ref([
+      {
+        title: "\u7D22\u5F15\u540D\u79F0",
+        key: "indexName",
+        width: 330,
+        type: "input" /* input */,
+        defaultValue: "",
+        placeholder: "\u8BF7\u8F93\u5165${title}",
+        validateRules: [{ required: true, message: "${title}\u4E0D\u80FD\u4E3A\u7A7A" }]
+      },
+      {
+        title: "\u7D22\u5F15\u680F\u4F4D",
+        key: "indexField",
+        width: 330,
+        type: "select-multiple" /* selectMultiple */,
+        options: [],
+        defaultValue: "",
+        placeholder: "\u8BF7\u9009\u62E9${title}",
+        validateRules: [{ required: true, message: "\u8BF7\u9009\u62E9${title}" }]
+      },
+      {
+        title: "\u7D22\u5F15\u7C7B\u578B",
+        key: "indexType",
+        width: 330,
+        type: "select" /* select */,
+        options: [
+          { title: "normal", value: "normal" },
+          { title: "unique", value: "unique" }
+        ],
+        defaultValue: "normal",
+        placeholder: "\u8BF7\u9009\u62E9${title}",
+        validateRules: [{ required: true, message: "\u8BF7\u9009\u62E9${title}" }]
+      }
+    ]);
+    const setup = useTableSync(columns);
+    const { tableRef, loading, dataSource, tableHeight, setDataSource, validateData } = setup;
+    function syncTable(dbTable) {
+      let options = [];
+      let data = dbTable.value.tableRef.getTableData();
+      data.forEach((value) => {
+        if (value.dbFieldName) {
+          options.push({
+            title: value.dbFieldName,
+            value: value.dbFieldName
+          });
+        }
+      });
+      columns.value[1].options = options;
+    }
+    return { tableRef, loading, dataSource, columns, tableHeight, syncTable, setDataSource, validateData };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_JVxeTable = resolveComponent("JVxeTable");
+  return openBlock(), createBlock(_component_JVxeTable, {
+    ref: "tableRef",
+    rowNumber: "",
+    rowSelection: "",
+    dragSort: "",
+    keyboardEdit: "",
+    sortKey: "orderNum",
+    maxHeight: _ctx.tableHeight.normal,
+    loading: _ctx.loading,
+    columns: _ctx.columns,
+    dataSource: _ctx.dataSource,
+    toolbar: _ctx.actionButton
+  }, null, 8, ["maxHeight", "loading", "columns", "dataSource", "toolbar"]);
+}
+var IndexTable = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  IndexTable
+};
+//# sourceMappingURL=chunk-3E45I3O2.js.map

@@ -1,0 +1,313 @@
+import {BasicColumn} from '/@/components/Table';
+import {FormSchema} from '/@/components/Table';
+import { rules} from '/@/utils/helper/validator';
+import { render } from '/@/utils/common/renderUtils';
+
+export const columns: BasicColumn[] = [
+    {
+    title: '主键',
+    dataIndex: 'unitId'
+   },
+   {
+    title: '检查单位名称',
+    dataIndex: 'unitname'
+   },
+   {
+    title: '检查类型',
+    dataIndex: 'checktype'
+   },
+   {
+    title: '检查时间',
+    dataIndex: 'checktime'
+   },
+   {
+    title: '检查人员',
+    dataIndex: 'checkpeople'
+   },
+   {
+    title: '被检查单位名称',
+    dataIndex: 'checkedentname'
+   },
+   {
+    title: '许可证号',
+    dataIndex: 'licence'
+   },
+   {
+    title: '注册地址',
+    dataIndex: 'address'
+   },
+   {
+    title: '是否处罚',
+    dataIndex: 'punish'
+   },
+   {
+    title: '执法处罚类型',
+    dataIndex: 'punishtype'
+   },
+   {
+    title: '到期时间',
+    dataIndex: 'expiretime'
+   },
+   {
+    title: '修正情况',
+    dataIndex: 'amednsituation'
+   },
+   {
+    title: '是否结案',
+    dataIndex: 'settle'
+   },
+   {
+    title: '附件',
+    dataIndex: 'accessory'
+   },
+   {
+    title: '创建时间',
+    dataIndex: 'createtime'
+   },
+   {
+    title: '更新时间',
+    dataIndex: 'updatetiem'
+   },
+   {
+    title: '状态',
+    dataIndex: 'status'
+   },
+   {
+    title: '是否删除',
+    dataIndex: 'isdelete'
+   },
+   {
+    title: '检查编号',
+    dataIndex: 'checknumber'
+   },
+   {
+    title: '业务id',
+    dataIndex: 'ywid'
+   },
+   {
+    title: '备注',
+    dataIndex: 'remark'
+   },
+   {
+    title: '检查意见',
+    dataIndex: 'checkopinion'
+   },
+   {
+    title: '插入用户',
+    dataIndex: 'insertUser'
+   },
+   {
+    title: '插入时间',
+    dataIndex: 'insertTime'
+   },
+   {
+    title: '处罚类型-其它',
+    dataIndex: 'otherPunishType'
+   },
+   {
+    title: '单位实例ID',
+    dataIndex: 'companyInstanceid'
+   },
+   {
+    title: '省',
+    dataIndex: 'province'
+   },
+   {
+    title: '市',
+    dataIndex: 'city'
+   },
+   {
+    title: '区县',
+    dataIndex: 'district'
+   },
+   {
+    title: '老数据标记',
+    dataIndex: 'oldMark'
+   },
+   {
+    title: 'UPDATEUSER',
+    dataIndex: 'updateuser'
+   },
+   {
+    title: 'IS_MOBILE',
+    dataIndex: 'isMobile'
+   },
+];
+
+export const searchFormSchema: FormSchema[] = [
+ {
+    label: '主键',
+    field: 'unitId',
+    component: 'Input'
+  },
+ {
+    label: '检查单位名称',
+    field: 'unitname',
+    component: 'Input'
+  },
+];
+
+export const formSchema: FormSchema[] = [
+  // TODO 主键隐藏字段，目前写死为ID
+  {label: '', field: 'id', component: 'Input', show: false},
+  {
+    label: '主键',
+    field: 'unitId',
+    component: 'Input',
+  },
+  {
+    label: '检查单位名称',
+    field: 'unitname',
+    component: 'Input',
+  },
+  {
+    label: '检查类型',
+    field: 'checktype',
+    component: 'Input',
+  },
+  {
+    label: '检查时间',
+    field: 'checktime',
+    component: 'DatePicker'
+  },
+  {
+    label: '检查人员',
+    field: 'checkpeople',
+    component: 'Input',
+  },
+  {
+    label: '被检查单位名称',
+    field: 'checkedentname',
+    component: 'Input',
+  },
+  {
+    label: '许可证号',
+    field: 'licence',
+    component: 'Input',
+  },
+  {
+    label: '注册地址',
+    field: 'address',
+    component: 'Input',
+  },
+  {
+    label: '是否处罚',
+    field: 'punish',
+    component: 'Input',
+  },
+  {
+    label: '执法处罚类型',
+    field: 'punishtype',
+    component: 'Input',
+  },
+  {
+    label: '到期时间',
+    field: 'expiretime',
+    component: 'DatePicker'
+  },
+  {
+    label: '修正情况',
+    field: 'amednsituation',
+    component: 'Input',
+  },
+  {
+    label: '是否结案',
+    field: 'settle',
+    component: 'Input',
+  },
+  {
+    label: '附件',
+    field: 'accessory',
+    component: 'Input',
+  },
+  {
+    label: '创建时间',
+    field: 'createtime',
+    component: 'Input',
+  },
+  {
+    label: '更新时间',
+    field: 'updatetiem',
+    component: 'DatePicker'
+  },
+  {
+    label: '状态',
+    field: 'status',
+    component: 'Input',
+  },
+  {
+    label: '是否删除',
+    field: 'isdelete',
+    component: 'Input',
+  },
+  {
+    label: '检查编号',
+    field: 'checknumber',
+    component: 'Input',
+  },
+  {
+    label: '业务id',
+    field: 'ywid',
+    component: 'Input',
+  },
+  {
+    label: '备注',
+    field: 'remark',
+    component: 'Input',
+  },
+  {
+    label: '检查意见',
+    field: 'checkopinion',
+    component: 'Input',
+  },
+  {
+    label: '插入用户',
+    field: 'insertUser',
+    component: 'Input',
+  },
+  {
+    label: '插入时间',
+    field: 'insertTime',
+    component: 'DatePicker'
+  },
+  {
+    label: '处罚类型-其它',
+    field: 'otherPunishType',
+    component: 'Input',
+  },
+  {
+    label: '单位实例ID',
+    field: 'companyInstanceid',
+    component: 'Input',
+  },
+  {
+    label: '省',
+    field: 'province',
+    component: 'Input',
+  },
+  {
+    label: '市',
+    field: 'city',
+    component: 'Input',
+  },
+  {
+    label: '区县',
+    field: 'district',
+    component: 'Input',
+  },
+  {
+    label: '老数据标记',
+    field: 'oldMark',
+    component: 'Input',
+  },
+  {
+    label: 'UPDATEUSER',
+    field: 'updateuser',
+    component: 'Input',
+  },
+  {
+    label: 'IS_MOBILE',
+    field: 'isMobile',
+    component: 'Input',
+  },
+];

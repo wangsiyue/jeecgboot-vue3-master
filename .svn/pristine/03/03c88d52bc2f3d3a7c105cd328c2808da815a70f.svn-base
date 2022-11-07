@@ -1,0 +1,152 @@
+import {
+  BasicForm,
+  useForm
+} from "./chunk-KYYR2BW6.js";
+import "./chunk-SOSH3DWB.js";
+import {
+  pick$1
+} from "./chunk-OMA7JPDB.js";
+import "./chunk-DZMOYDKI.js";
+import "./chunk-TNMIRAD5.js";
+import "./chunk-EKOIBGOQ.js";
+import {
+  defHttp
+} from "./chunk-64MZJWVI.js";
+import "./chunk-ANLUEKLO.js";
+import "./chunk-LZQJUVGN.js";
+import "./chunk-GH3CBHGS.js";
+import "./chunk-ARD7XY2B.js";
+import "./chunk-H5XI7H7T.js";
+import "./chunk-GPOHKMTD.js";
+import "./chunk-RLJKXQIA.js";
+import "./chunk-RHCHCTS4.js";
+import {
+  _export_sfc
+} from "./chunk-CITY6UHW.js";
+import "./chunk-C4IBJHIP.js";
+import "./chunk-YLDRSUWQ.js";
+import "./chunk-RX5I5ULI.js";
+import "./chunk-KVJ6VO5A.js";
+import "./chunk-WLZB43K5.js";
+import "./chunk-GJK6IZYL.js";
+import "./chunk-YTTBVVBT.js";
+import "./chunk-KIDT26GW.js";
+import "./chunk-EW6PF333.js";
+import "./chunk-SFFFXB4Y.js";
+import "./chunk-4VBCR2UY.js";
+import "./chunk-LU447FN7.js";
+import "./chunk-PCZNDPKY.js";
+import "./chunk-RNTI5KWT.js";
+import "./chunk-D2VLAI67.js";
+import "./chunk-6AC3D6AH.js";
+import "./chunk-ZQYRAJKZ.js";
+import "./chunk-Z3NVNWVB.js";
+import "./chunk-YXPBMO4E.js";
+import "./chunk-WTYZJWFF.js";
+import "./chunk-IF4EKY7K.js";
+import "./chunk-SOWJBRMK.js";
+import "./chunk-JTWWQTIY.js";
+import "./chunk-7GOB2L72.js";
+import "./chunk-GUMRFUUS.js";
+import "./chunk-D65CINXV.js";
+import "./chunk-3UC42JCT.js";
+import "./chunk-RL4BZ2NY.js";
+import "./chunk-MH4EPDFD.js";
+import "./chunk-L26JVTZY.js";
+import "./chunk-KAI4QMTN.js";
+import "./chunk-O3J5FWNC.js";
+import "./chunk-SJ2YS27J.js";
+import "./chunk-UFII5LNT.js";
+import "./chunk-FYK3HJMB.js";
+import {
+  createElementBlock,
+  createVNode,
+  defineComponent,
+  openBlock,
+  resolveComponent
+} from "./chunk-JQQZ4WSS.js";
+import "./chunk-G5TZ7427.js";
+import "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/ModalFormDemo.js
+init_define_APP_INFO();
+import "E:/workspace/projects/dev/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var getSchemas = () => {
+  return [
+    {
+      field: "name",
+      component: "Input",
+      label: "\u540D\u79F0"
+    },
+    {
+      field: "age",
+      component: "InputNumber",
+      label: "\u5E74\u9F84",
+      componentProps: {
+        style: {
+          "width": "100%"
+        }
+      }
+    },
+    {
+      field: "sex",
+      label: "\u6027\u522B",
+      component: "JDictSelectTag",
+      componentProps: {
+        dictCode: "sex"
+      }
+    },
+    {
+      field: "birthday",
+      component: "DatePicker",
+      label: "\u751F\u65E5",
+      componentProps: {
+        valueFormat: "YYYY-MM-DD",
+        style: {
+          "width": "100%"
+        }
+      }
+    },
+    {
+      field: "email",
+      component: "Input",
+      label: "\u90AE\u7BB1"
+    }
+  ];
+};
+var _sfc_main = defineComponent({
+  components: { BasicForm },
+  props: ["id"],
+  setup(props) {
+    const [registerForm, { setFieldsValue }] = useForm({
+      schemas: getSchemas(),
+      showActionButtonGroup: false,
+      baseColProps: { span: 24 }
+    });
+    let params = { id: props.id };
+    defHttp.get({ url: "/test/jeecgDemo/queryById", params }, { isTransformResponse: false }).then((res) => {
+      if (res.success) {
+        let values = pick$1(res.result, "name", "age", "birthday", "sex", "email");
+        setFieldsValue(values);
+      }
+    });
+    return {
+      registerForm
+    };
+  }
+});
+var _hoisted_1 = { style: { "margin": "50px auto", "width": "800px" } };
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BasicForm = resolveComponent("BasicForm");
+  return openBlock(), createElementBlock("div", _hoisted_1, [
+    createVNode(_component_BasicForm, { onRegister: _ctx.registerForm }, null, 8, ["onRegister"])
+  ]);
+}
+var ModalFormDemo = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+export {
+  ModalFormDemo as default
+};
+//# sourceMappingURL=ModalFormDemo-6BQER6ZN.js.map

@@ -1,0 +1,14 @@
+import {
+  require_clipboard
+} from "./chunk-A7XLKMMP.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:clipboard
+init_define_APP_INFO();
+var clipboard_default = require_clipboard();
+export {
+  clipboard_default as default
+};
+//# sourceMappingURL=clipboard.js.map

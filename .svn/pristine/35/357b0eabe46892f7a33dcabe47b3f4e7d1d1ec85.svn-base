@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/utils/log.ts"],
+  "sourcesContent": ["const projectName = import.meta.env.VITE_GLOB_APP_TITLE;\n\nexport function warn(message: string) {\n  console.warn(`[${projectName} warn]:${message}`);\n}\n\nexport function error(message: string) {\n  throw new Error(`[${projectName} error]:${message}`);\n}\n"],
+  "mappings": ";;;;;AAAA;AAAA,IAAM,cAAc,YAAY,IAAI;AAE7B,SAAS,KAAK,SAAiB;AACpC,UAAQ,KAAK,IAAI,qBAAqB,SAAS;AACjD;AAEO,SAAS,MAAM,SAAiB;AACrC,QAAM,IAAI,MAAM,IAAI,sBAAsB,SAAS;AACrD;",
+  "names": []
+}

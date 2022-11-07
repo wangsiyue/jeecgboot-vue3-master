@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["dep:vue-router"],
+  "sourcesContent": ["\nexport * from \"./node_modules/vue-router/dist/vue-router.mjs\""],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;",
+  "names": []
+}

@@ -1,0 +1,336 @@
+import {
+  downloadByData
+} from "./chunk-DIKQ64XW.js";
+import {
+  FileSelectModal
+} from "./chunk-ILVIMFXU.js";
+import {
+  useMessageOnline
+} from "./chunk-J75HBRFQ.js";
+import {
+  useCodeGeneratorFormSchemas
+} from "./chunk-LMRYBDBC.js";
+import {
+  BasicForm,
+  useForm
+} from "./chunk-CWQVWJAJ.js";
+import {
+  underLine2CamelCase
+} from "./chunk-2D5MMSKL.js";
+import {
+  BasicModal,
+  useModal,
+  useModalInner
+} from "./chunk-MHXJV5SW.js";
+import {
+  defHttp
+} from "./chunk-MXTOG34P.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  Fragment,
+  computed,
+  createBlock,
+  createCommentVNode,
+  createElementBlock,
+  createVNode,
+  defineComponent,
+  mergeProps,
+  nextTick,
+  openBlock,
+  reactive,
+  ref,
+  resolveComponent,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/CodeGeneratorModal.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+var _sfc_main = defineComponent({
+  name: "CodeGenerator",
+  components: { BasicForm, BasicModal, FileSelectModal },
+  emits: ["register"],
+  setup(props) {
+    const JEECG_ONL_PROJECT_PATH = "JEECG_ONL_PROJECT_PATH";
+    const { createMessage: $message } = useMessage();
+    const { createConfirm: $confirm } = useMessageOnline();
+    const single = ref(true);
+    const subTableRef = ref();
+    const modalWidth = computed(() => single.value ? 800 : 1200);
+    const title = ref("\u4EE3\u7801\u751F\u6210");
+    const confirmLoading = ref(false);
+    const code = ref("");
+    const metaModel = reactive({
+      projectPath: "",
+      packageStyle: "service",
+      jspMode: "",
+      jformType: "1",
+      tableName_tmp: "",
+      ftlDescription: "",
+      entityName: "",
+      codeTypes: "controller,service,dao,mapper,entity,vue"
+    });
+    const model = reactive({});
+    const jspModeOptions = ref([]);
+    const subTable = reactive({
+      dataSource: [],
+      columns: [
+        {
+          title: "\u5B50\u8868\u540D",
+          key: "tableName",
+          type: "input" /* input */,
+          disabled: true,
+          validateRules: [{ required: true, message: "\u8BF7\u8F93\u5165${title}" }]
+        },
+        {
+          title: "\u5B50\u8868\u5B9E\u4F53",
+          key: "entityName",
+          type: "input" /* input */,
+          validateRules: [{ required: true, message: "\u8BF7\u8F93\u5165${title}" }]
+        },
+        {
+          title: "\u529F\u80FD\u8BF4\u660E",
+          key: "ftlDescription",
+          type: "input" /* input */,
+          validateRules: [{ required: true, message: "\u8BF7\u8F93\u5165${title}" }]
+        }
+      ]
+    });
+    const showSubTable = computed(() => subTable.dataSource.length > 0);
+    const { formSchemas } = useCodeGeneratorFormSchemas(props, {
+      onProjectPathChange,
+      onProjectPathSearch,
+      jspModeOptions
+    }, single);
+    const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
+      schemas: formSchemas,
+      showActionButtonGroup: false,
+      labelAlign: "right"
+    });
+    const [registerModal, { closeModal }] = useModalInner((data) => __async(this, null, function* () {
+      yield resetFields();
+      code.value = data.code;
+      confirmLoading.value = false;
+      subTable.dataSource = [];
+      jspModeOptions.value = [];
+      getStoreProjectPath();
+      Object.assign(model, metaModel);
+      loadData();
+    }));
+    function loadData() {
+      return __async(this, null, function* () {
+        let { main, sub, jspModeList, projectPath } = yield defHttp.get({
+          url: "/online/cgform/head/tableInfo",
+          params: { code: code.value }
+        });
+        let jspModeListForVue3 = [];
+        for (let mode of jspModeList) {
+          const { code: code2, note } = mode;
+          if (code2 == "many")
+            ;
+          else {
+            jspModeListForVue3.push({
+              label: note,
+              value: code2
+            });
+          }
+        }
+        jspModeOptions.value = jspModeListForVue3;
+        if (main.isTree == "Y") {
+          model.jspMode = "tree";
+        } else {
+          model.jspMode = jspModeListForVue3[0].value;
+        }
+        single.value = main.tableType == 1;
+        title.value = "\u4EE3\u7801\u751F\u6210\u3010" + main.tableName + "\u3011";
+        if (!model.projectPath) {
+          model.projectPath = projectPath;
+          window.localStorage.setItem(JEECG_ONL_PROJECT_PATH, projectPath);
+        }
+        model.jformType = main.tableType + "";
+        model.tableName_tmp = main.tableName;
+        model.ftlDescription = main.tableTxt;
+        let entityNameTemp = underLine2CamelCase(main.tableName);
+        model.entityName = entityNameTemp.substring(0, 1).toUpperCase() + entityNameTemp.substring(1);
+        yield nextTick();
+        setFieldsValue(model);
+        if (sub && sub.length > 0) {
+          subTable.dataSource = sub.map((item) => ({
+            tableName: item.tableName,
+            entityName: getCamelCase(item.tableName),
+            ftlDescription: item.tableTxt
+          }));
+        }
+      });
+    }
+    function onSubmit() {
+      return __async(this, null, function* () {
+        try {
+          const values = yield validate();
+          let params = Object.assign({}, values, { code: code.value, tableName: values.tableName_tmp });
+          if (showSubTable.value) {
+            let errMap = yield subTableRef.value.validateTable();
+            if (errMap) {
+              return;
+            }
+            params.subList = subTableRef.value.getTableData();
+          }
+          confirmLoading.value = true;
+          let codeList = yield defHttp.post({ url: "/online/cgform/api/codeGenerate", params });
+          $confirm({
+            iconType: "info",
+            title: "\u4EE3\u7801\u751F\u6210\u7ED3\u679C",
+            width: 1200,
+            closable: true,
+            okText: "\u4E0B\u8F7D\u5230\u672C\u5730",
+            cancelText: "\u786E\u5B9A\u5E76\u5173\u95ED",
+            content: `<p>${codeList.map((item) => item + "<br>").join("")}</p>`,
+            onOk: () => onDownloadGenerateCode(codeList, values.tableName_tmp)
+          });
+          closeModal();
+        } catch (e) {
+          console.error(e);
+        } finally {
+          confirmLoading.value = false;
+        }
+      });
+    }
+    function onDownloadGenerateCode(codeList, tableName) {
+      return defHttp.get({
+        url: "/online/cgform/api/downGenerateCode",
+        params: {
+          fileList: encodeURI(codeList)
+        },
+        responseType: "blob"
+      }, { isTransformResponse: false }).then((data) => {
+        if (!data || data.size == 0) {
+          $message.warning("\u5BFC\u51FA\u4EE3\u7801\u5931\u8D25\uFF01");
+          return;
+        }
+        let fileName = "\u5BFC\u5230\u751F\u6210\u4EE3\u7801_" + tableName + "_" + new Date().getTime() + ".zip";
+        downloadByData(data, fileName, "application/zip");
+      });
+    }
+    function onCancel() {
+      closeModal();
+    }
+    const [registerFileSelectModal, fileSelectModal] = useModal();
+    function onProjectPathSearch() {
+      fileSelectModal.openModal(true, {});
+    }
+    function onFileSelect(url) {
+      window.localStorage.setItem(JEECG_ONL_PROJECT_PATH, url);
+      setFieldsValue({ projectPath: url });
+    }
+    function getCamelCase(val) {
+      let temp = underLine2CamelCase(val);
+      return temp.substring(0, 1).toUpperCase() + temp.substring(1);
+    }
+    function getStoreProjectPath() {
+      let path = window.localStorage.getItem(JEECG_ONL_PROJECT_PATH);
+      if (path) {
+        metaModel.projectPath = path;
+      }
+    }
+    function onProjectPathChange(e) {
+      if (e.target.value)
+        window.localStorage.setItem(JEECG_ONL_PROJECT_PATH, e.target.value);
+    }
+    return {
+      title,
+      modalWidth,
+      confirmLoading,
+      subTable,
+      showSubTable,
+      onSubmit,
+      onCancel,
+      onFileSelect,
+      registerFileSelectModal,
+      subTableRef,
+      registerForm,
+      registerModal
+    };
+  }
+});
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_BasicForm = resolveComponent("BasicForm");
+  const _component_JVxeTable = resolveComponent("JVxeTable");
+  const _component_a_card = resolveComponent("a-card");
+  const _component_a_spin = resolveComponent("a-spin");
+  const _component_BasicModal = resolveComponent("BasicModal");
+  const _component_FileSelectModal = resolveComponent("FileSelectModal");
+  return openBlock(), createElementBlock(Fragment, null, [
+    createVNode(_component_BasicModal, {
+      onRegister: _ctx.registerModal,
+      title: _ctx.title,
+      width: _ctx.modalWidth,
+      confirmLoading: _ctx.confirmLoading,
+      okText: "\u5F00\u59CB\u751F\u6210",
+      cancelText: "\u53D6\u6D88",
+      onOk: _ctx.onSubmit,
+      onCancel: _ctx.onCancel
+    }, {
+      default: withCtx(() => [
+        createVNode(_component_a_spin, { spinning: _ctx.confirmLoading }, {
+          default: withCtx(() => [
+            createVNode(_component_BasicForm, { onRegister: _ctx.registerForm }, null, 8, ["onRegister"]),
+            _ctx.showSubTable ? (openBlock(), createBlock(_component_a_card, {
+              key: 0,
+              title: "\u5B50\u8868\u4FE1\u606F",
+              size: "small"
+            }, {
+              default: withCtx(() => [
+                createVNode(_component_JVxeTable, mergeProps({
+                  ref: "subTableRef",
+                  rowNumber: "",
+                  maxHeight: 580
+                }, _ctx.subTable), null, 16)
+              ]),
+              _: 1
+            })) : createCommentVNode("", true)
+          ]),
+          _: 1
+        }, 8, ["spinning"])
+      ]),
+      _: 1
+    }, 8, ["onRegister", "title", "width", "confirmLoading", "onOk", "onCancel"]),
+    createVNode(_component_FileSelectModal, {
+      onRegister: _ctx.registerFileSelectModal,
+      onSelect: _ctx.onFileSelect
+    }, null, 8, ["onRegister", "onSelect"])
+  ], 64);
+}
+var CodeGeneratorModal = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  CodeGeneratorModal
+};
+//# sourceMappingURL=chunk-6KTPZVGX.js.map

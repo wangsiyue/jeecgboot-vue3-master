@@ -1,0 +1,235 @@
+import {
+  error
+} from "./chunk-LZQJUVGN.js";
+import {
+  dateUtil,
+  getDynamicProps,
+  getValueType
+} from "./chunk-GH3CBHGS.js";
+import {
+  isProdMode
+} from "./chunk-GE6AQLDJ.js";
+import {
+  nextTick,
+  onUnmounted,
+  ref,
+  unref,
+  watch
+} from "./chunk-JQQZ4WSS.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// src/components/Form/src/hooks/useForm.ts
+init_define_APP_INFO();
+
+// src/components/Form/src/utils/formUtils.ts
+init_define_APP_INFO();
+function handleRangeValue(props, values) {
+  const fieldMapToTime = unref(props)?.fieldMapToTime;
+  fieldMapToTime && (values = handleRangeTimeValue(props, values));
+  const fieldMapToNumber = unref(props)?.fieldMapToNumber;
+  fieldMapToNumber && (values = handleRangeNumberValue(props, values));
+  return values;
+}
+function handleRangeTimeValue(props, values) {
+  const fieldMapToTime = unref(props).fieldMapToTime;
+  if (!fieldMapToTime || !Array.isArray(fieldMapToTime)) {
+    return values;
+  }
+  for (const [field, [startTimeKey, endTimeKey], format = "YYYY-MM-DD"] of fieldMapToTime) {
+    if (!field || !startTimeKey || !endTimeKey || !values[field]) {
+      continue;
+    }
+    let timeValue = values[field];
+    if (!Array.isArray(timeValue)) {
+      timeValue = timeValue.split(",");
+    }
+    const [startTime, endTime] = timeValue;
+    values[startTimeKey] = dateUtil(startTime).format(format);
+    values[endTimeKey] = dateUtil(endTime).format(format);
+    Reflect.deleteProperty(values, field);
+  }
+  return values;
+}
+function handleRangeNumberValue(props, values) {
+  const fieldMapToNumber = unref(props).fieldMapToNumber;
+  if (!fieldMapToNumber || !Array.isArray(fieldMapToNumber)) {
+    return values;
+  }
+  for (const [field, [startNumberKey, endNumberKey]] of fieldMapToNumber) {
+    if (!field || !startNumberKey || !endNumberKey || !values[field]) {
+      continue;
+    }
+    let temp = values[field];
+    if (typeof temp === "string") {
+      temp = temp.split(",");
+    }
+    const [startNumber, endNumber] = temp;
+    values[startNumberKey] = startNumber;
+    values[endNumberKey] = endNumber;
+    Reflect.deleteProperty(values, field);
+  }
+  return values;
+}
+
+// src/components/Form/src/hooks/useForm.ts
+function useForm(props) {
+  const formRef = ref(null);
+  const loadedRef = ref(false);
+  async function getForm() {
+    const form = unref(formRef);
+    if (!form) {
+      error("The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!");
+    }
+    await nextTick();
+    return form;
+  }
+  function register(instance) {
+    isProdMode() && onUnmounted(() => {
+      formRef.value = null;
+      loadedRef.value = null;
+    });
+    if (unref(loadedRef) && isProdMode() && instance === unref(formRef))
+      return;
+    formRef.value = instance;
+    loadedRef.value = true;
+    watch(
+      () => props,
+      () => {
+        props && instance.setProps(getDynamicProps(props));
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    );
+  }
+  const methods = {
+    scrollToField: async (name, options) => {
+      const form = await getForm();
+      form.scrollToField(name, options);
+    },
+    setProps: async (formProps) => {
+      const form = await getForm();
+      form.setProps(formProps);
+    },
+    updateSchema: async (data) => {
+      const form = await getForm();
+      form.updateSchema(data);
+    },
+    resetSchema: async (data) => {
+      const form = await getForm();
+      form.resetSchema(data);
+    },
+    clearValidate: async (name) => {
+      const form = await getForm();
+      form.clearValidate(name);
+    },
+    resetFields: async () => {
+      getForm().then(async (form) => {
+        await form.resetFields();
+      });
+    },
+    removeSchemaByFiled: async (field) => {
+      unref(formRef)?.removeSchemaByFiled(field);
+    },
+    getFieldsValue: () => {
+      let values = unref(formRef)?.getFieldsValue();
+      if (values) {
+        Object.keys(values).map((key) => {
+          if (values[key] instanceof Array) {
+            values[key] = values[key].join(",");
+          }
+        });
+      }
+      return values;
+    },
+    setFieldsValue: async (values) => {
+      const form = await getForm();
+      form.setFieldsValue(values);
+    },
+    appendSchemaByField: async (schema, prefixField, first) => {
+      const form = await getForm();
+      form.appendSchemaByField(schema, prefixField, first);
+    },
+    submit: async () => {
+      const form = await getForm();
+      return form.submit();
+    },
+    validate: async (nameList) => {
+      const form = await getForm();
+      let getProps = props || form.getProps;
+      let values = form.validate(nameList).then((values2) => {
+        for (let key in values2) {
+          if (values2[key] instanceof Array) {
+            let valueType = getValueType(getProps, key);
+            if (valueType === "string") {
+              values2[key] = values2[key].join(",");
+            }
+          }
+        }
+        return handleRangeValue(getProps, values2);
+      });
+      return values;
+    },
+    validateFields: async (nameList) => {
+      const form = await getForm();
+      return form.validateFields(nameList);
+    }
+  };
+  return [register, methods];
+}
+
+// src/components/Form/index.ts
+init_define_APP_INFO();
+import BasicForm from "D:/jeecgboot-vue3-master/src/components/Form/src/BasicForm.vue";
+
+// src/components/Form/src/types/form.ts
+init_define_APP_INFO();
+
+// src/components/Form/src/types/formItem.ts
+init_define_APP_INFO();
+
+// src/components/Form/src/hooks/useComponentRegister.ts
+init_define_APP_INFO();
+
+// src/components/Form/index.ts
+import { default as default2 } from "D:/jeecgboot-vue3-master/src/components/Form/src/components/ApiSelect.vue";
+import { default as default3 } from "D:/jeecgboot-vue3-master/src/components/Form/src/components/RadioButtonGroup.vue";
+import { default as default4 } from "D:/jeecgboot-vue3-master/src/components/Form/src/components/ApiTreeSelect.vue";
+import { default as default5 } from "D:/jeecgboot-vue3-master/src/components/Form/src/components/ApiRadioGroup.vue";
+import { default as default6 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JAreaLinkage.vue";
+import { default as default7 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JSelectUser.vue";
+import { default as default8 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JSelectDept.vue";
+import { default as default9 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JCodeEditor.vue";
+import { default as default10 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JCategorySelect.vue";
+import { default as default11 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JSelectMultiple.vue";
+import { default as default12 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JPopup.vue";
+import { default as default13 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JAreaSelect.vue";
+import { default as default17 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JCheckbox.vue";
+import { default as default18 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JInput.vue";
+import { default as default19 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JEllipsis.vue";
+import { default as default20 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JDictSelectTag.vue";
+import { default as default21 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JTreeSelect.vue";
+import { default as default22 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JSearchSelect.vue";
+import { default as default23 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JSelectUserByDept.vue";
+import { default as default24 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JEditor.vue";
+import { default as default25 } from "D:/jeecgboot-vue3-master/src/components/Form/src/jeecg/components/JImageUpload.vue";
+
+export {
+  useForm,
+  BasicForm,
+  default6 as default,
+  default7 as default2,
+  default8 as default3,
+  default9 as default4,
+  default10 as default5,
+  default11 as default6,
+  default12 as default7,
+  default13 as default8,
+  default20 as default9,
+  default21 as default10,
+  default23 as default11
+};
+//# sourceMappingURL=chunk-CWQVWJAJ.js.map

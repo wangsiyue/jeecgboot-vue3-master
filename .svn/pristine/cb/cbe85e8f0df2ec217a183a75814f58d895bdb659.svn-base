@@ -1,0 +1,138 @@
+import {
+  defHttp
+} from "./chunk-MXTOG34P.js";
+import {
+  _export_sfc
+} from "./chunk-GZ7LOGNL.js";
+import {
+  useMessage
+} from "./chunk-SQAXQJKY.js";
+import {
+  useDebounceFn
+} from "./chunk-WTYZJWFF.js";
+import {
+  Fragment,
+  createBlock,
+  createElementBlock,
+  createTextVNode,
+  openBlock,
+  ref,
+  renderList,
+  resolveComponent,
+  watch,
+  withCtx
+} from "./chunk-JQQZ4WSS.js";
+import {
+  toDisplayString
+} from "./chunk-EDBTC3WO.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// node_modules/@jeecg/online/JOnlineSearchSelect.js
+init_define_APP_INFO();
+import "D:/jeecgboot-vue3-master/src/components/jeecg/OnLine/JPopupOnlReport.vue";
+var { createMessage: $message } = useMessage();
+var _sfc_main = {
+  name: "JOnlineSearchSelect",
+  props: {
+    placeholder: {
+      type: String,
+      default: "",
+      required: false
+    },
+    value: {
+      type: String,
+      required: false
+    },
+    sql: {
+      type: String,
+      required: true
+    }
+  },
+  emits: ["update:value"],
+  setup(props, { emit }) {
+    let selected = ref("");
+    let selectOptions = ref([]);
+    watch(() => props.value, (newVal) => {
+      if (!newVal) {
+        selected.value = void 0;
+      } else {
+        selected.value = newVal;
+      }
+    }, { immediate: true });
+    watch(() => props.sql, () => {
+      resetOptions();
+    }, { immediate: true });
+    const handleSearch = useDebounceFn(searchByKeyword, 800);
+    function searchByKeyword(keyword = "") {
+      let params = {
+        keyword
+      };
+      let url = "/online/cgreport/api/getReportDictList?sql=" + props.sql;
+      defHttp.get({ url, params }, { isTransformResponse: false }).then((res) => {
+        if (res.success) {
+          if (res.result && res.result.length > 0) {
+            selectOptions.value = res.result;
+          } else {
+            selectOptions.value = [];
+          }
+        } else {
+          $message.warning(res.message);
+        }
+      });
+    }
+    function handleChange(value) {
+      emit("update:value", value);
+      if (!value || value == "") {
+        resetOptions();
+      }
+    }
+    function resetOptions() {
+      selectOptions.value = [];
+      searchByKeyword();
+    }
+    return {
+      selectOptions,
+      handleSearch,
+      handleChange,
+      selected
+    };
+  }
+};
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_a_select_option = resolveComponent("a-select-option");
+  const _component_a_select = resolveComponent("a-select");
+  return openBlock(), createBlock(_component_a_select, {
+    value: $setup.selected,
+    placeholder: $props.placeholder,
+    "show-search": "",
+    "default-active-first-option": false,
+    "show-arrow": true,
+    "filter-option": false,
+    "not-found-content": null,
+    onSearch: $setup.handleSearch,
+    onChange: $setup.handleChange,
+    allowClear: ""
+  }, {
+    default: withCtx(() => [
+      (openBlock(true), createElementBlock(Fragment, null, renderList($setup.selectOptions, (d) => {
+        return openBlock(), createBlock(_component_a_select_option, {
+          key: d.value
+        }, {
+          default: withCtx(() => [
+            createTextVNode(toDisplayString(d.text), 1)
+          ]),
+          _: 2
+        }, 1024);
+      }), 128))
+    ]),
+    _: 1
+  }, 8, ["value", "placeholder", "onSearch", "onChange"]);
+}
+var JOnlineSearchSelect = _export_sfc(_sfc_main, [["render", _sfc_render]]);
+
+export {
+  JOnlineSearchSelect
+};
+//# sourceMappingURL=chunk-BARVCE4Y.js.map

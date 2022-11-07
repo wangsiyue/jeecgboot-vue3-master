@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../ant-design-vue/es/form/interface.js", "dep:ant-design-vue_es_form_interface"],
+  "sourcesContent": ["export {};", "export default require(\"./node_modules/ant-design-vue/es/form/interface.js\");"],
+  "mappings": ";;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;;ACAA;AAAA,IAAO,2CAAQ;",
+  "names": []
+}

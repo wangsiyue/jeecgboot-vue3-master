@@ -1,0 +1,14 @@
+import {
+  require_data
+} from "./chunk-NRJBE4PY.js";
+import {
+  init_define_APP_INFO
+} from "./chunk-ET6QIZHT.js";
+
+// dep:china-area-data
+init_define_APP_INFO();
+var china_area_data_default = require_data();
+export {
+  china_area_data_default as default
+};
+//# sourceMappingURL=china-area-data.js.map
